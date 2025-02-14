@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c491b8531eec05ba41a11d9276a5749",
+    "content-hash": "1f2577a5a401ba01600dce3f39fd68f1",
     "packages": [
         {
             "name": "brick/math",
@@ -1994,16 +1994,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.72.6",
+            "version": "2.73.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon.git",
-                "reference": "1e9d50601e7035a4c61441a208cb5bed73e108c5"
+                "reference": "9228ce90e1035ff2f0db84b40ec2e023ed802075"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/1e9d50601e7035a4c61441a208cb5bed73e108c5",
-                "reference": "1e9d50601e7035a4c61441a208cb5bed73e108c5",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/9228ce90e1035ff2f0db84b40ec2e023ed802075",
+                "reference": "9228ce90e1035ff2f0db84b40ec2e023ed802075",
                 "shasum": ""
             },
             "require": {
@@ -2097,7 +2097,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-27T09:28:11+00:00"
+            "time": "2025-01-08T20:10:23+00:00"
         },
         {
             "name": "nette/schema",
@@ -5610,6 +5610,90 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yajra/laravel-datatables-oracle",
+            "version": "v10.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yajra/laravel-datatables.git",
+                "reference": "5fd89966fd779cce69a30f6262207242b55db523"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/5fd89966fd779cce69a30f6262207242b55db523",
+                "reference": "5fd89966fd779cce69a30f6262207242b55db523",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^9|^10",
+                "illuminate/filesystem": "^9|^10",
+                "illuminate/http": "^9|^10",
+                "illuminate/support": "^9|^10",
+                "illuminate/view": "^9|^10",
+                "php": "^8.0.2"
+            },
+            "require-dev": {
+                "nunomaduro/larastan": "^2.4",
+                "orchestra/testbench": "^8",
+                "yajra/laravel-datatables-html": "^9.3.4|^10"
+            },
+            "suggest": {
+                "yajra/laravel-datatables-buttons": "Plugin for server-side exporting of dataTables.",
+                "yajra/laravel-datatables-editor": "Plugin to use DataTables Editor (requires a license).",
+                "yajra/laravel-datatables-export": "Plugin for server-side exporting using livewire and queue worker.",
+                "yajra/laravel-datatables-fractal": "Plugin for server-side response using Fractal.",
+                "yajra/laravel-datatables-html": "Plugin for server-side HTML builder of dataTables."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "DataTables": "Yajra\\DataTables\\Facades\\DataTables"
+                    },
+                    "providers": [
+                        "Yajra\\DataTables\\DataTablesServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "10.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helper.php"
+                ],
+                "psr-4": {
+                    "Yajra\\DataTables\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arjay Angeles",
+                    "email": "aqangeles@gmail.com"
+                }
+            ],
+            "description": "jQuery DataTables API for Laravel 4|5|6|7|8|9|10",
+            "keywords": [
+                "datatables",
+                "jquery",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/yajra/laravel-datatables/issues",
+                "source": "https://github.com/yajra/laravel-datatables/tree/v10.9.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/yajra",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-09-29T07:34:10+00:00"
         }
     ],
     "packages-dev": [
@@ -6012,16 +6096,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.12.1",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845"
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/123267b2c49fbf30d78a7b2d333f6be754b94845",
-                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/024473a478be9df5fdaca2c793f2232fe788e414",
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414",
                 "shasum": ""
             },
             "require": {
@@ -6060,7 +6144,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.12.1"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.13.0"
             },
             "funding": [
                 {
@@ -6068,7 +6152,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-11-08T17:47:46+00:00"
+            "time": "2025-02-12T12:17:51+00:00"
         },
         {
             "name": "nunomaduro/collision",
@@ -8127,12 +8211,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
