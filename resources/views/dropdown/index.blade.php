@@ -94,7 +94,7 @@
 
 <script>
     $(function() {
-        $('#ssTable').DataTable({
+        var dataTable = $('#ssTable').DataTable({
             processing: true,
             serverSide: true,
             scrollY: '100vh',
@@ -184,6 +184,12 @@
                     $(rows).eq(api.column(1, { page: 'current' }).data().length - rowspan).find('td:eq(1)').attr('rowspan', rowspan);
                 }
             }
+        });
+        $('#vertical-menu-btn').on('click', function() {
+            setTimeout(function() {
+                dataTable.columns.adjust().draw();
+                window.dispatchEvent(new Event('resize'));
+            }, 10);
         });
     });
 </script>

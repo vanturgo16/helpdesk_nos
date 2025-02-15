@@ -75,10 +75,6 @@
                             <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
                             <i data-feather="sun" class="icon-lg layout-mode-light"></i>
                         </button>
-                        {{-- <button type="button" class="btn header-item" id="mode-setting-btn">
-                            <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
-                            <i data-feather="sun" class="icon-lg layout-mode-light"></i>
-                        </button> --}}
                     </div>
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item right-bar-toggle me-2">
@@ -122,28 +118,6 @@
                         <li>
                             <a href="{{ route('dropdown.index') }}" class="{{ request()->is('dropdown*') ? 'bg-light active' : '' }}">
                                 <i class="mdi mdi-package-down"></i><span>Manage Dropdowns</span>
-                            </a>
-                        </li>
-                        
-                        <li class="menu-title mt-2" data-key="t-menu">Master Data</li>
-                        <li>
-                            <a href="{{ route('institution.index') }}" class="{{ request()->is('institution*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-office-building"></i><span>Master Jaringan</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('staff.index') }}" class="{{ request()->is('staff*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-account-group"></i><span>Master Employee</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('department.index') }}" class="{{ request()->is('department*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-graph-outline"></i><span>Master Dept</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('position.index') }}" class="{{ request()->is('position*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-lan"></i><span>Master Position</span>
                             </a>
                         </li>
 
@@ -364,6 +338,7 @@
     <!-- DASHBOARD INIT -->
     <script src="{{ asset('assets/js/pages/dashboard.init.js') }}"></script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
     <!-- DATATABLE CUSTOM SCROLL -->
     <script>

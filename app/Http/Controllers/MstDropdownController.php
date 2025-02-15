@@ -25,19 +25,14 @@ class MstDropdownController extends Controller
             return DataTables::of($datas)
                 ->addColumn('action', function ($data) use ($categories) {
                     return view('dropdown.action', compact('data', 'categories'));
-                })
-                ->toJson();
+                })->toJson();
         }
 
         //Audit Log
         $this->auditLogs('View List Master Dropdown');
-
         return view('dropdown.index', compact('categories'));
     }
-    private function checkExisting($cat, $name)
-    {
-        return MstDropdowns::where('category', $cat)->where('name_value', $name)->exists();
-    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -45,9 +40,8 @@ class MstDropdownController extends Controller
             'name_value' => 'required',
         ]);
         $category = $request->category === 'NewCat' ? $request->addcategory : $request->category;
-
         // Check Existing Data
-        if ($this->checkExisting($category, $request->name_value)) {
+        if (MstDropdowns::where('category', $category)->where('name_value', $request->name_value)->exists()) {
             return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
         }
 
@@ -60,17 +54,16 @@ class MstDropdownController extends Controller
                 'is_active' => 1
             ]);
 
-            //Audit Log
+            // Audit Log
             $this->auditLogs('Store New Dropdown ID: ' . $store->id);
-
             DB::commit();
             return redirect()->back()->with('success', 'Success, New Dropdown Added');
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e);
             return redirect()->back()->with(['fail' => 'Failed to Add New Dropdown!']);
         }
     }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -80,6 +73,10 @@ class MstDropdownController extends Controller
         $category = $request->category === 'NewCat' ? $request->addcategory : $request->category;
 
         $id = decrypt($id);
+        // Check Existing Data
+        if(MstDropdowns::where('category', $category)->where('name_value', $request->name_value)->where('id', '!=', $id)->exists()) {
+            return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
+        }
         // Check With Data Before
         $dataBefore = MstDropdowns::where('id', $id)->first();
         $dataBefore->category = $category;
@@ -87,11 +84,6 @@ class MstDropdownController extends Controller
         $dataBefore->code_format = $request->code_format;
 
         if ($dataBefore->isDirty()) {
-            // Check Existing Data
-            if ($this->checkExisting($category, $request->name_value)) {
-                return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
-            }
-
             DB::beginTransaction();
             try {
                 MstDropdowns::where('id', $id)->update([
@@ -100,14 +92,12 @@ class MstDropdownController extends Controller
                     'code_format' => $request->code_format
                 ]);
 
-                //Audit Log
+                // Audit Log
                 $this->auditLogs('Update Selected Dropdown ID: ' . $id);
-
                 DB::commit();
                 return redirect()->back()->with('success', 'Success, Selected Dropdown Updated');
             } catch (Exception $e) {
                 DB::rollBack();
-                dd($e);
                 return redirect()->back()->with(['fail' => 'Failed to Update Selected Dropdown!']);
             }
         } else {
@@ -118,40 +108,35 @@ class MstDropdownController extends Controller
     public function enable($id)
     {
         $id = decrypt($id);
-
         DB::beginTransaction();
         try {
             MstDropdowns::where('id', $id)->update(['is_active' => 1]);
             $nameValue = MstDropdowns::where('id', $id)->first()->name_value;
 
-            //Audit Log
+            // Audit Log
             $this->auditLogs('Enable Selected Dropdown ID: ' . $id);
-
             DB::commit();
             return redirect()->back()->with(['success' => 'Success Activate : ' . $nameValue]);
         } catch (Exception $e) {
             DB::rollback();
-            dd($e);
             return redirect()->back()->with(['fail' => 'Failed to Activate : ' . $nameValue . '!']);
         }
     }
+
     public function disable($id)
     {
         $id = decrypt($id);
-
         DB::beginTransaction();
         try {
             MstDropdowns::where('id', $id)->update(['is_active' => 0]);
             $nameValue = MstDropdowns::where('id', $id)->first()->name_value;
 
-            //Audit Log
+            // Audit Log
             $this->auditLogs('Disable Selected Dropdown ID: ' . $id);
-
             DB::commit();
             return redirect()->back()->with(['success' => 'Success Deactivate : ' . $nameValue]);
         } catch (Exception $e) {
             DB::rollback();
-            dd($e);
             return redirect()->back()->with(['fail' => 'Failed to Deactivate : ' . $nameValue . '!']);
         }
     }

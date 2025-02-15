@@ -19,13 +19,11 @@ class AuditLogController extends Controller
     public function index(Request $request)
     {
         if (!$request->has('monthYear') || $request->monthYear == "") {
-            $now = Carbon::now();
-            $monthYear = $now->format('Y-m');
+            $monthYear = Carbon::now()->format('Y-m');
         } else {
             $monthYear = $request->monthYear;
         }
         [$year, $month] = explode('-', $monthYear);
-
         $datas = AuditLog::select('audit_logs.*', 'created_at as created')
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
@@ -36,9 +34,8 @@ class AuditLogController extends Controller
             return DataTables::of($datas)->toJson();
         }
 
-        //Audit Log
+        // Audit Log
         $this->auditLogs('View List Audit Log');
-
         return view('auditlog.index', compact('monthYear'));
     }
 }

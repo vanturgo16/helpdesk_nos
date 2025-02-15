@@ -10,12 +10,8 @@ use App\Http\Middleware\UpdateLastSeen;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\InstitutionController;
-use App\Http\Controllers\MstDepartmentController;
 use App\Http\Controllers\MstDropdownController;
-use App\Http\Controllers\MstPositionController;
 use App\Http\Controllers\MstRuleController;
-use App\Http\Controllers\MstStaffController;
 use App\Http\Controllers\MstUserController;
 
 
@@ -59,40 +55,12 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
         Route::prefix('user')->group(function () {
             Route::get('/', 'index')->name('user.index');
             Route::post('/store', 'store')->name('user.store');
-        });
-    });
-
-    // INSTITUTION MANAGEMENT
-    Route::controller(InstitutionController::class)->group(function () {
-        Route::prefix('institution')->group(function () {
-            Route::get('/', 'index')->name('institution.index');
-        });
-    });
-    // DEPARTMENT MANAGEMENT
-    Route::controller(MstDepartmentController::class)->group(function () {
-        Route::prefix('department')->group(function () {
-            Route::get('/', 'index')->name('department.index');
-            Route::post('/store', 'store')->name('department.store');
-            Route::post('/update/{id}', 'update')->name('department.update');
-            Route::post('/disable/{id}', 'disable')->name('department.disable');
-            Route::post('/enable/{id}', 'enable')->name('department.enable');
-        });
-    });
-    // POSITION MANAGEMENT
-    Route::controller(MstPositionController::class)->group(function () {
-        Route::prefix('position')->group(function () {
-            Route::get('/', 'index')->name('position.index');
-            Route::post('/store', 'store')->name('position.store');
-            Route::post('/update/{id}', 'update')->name('position.update');
-            Route::post('/disable/{id}', 'disable')->name('position.disable');
-            Route::post('/enable/{id}', 'enable')->name('position.enable');
-        });
-    });
-    // STAFF MANAGEMENT
-    Route::controller(MstStaffController::class)->group(function () {
-        Route::prefix('staff')->group(function () {
-            Route::get('/', 'index')->name('staff.index');
-            Route::post('/store', 'store')->name('staff.store');
+            Route::post('/update/{id}', 'update')->name('user.update');
+            Route::post('/reset/{id}', 'reset')->name('user.reset');
+            Route::post('/activate/{id}', 'activate')->name('user.activate');
+            Route::post('/deactivate/{id}', 'deactivate')->name('user.deactivate');
+            Route::post('/delete/{id}', 'delete')->name('user.delete');
+            Route::post('/check_email_employee', 'check_email')->name('user.check_email_employee');
         });
     });
 
