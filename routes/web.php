@@ -12,8 +12,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MstDropdownController;
 use App\Http\Controllers\MstRuleController;
+use App\Http\Controllers\MstStatusController;
+use App\Http\Controllers\MstCategoryController;
+use App\Http\Controllers\MstCreateTicketController;
+use App\Http\Controllers\MstSubCategoryController;
 use App\Http\Controllers\MstUserController;
-
 
 // LOGIN
 Route::get('/', [AuthController::class, 'login'])->name('login');
@@ -61,6 +64,45 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::post('/deactivate/{id}', 'deactivate')->name('user.deactivate');
             Route::post('/delete/{id}', 'delete')->name('user.delete');
             Route::post('/check_email_employee', 'check_email')->name('user.check_email_employee');
+        });
+    });
+    // MASTER STATUS
+    Route::controller(MstStatusController::class)->group(function () {
+        Route::prefix('status')->group(function () {
+            Route::get('/', 'index')->name('status.index');
+            Route::post('/store', 'store')->name('status.store');
+            Route::post('/update/{id}', 'update')->name('status.update');
+            Route::post('/disable/{id}', 'disable')->name('status.disable');
+            Route::post('/enable/{id}', 'enable')->name('status.enable');
+        });
+    });
+    // MASTER CATEGORY
+    Route::controller(MstCategoryController::class)->group(function () {
+        Route::prefix('category')->group(function () {
+            Route::get('/', 'index')->name('category.index');
+            Route::post('/store', 'store')->name('category.store');
+            Route::post('/update/{id}', 'update')->name('category.update');
+            Route::post('/disable/{id}', 'disable')->name('category.disable');
+            Route::post('/enable/{id}', 'enable')->name('category.enable');
+        });
+    });
+    // MASTER SUB CATEGORY
+    Route::controller(MstSubCategoryController::class)->group(function () {
+        Route::prefix('subcategory')->group(function () {
+            Route::get('/', 'index')->name('subcategory.index');
+            Route::post('/store', 'store')->name('subcategory.store');
+            Route::post('/update/{id}', 'update')->name('subcategory.update');
+            Route::post('/disable/{id}', 'disable')->name('subcategory.disable');
+            Route::post('/enable/{id}', 'enable')->name('subcategory.enable');
+        });
+    });
+
+    
+    // CREATE TICKET
+    Route::controller(MstCreateTicketController::class)->group(function () {
+        Route::prefix('create-ticket')->group(function () {
+            Route::get('/', 'index')->name('createTicket.index');
+            Route::post('/store', 'store')->name('createTicket.store');
         });
     });
 

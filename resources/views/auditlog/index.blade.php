@@ -83,7 +83,7 @@
                     },
                     orderable: false,
                     searchable: false,
-                    className: 'align-middle text-center',
+                    className: 'align-top text-center',
                 },
                 {
                     orderable: true,

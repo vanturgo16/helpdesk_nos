@@ -113,7 +113,7 @@
                     },
                     orderable: false,
                     searchable: false,
-                    className: 'align-middle text-center',
+                    className: 'align-top text-center',
                 },
                 {
                     data: 'name',
@@ -126,12 +126,12 @@
                     orderable: true,
                     data: 'role',
                     name: 'role',
-                    className: 'align-middle text-center',
+                    className: 'align-top text-center',
                 },
                 {
                     data: 'is_active',
                     orderable: true,
-                    className: 'align-middle text-center',
+                    className: 'align-top text-center',
                     render: function(data, type, row) {
                         var html
                         if(row.is_active == 1){
@@ -147,7 +147,7 @@
                     name: 'action',
                     orderable: false,
                     searchable: false,
-                    className: 'align-middle text-center',
+                    className: 'align-top text-center',
                 },
             ],
         });

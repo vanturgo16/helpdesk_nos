@@ -121,9 +121,26 @@
                             </a>
                         </li>
 
+                        <li class="menu-title mt-2" data-key="t-menu">Master</li>
+                        <li>
+                            <a href="{{ route('status.index') }}" class="{{ request()->is('status*') ? 'bg-light active' : '' }}">
+                                <i class="mdi mdi-list-status"></i><span>Status</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('category.index') }}" class="{{ request()->is('category*') ? 'bg-light active' : '' }}">
+                                <i class="mdi mdi-sitemap-outline"></i><span>Category</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('subcategory.index') }}" class="{{ request()->is('subcategory*') ? 'bg-light active' : '' }}">
+                                <i class="mdi mdi-sitemap"></i><span>Sub Category</span>
+                            </a>
+                        </li>
+
                         <li class="menu-title mt-2" data-key="t-menu">Helpdesk</li>
                         <li>
-                            <a href="#" class="">
+                            <a href="{{ route('createTicket.index') }}" class="{{ request()->is('create-ticket*') ? 'bg-light active' : '' }}">
                                 <i class="mdi mdi-ticket-outline"></i><span>Create Ticket</span>
                             </a>
                         </li>
@@ -155,7 +172,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
-                            © Edu_Stream 2024
+                            © Dashboard Helpdesk PT Mitra Sendang Kemakmuran Banten 2025
                         </div>
                     </div>
                 </div>
@@ -330,6 +347,11 @@
     <script src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/js/select2.init.js') }}"></script>
+    <!-- twitter-bootstrap-wizard js -->
+    <script src="{{ asset('assets/libs/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/twitter-bootstrap-wizard/prettify.js') }}"></script>
+    <!-- form wizard init -->
+    <script src="{{ asset('assets/js/pages/form-wizard.init.js') }}"></script>
     <!-- CKEDITOR JS -->
     <script src="{{ asset('assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/js/pages/form-editor.init.js') }}"></script>
