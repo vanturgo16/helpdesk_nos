@@ -112,3 +112,9 @@
         height: 78vh;
     }
 }
+.footer-text {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

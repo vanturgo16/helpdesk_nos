@@ -1,7 +1,6 @@
 @extends('layouts.master')
 @section('konten')
 
-
 <style>
     .ticket-container {
         background: linear-gradient(135deg, #f8f9fa 25%, #e9ecef 100%);
@@ -33,35 +32,14 @@
     }
 </style>
 
-<style>
-    .page-content {
-        position: relative;
-        min-height: 100vh;
-        padding-bottom: 80px;
-    }
-    .floating-card {
-        position: absolute;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-        max-width: 80vw;
-        background: white;
-        z-index: 11;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-</style>
-
-<div class="page-content position-relative">
+<div class="page-content">
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header bg-light text-primary">
                     <h4 class="card-title mb-0">Create New Ticket</h4>
                 </div>
-                <div class="card-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="card-body">
                     <div id="progrss-wizard" class="twitter-bs-wizard">
                         <ul class="twitter-bs-wizard-nav nav nav-pills nav-justified">
                             <li class="nav-item">
@@ -89,7 +67,7 @@
                         </ul>
 
                         <!-- wizard-nav -->
-                        <div class="tab-content twitter-bs-wizard-tab-content" style="max-height: 45vh; overflow-y: auto; overflow-x: hidden;">
+                        <div class="tab-content twitter-bs-wizard-tab-content">
                             <div class="tab-pane" id="categoryTicket">
                                 <div class="text-center mb-4">
                                     <h5>Category Ticket</h5>
@@ -131,6 +109,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                    <li class="next"><a href="javascript: void(0);" class="btn btn-primary">Next <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                </ul>
                             </div>
                             <div class="tab-pane" id="detailTicket">
                                 <div class="text-center mb-4">
@@ -161,6 +142,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                    <li class="previous"><a href="javascript: void(0);" class="btn btn-secondary"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>
+                                    <li class="next"><a href="javascript: void(0);" class="btn btn-primary">Next <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                </ul>
                             </div>
                             <div class="tab-pane" id="summaryTicket">
                                 <div class="text-center mb-4">
@@ -172,7 +157,7 @@
                                         <div class="ticket-container">
                                             <h3 class="text-center">No. Ticket : <b><u>TCK123IT</u></b></h3>
                                             <div class="row mt-4">
-                                                <div class="col-lg-6 mb-4">
+                                                <div class="col-lg-6">
                                                     <table>
                                                         <tbody>
                                                             <tr>
@@ -222,6 +207,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                    <li class="previous"><a href="javascript: void(0);" class="btn btn-secondary"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>
+                                    <li class="float-end"><a href="javascript: void(0);" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sendTicket">Send Ticket</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -229,21 +218,8 @@
             </div>
         </div>
     </div>
-
-    <!-- Floating Card at the Bottom of page-content -->
-    <div class="floating-card card shadow">
-        <div class="card-body text-center p-0">
-            <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-secondary" id="prevBtn">
-                    <i class="fas fa-arrow-left"></i>&nbsp;&nbsp; Previous
-                </button>
-                <button class="btn btn-primary" id="nextBtn">
-                    Next &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-    </div>
 </div>
+
 
 {{-- Modal Add --}}
 <div class="modal fade" id="sendTicket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -255,11 +231,6 @@
             </div>
             <form class="formLoad" action="{{ route('createTicket.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="id_mst_status_final" value="">
-                <input type="hidden" name="id_mst_category_final" value="">
-                <input type="hidden" name="id_mst_sub_category_final" value="">
-                <input type="hidden" name="remarks_final" value="">
-                <input type="hidden" name="id_department_final" value="">
                 <div class="modal-body">
                     <div class="text-center">
                         Are You Sure to <b>Send</b> This Ticket?
@@ -267,7 +238,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="bx bx-paper-plane label-icon"></i>Send Ticket</button>
+                    <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="bx bx-paper-plane label-icon"></i>Send</button>
                 </div>
             </form>
         </div>
@@ -281,55 +252,6 @@
         if (notes.innerText.length > 255) {
             notes.innerText = notes.innerText.substring(0, 255) + "...";
         }
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let tabs = document.querySelectorAll('.twitter-bs-wizard-nav .nav-link');
-        let tabContents = document.querySelectorAll('.tab-pane');
-        let prevBtn = document.getElementById('prevBtn');
-        let nextBtn = document.getElementById('nextBtn');
-        let currentTab = 0;
-    
-        function showTab(index) {
-            tabs.forEach((tab, i) => {
-                tab.classList.toggle('active', i === index);
-                tabContents[i].classList.toggle('active', i === index);
-            });
-    
-            prevBtn.disabled = index === 0;
-    
-            if (index === tabs.length - 1) {
-                nextBtn.innerHTML = 'Submit &nbsp;<i class="bx bx-paper-plane"></i>';
-                nextBtn.classList.remove('btn-primary');
-                nextBtn.classList.add('btn-success');
-                nextBtn.setAttribute("data-bs-toggle", "modal");
-                nextBtn.setAttribute("data-bs-target", "#sendTicket");
-            } else {
-                nextBtn.innerHTML = 'Next &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>';
-                nextBtn.classList.remove('btn-success');
-                nextBtn.classList.add('btn-primary');
-                nextBtn.removeAttribute("data-bs-toggle");
-                nextBtn.removeAttribute("data-bs-target");
-            }
-        }
-    
-        prevBtn.addEventListener("click", function () {
-            if (currentTab > 0) {
-                currentTab--;
-                showTab(currentTab);
-            }
-        });
-    
-        nextBtn.addEventListener("click", function () {
-            if (currentTab < tabs.length - 1) {
-                currentTab++;
-                showTab(currentTab);
-            }
-        });
-    
-        showTab(currentTab);
     });
 </script>
 

@@ -171,7 +171,7 @@
             <footer class="footer" style="position: fixed; z-index: 10;">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 footer-text">
                             © Dashboard Helpdesk PT Mitra Sendang Kemakmuran Banten 2025
                         </div>
                     </div>
