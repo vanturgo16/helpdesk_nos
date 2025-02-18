@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'dealer_type',
+        'dealer_name',
+        'department',
     ];
 
     /**
