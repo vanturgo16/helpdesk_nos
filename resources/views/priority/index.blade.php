@@ -17,13 +17,13 @@
                                         <h5 class="modal-title" id="staticBackdropLabel">Add New</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form class="formLoad" action="{{ route('status.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
+                                    <form class="formLoad" action="{{ route('priority.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-lg-12 mb-3">
-                                                    <label class="form-label">Status Name</label> <label class="text-danger">*</label>
-                                                    <input class="form-control" type="text" name="status" placeholder="Input Status Name.." required>
+                                                    <label class="form-label">Priority Name</label> <label class="text-danger">*</label>
+                                                    <input class="form-control" type="text" name="priority" placeholder="Input Priority Name.." required>
                                                 </div>
                                             </div>
                                         </div>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="col-4">
                     <div class="text-center">
-                        <h4 class="text-bold">Master Status</h4>
+                        <h4 class="text-bold">Master Priority</h4>
                     </div>
                 </div>
                 <div class="col-4"></div>
@@ -50,7 +50,7 @@
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">No</th>
-                        <th class="align-middle text-center">Status Name</th>
+                        <th class="align-middle text-center">Priority Name</th>
                         <th class="align-middle text-center">Status</th>
                         <th class="align-middle text-center">Action</th>
                     </tr>
@@ -66,7 +66,7 @@
             processing: true,
             serverSide: true,
             scrollY: '100vh',
-            ajax: '{!! route('status.index') !!}',
+            ajax: '{!! route('priority.index') !!}',
             columns: [{
                 data: null,
                     render: function(data, type, row, meta) {
@@ -77,7 +77,7 @@
                     className: 'align-top text-center',
                 },
                 {
-                    data: 'status',
+                    data: 'priority',
                     orderable: true,
                     className: 'align-top',
                 },

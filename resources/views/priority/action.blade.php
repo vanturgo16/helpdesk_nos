@@ -18,16 +18,16 @@
         <div class="modal-dialog modal-dialog-top" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Edit Status</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Edit Priority</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="formLoad" action="{{ route('status.update', encrypt($data->id)) }}" method="POST" enctype="multipart/form-data">
+                <form class="formLoad" action="{{ route('priority.update', encrypt($data->id)) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-12 mb-3">
-                                <label class="form-label">Status Name</label> <label class="text-danger">*</label>
-                                <input class="form-control" type="text" name="status" value="{{ $data->status }}" placeholder="Input Status Name.." required>
+                                <label class="form-label">Priority Name</label> <label class="text-danger">*</label>
+                                <input class="form-control" type="text" name="priority" value="{{ $data->priority }}" placeholder="Input Priority Name.." required>
                             </div>
                         </div>
                     </div>
@@ -44,14 +44,14 @@
         <div class="modal-dialog modal-dialog-top" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Disable Status</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Disable Priority</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="formLoad" action="{{ route('status.disable', encrypt($data->id)) }}" method="POST" enctype="multipart/form-data">
+                <form class="formLoad" action="{{ route('priority.disable', encrypt($data->id)) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="text-center">
-                            Are You Sure to <b>Disable</b> This Status?
+                            Are You Sure to <b>Disable</b> This Priority?
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -69,14 +69,14 @@
         <div class="modal-dialog modal-dialog-top" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Enable Status</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Enable Priority</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="formLoad" action="{{ route('status.enable', encrypt($data->id)) }}" method="POST" enctype="multipart/form-data">
+                <form class="formLoad" action="{{ route('priority.enable', encrypt($data->id)) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="text-center">
-                            Are You Sure to <b>Enable</b> This Status?
+                            Are You Sure to <b>Enable</b> This Priority?
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -11,7 +11,7 @@
                         
                         {{-- Modal Add --}}
                         <div class="modal fade" id="add-new" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-top modal-lg" role="document">
+                            <div class="modal-dialog modal-dialog-top" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
@@ -21,37 +21,12 @@
                                         @csrf
                                         <div class="modal-body">
                                             <div class="row">
-                                                <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Name</label><label style="color: darkred">*</label>
-                                                    <input class="form-control" type="text" name="name" placeholder="Input Name.." required>
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
+                                                <div class="col-lg-12 mb-3">
                                                     <label class="form-label">Email</label><label style="color: darkred">*</label>
-                                                    <input class="form-control" type="email" name="email" placeholder="Input Email.." required>
+                                                    <div id="emailWarning"></div>
+                                                    <input class="form-control" id="checkEmail" name="email" type="email" value="" placeholder="Input Email.." required>
                                                 </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Dealer Type</label> <label class="text-danger">*</label>
-                                                    <select class="form-control select2" name="dealer_type" required>
-                                                        <option value="" disabled selected>- Select Dealer Type -</option>
-                                                        @foreach($dealerTypes as $item)
-                                                            <option value="{{ $item->name_value }}">{{ $item->name_value }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Dealer Name</label><label style="color: darkred">*</label>
-                                                    <input class="form-control" type="text" name="dealer_name" placeholder="Input Dealer Name.." required>
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Department</label> <label class="text-danger">*</label>
-                                                    <select class="form-control select2" name="department" required>
-                                                        <option value="" disabled selected>- Select Department -</option>
-                                                        @foreach($departments as $item)
-                                                            <option value="{{ $item->name_value }}">{{ $item->name_value }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
+                                                <div class="col-lg-12 mb-3">
                                                     <label class="form-label">Role</label> <label class="text-danger">*</label>
                                                     <select class="form-control select2" name="role" required>
                                                         <option value="" disabled selected>- Select Role -</option>
@@ -67,6 +42,34 @@
                                             <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-account-plus label-icon"></i>Add</button>
                                         </div>
                                     </form>
+                                    <script>
+                                        $(document).ready(function(){
+                                            $('#checkEmail').on('input', function(){
+                                                var email = $(this).val();
+                                                checkEmailAvailability(email);
+                                            });
+                                    
+                                            function checkEmailAvailability(email) {
+                                                $.ajax({
+                                                    url: 'user/check_email_employee',
+                                                    type: 'POST',
+                                                    data: {
+                                                        email: email,
+                                                        _token: '{{ csrf_token() }}'
+                                                    },
+                                                    success: function(response) {
+                                                        $('#emailWarning').remove();
+                                                        if (response.status === 'notregistered') {
+                                                            $('#checkEmail').before('<div id="emailWarning"><div class="alert alert-warning alert-dismissible alert-label-icon label-arrow fade show" role="alert"><i class="mdi mdi-alert-outline label-icon"></i><strong>Warning</strong> - Email Not Registered As Employee<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>');
+                                                            $('#submitButton').prop('disabled', true);
+                                                        } else {
+                                                            $('#submitButton').prop('disabled', false);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -81,13 +84,11 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered dt-responsive w-100" id="ssTable">
+            <table class="table table-bordered dt-responsive nowrap w-100" id="ssTable">
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">No</th>
                         <th class="align-middle text-center">Name</th>
-                        <th class="align-middle text-center">Dealer</th>
-                        <th class="align-middle text-center">Department</th>
                         <th class="align-middle text-center">Role</th>
                         <th class="align-middle text-center">Status</th>
                         <th class="align-middle text-center">Action</th>
@@ -104,7 +105,7 @@
             processing: true,
             serverSide: true,
             scrollY: '100vh',
-            ajax: '{!! route('user.datas') !!}',
+            ajax: '{!! route('user.index') !!}',
             columns: [{
                 data: null,
                     render: function(data, type, row, meta) {
@@ -122,27 +123,10 @@
                     },
                 },
                 {
-                    data: 'dealer_name',
-                    name: 'dealer_name',
-                    orderable: true,
-                    searchable: true,
-                    className: 'align-top',
-                    render: function(data, type, row) {
-                        return row.dealer_type + '<br>' + data;
-                    },
-                },
-                {
-                    data: 'department',
-                    name: 'department',
-                    orderable: true,
-                    searchable: true,
-                    className: 'align-top',
-                },
-                {
                     orderable: true,
                     data: 'role',
                     name: 'role',
-                    className: 'align-top text-center fw-bold',
+                    className: 'align-top text-center',
                 },
                 {
                     data: 'is_active',
@@ -164,12 +148,6 @@
                     orderable: false,
                     searchable: false,
                     className: 'align-top text-center',
-                },
-                {
-                    data: 'dealer_type',
-                    name: 'dealer_type',
-                    searchable: true,
-                    visible: false
                 },
             ],
         });

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Traits\AuditLogsTrait;
 
 // Model
-use App\Models\MstStatus;
+use App\Models\MstPriorities;
 use App\Models\MstCategory;
 
 class MstCreateTicketController extends Controller
@@ -18,12 +18,12 @@ class MstCreateTicketController extends Controller
 
     public function index(Request $request)
     {
-        $statuses = MstStatus::orderBy('created_at', 'desc')->where('is_active', 1)->get();
+        $priorities = MstPriorities::orderBy('created_at', 'desc')->where('is_active', 1)->get();
         $categories = MstCategory::orderBy('created_at', 'desc')->where('is_active', 1)->get();
 
         //Audit Log
         $this->auditLogs('View Form Create Ticket');
-        return view('create_ticket.index', compact('statuses', 'categories'));
+        return view('create_ticket.index', compact('priorities', 'categories'));
     }
 
     public function store(Request $request)

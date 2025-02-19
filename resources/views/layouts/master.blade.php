@@ -123,8 +123,8 @@
 
                         <li class="menu-title mt-2" data-key="t-menu">Master</li>
                         <li>
-                            <a href="{{ route('status.index') }}" class="{{ request()->is('status*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-list-status"></i><span>Status</span>
+                            <a href="{{ route('priority.index') }}" class="{{ request()->is('priority*') ? 'bg-light active' : '' }}">
+                                <i class="mdi mdi-list-status"></i><span>Priority</span>
                             </a>
                         </li>
                         <li>
@@ -146,12 +146,7 @@
                         </li>
                         <li>
                             <a href="#" class="">
-                                <i class="mdi mdi-ticket-account"></i><span>Ticket Tracking</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="">
-                                <i class="mdi mdi-ticket-confirmation"></i><span>Ticket History</span>
+                                <i class="mdi mdi-ticket-confirmation"></i><span>List Ticket</span>
                             </a>
                         </li>
 
