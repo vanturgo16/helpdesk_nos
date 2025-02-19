@@ -94,6 +94,9 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::post('/update/{id}', 'update')->name('subcategory.update');
             Route::post('/disable/{id}', 'disable')->name('subcategory.disable');
             Route::post('/enable/{id}', 'enable')->name('subcategory.enable');
+
+            // Ajax
+            Route::get('/get-subcategory/{id}', 'getSubcategory')->name('subcategory.getSubcategory');
         });
     });
 

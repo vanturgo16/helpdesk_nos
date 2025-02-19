@@ -138,4 +138,15 @@ class MstSubCategoryController extends Controller
             return redirect()->back()->with(['fail' => 'Failed to Deactivate : ' . $nameValue . '!']);
         }
     }
+
+    // AJAX
+    public function getSubcategory($id)
+    {
+        $datas = MstSubCategory::where('id_mst_category', $id)->get();
+        if ($datas) {
+            return response()->json(['success' => true, 'data' => [$datas]]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
 }

@@ -274,6 +274,42 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $('select[name="id_mst_category"]').on('change', function () {
+            var categoryId = $(this).val();
+            var subCategorySelect = $('select[name="id_mst_sub_category"]');
+            
+            if (categoryId) {
+                $.ajax({
+                    url: '/subcategory/get-subcategory/' + categoryId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        subCategorySelect.empty();
+                        subCategorySelect.append('<option value="" disabled selected>- Select -</option>');
+                        
+                        if (response.success) {
+                            $.each(response.data[0], function (key, item) {
+                                subCategorySelect.append('<option value="' + item.id + '">' + item.sub_category + '</option>');
+                            });
+                        }
+                        
+                        subCategorySelect.append('<option disabled>──────────</option>');
+                        subCategorySelect.append('<option value="Other">Other</option>');
+                    },
+                    error: function () {
+                        alert('Error fetching subcategories. Please try again.');
+                    }
+                });
+            } else {
+                subCategorySelect.empty().append('<option value="" disabled selected>- Select -</option>');
+                subCategorySelect.append('<option disabled>──────────</option>');
+                subCategorySelect.append('<option value="Other">Other</option>');
+            }
+        });
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
