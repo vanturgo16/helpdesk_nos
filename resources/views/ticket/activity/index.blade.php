@@ -1,12 +1,9 @@
 <table class="table table-bordered dt-responsive w-100" id="ssTable">
     <thead class="table-light">
         <tr>
-            <th class="align-middle text-center">#</th>
-            <th class="align-middle text-center">Status</th>
+            <th class="align-middle text-center">Action By</th>
             <th class="align-middle text-center">Message</th>
             <th class="align-middle text-center">Attachment</th>
-            <th class="align-middle text-center">Action By</th>
-            <th class="align-middle text-center">Action</th>
         </tr>
     </thead>
 </table>
@@ -21,21 +18,16 @@
                 url: url,
                 type: 'GET',
             },
-            columns: [{
-                data: null,
-                    render: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    },
-                    orderable: false,
-                    searchable: false,
-                    className: 'align-top text-center',
-                },
+            columns: [
                 {
-                    data: 'description',
-                    name: 'description',
-                    orderable: true,
+                    data: 'created',
+                    name: 'created',
                     searchable: true,
+                    orderable: true,
                     className: 'align-top',
+                    render: function(data, type, row) {
+                        return row.created_by + '<br><b>At.</b>' + row.created;
+                    },
                 },
                 {
                     data: 'message',
@@ -43,6 +35,9 @@
                     orderable: true,
                     searchable: true,
                     className: 'align-top',
+                    render: function(data, type, row) {
+                        return '<b>' + row.description + '</b><br>' + row.message;
+                    },
                 },
                 {
                     data: 'attachment',
@@ -55,18 +50,13 @@
                     data: 'created_by',
                     name: 'created_by',
                     searchable: true,
-                    orderable: true,
-                    className: 'align-top',
-                    render: function(data, type, row) {
-                        return row.created_by + '<br><b>At.</b>' + row.created;
-                    },
+                    visible: false
                 },
                 {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false,
-                    className: 'align-top text-center',
+                    data: 'description',
+                    name: 'description',
+                    searchable: true,
+                    visible: false
                 },
             ],
         });

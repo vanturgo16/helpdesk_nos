@@ -21,8 +21,25 @@
 
     {{-- MAIN CARD --}}
     <div class="card">
-        <div class="card-header">
-            <h4 class="text-bold">Detail Ticket</h4>
+        <div class="card-header p-3 bg-light">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="text-bold">Detail Ticket</h4>
+                </div>
+                <div class="col-lg-6">
+                    <div class="text-end">
+                        <h4>
+                            @if($data->status == 0)
+                                <span class="badge bg-secondary text-white"><i class="fas fa-play-circle"></i> Requested</span>
+                            @elseif($data->status == 1)
+                                <span class="badge bg-warning text-white"><i class="fa-solid fa-spinner"></i> In-Progress</span>
+                            @elseif($data->status == 2)
+                                <span class="badge bg-success text-white"><i class="fa-solid fa-square-check"></i> Done</span>
+                            @endif
+                        </h4>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="row">
@@ -69,11 +86,31 @@
                     <span>{{ $data->notes }}</span>
                 </div>
             </div>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    @include('ticket.assign.index')
+                </div>
+            </div>
         </div>
     </div>
     <div class="card">
-        <div class="card-header">
-            <h4 class="text-bold">Ticket Activity</h4>
+        <div class="card-header p-3">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="text-bold">Ticket Activity</h4>
+                </div>
+                <div class="col-lg-6">
+                    <div class="text-end">
+                        <button type="button" class="btn btn-sm btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addActivity">
+                            <i class="mdi mdi-plus label-icon"></i> Add Activity
+                        </button>
+                        <button type="button" class="btn btn-sm btn-success waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#preClose">
+                            <i class="mdi mdi-close-circle label-icon"></i> Pre-close Ticket
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="row">
