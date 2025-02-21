@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 // Traits
 use App\Traits\AuditLogsTrait;
@@ -14,6 +15,7 @@ use App\Models\MstPriorities;
 use App\Models\MstCategory;
 use App\Models\Ticket;
 use App\Models\Log;
+use App\Models\LogTicket;
 
 class CreateTicketController extends Controller
 {
@@ -41,7 +43,7 @@ class CreateTicketController extends Controller
             'notes' => 'required',
             'file_1' => 'nullable|file|max:10240|mimes:jpg,png,pdf,docx,xls,xlsx',
         ]);
-
+        $assignTo = 'IT';
         DB::beginTransaction();
         try {
             $url = null;
@@ -67,8 +69,24 @@ class CreateTicketController extends Controller
             Log::create([
                 'id_ticket' => $store->id,
                 'created_by' => $user,
-                'description' => 'Request',
+                'description' => 'Success Created Ticket',
                 'message' => $request->notes
+            ]);
+            $logAssign = Log::create([
+                'id_ticket' => $store->id,
+                'created_by' => $user,
+                'description' => 'Success Assign Ticket',
+                'message' => 'Assign To:' . $assignTo
+            ]);
+            // Store Assign Log
+            LogTicket::create([
+                'id_ticket' => $store->id,
+                'id_log' => $logAssign->id,
+                'assign_by' => $user,
+                'assign_to_dept' => $assignTo,
+                'assign_date' => Carbon::now(),
+                'assign_status' => 0,
+                'preclosed_status' => 0,
             ]);
 
             // Audit Log

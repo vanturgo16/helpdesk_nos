@@ -119,6 +119,7 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::get('/datas', 'datas')->name('ticket.datas');
             Route::post('/store', 'store')->name('ticket.store');
             Route::get('/detail/{id}', 'detail')->name('ticket.detail');
+            Route::get('/detail/assign/datas/{id}', 'assignDatas')->name('ticket.assign.datas');
             Route::get('/detail/log/datas/{id}', 'logDatas')->name('ticket.log.datas');
         });
     });

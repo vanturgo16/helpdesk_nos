@@ -28,6 +28,7 @@
                         <th class="align-middle text-center">Category</th>
                         <th class="align-middle text-center">Requestor</th>
                         <th class="align-middle text-center">Target Closed</th>
+                        <th class="align-middle text-center">Last Assign To</th>
                         <th class="align-middle text-center">Status</th>
                         <th class="align-middle text-center">Action</th>
                     </tr>
@@ -120,6 +121,13 @@
                     }
                 },
                 {
+                    data: 'lastAssign',
+                    name: 'lastAssign',
+                    orderable: false,
+                    searchable: false,
+                    className: 'align-top',
+                },
+                {
                     data: 'status',
                     name: 'status',
                     orderable: true,
@@ -127,10 +135,12 @@
                     className: 'align-top text-center',
                     render: function(data, type, row) {
                         let html;
-                        if (data === 1) {
-                            html = `<span class="badge bg-success text-white">Done</span>`;
+                        if (data === 0) {
+                            html = `<span class="badge bg-secondary text-white"><i class="fas fa-play-circle"></i> Requested</span>`;
+                        } else if (data === 1) {
+                            html = `<span class="badge bg-warning text-white"><i class="fa-solid fa-spinner"></i> In-Progress</span>`;
                         } else {
-                            html = `<span class="badge bg-warning">Requested</span>`;
+                            html = `<span class="badge bg-success text-white"><i class="fa-solid fa-square-check"></i> Done</span>`;
                         }
                         return html;
                     },
@@ -210,7 +220,8 @@
                 <select id="filterStatus">
                     <option value="">-- All Status --</option>
                     <option value="0">Requested</option>
-                    <option value="1">Done</option>
+                    <option value="1">In-Progress</option>
+                    <option value="2">Done</option>
                 </select>
             </label>
         `;
