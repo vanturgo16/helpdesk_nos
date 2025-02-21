@@ -1,7 +1,6 @@
 @extends('layouts.master')
 @section('konten')
 
-
 <style>
     .ticket-container {
         background: linear-gradient(135deg, #f8f9fa 25%, #e9ecef 100%);
@@ -99,7 +98,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Priority</label> <label class="text-danger">*</label>
-                                            <select class="form-control select2" name="id_mst_priority" required>
+                                            <select class="form-control select2" name="priority_input" required>
                                                 <option value="" disabled selected>- Select Priority -</option>
                                                 @foreach($priorities as $item)
                                                     <option value="{{ $item->priority }}">{{ $item->priority }}</option>
@@ -113,7 +112,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Category</label> <label class="text-danger">*</label>
-                                            <select class="form-control select2" name="id_mst_category" required>
+                                            <select class="form-control select2" name="id_mst_category_input" required>
                                                 <option value="" disabled selected>- Select Category -</option>
                                                 @foreach($categories as $item)
                                                     <option value="{{ $item->id }}">{{ $item->category }}</option>
@@ -125,7 +124,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Sub Category</label> <label class="text-danger">*</label>
-                                            <select class="form-control select2" name="id_mst_sub_category" required>
+                                            <select class="form-control select2" name="id_mst_sub_category_input" required>
                                                 <option value="" disabled selected>- Select Sub Category -</option>
                                                 <option disabled>──────────</option>
                                                 <option value="Other">Other</option>
@@ -144,27 +143,27 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Notes (max 255 character)</label> <label class="text-danger">*</label>
-                                            <textarea name="notes" rows="3" cols="50" class="form-control" placeholder="Input Note.." required></textarea>
+                                            <textarea name="notes_input" rows="3" cols="50" class="form-control" placeholder="Input Note.." required></textarea>
                                             <div class="invalid-feedback">Please fill notes.</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Upload Document</label>
-                                            <input type="file" name="file_1" class="form-control">
+                                            <input type="file" name="file_1" id="file_1" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Report Date</label> <label class="text-danger">*</label>
-                                            <input type="date" name="report_date" class="form-control" required>
-                                            <div class="invalid-feedback">Please fill notes.</div>
+                                            <input type="date" name="report_date_input" class="form-control" required>
+                                            <div class="invalid-feedback">Please fill report date.</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Target Solved</label>
-                                            <input type="date" name="target_solved_date" class="form-control">
+                                            <input type="date" name="target_solved_date_input" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -177,7 +176,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="ticket-container">
-                                            <h3 class="text-center">No. Ticket : <b><u>TCK123IT</u></b></h3>
+                                            <h3 class="text-center">No. Ticket : <b><u>{{ $noTicket }}</u></b></h3>
                                             <div class="row mt-4">
                                                 <div class="col-lg-6 mb-4">
                                                     <table>
@@ -205,12 +204,14 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <div class="col-lg-6">
-                                                    <p><strong>Notes :</strong><br>
-                                                        <span id="summaryNotes" class="notes"></span>
-                                                    </p>
-                                                    <table class="mb-3">
+                                                <div class="col-lg-6 mb-4">
+                                                    <table>
                                                         <tbody>
+                                                            <tr>
+                                                                <td class="align-top"><strong>Input File</strong></td>
+                                                                <td class="align-top" style="padding-left: 15px;">:</td>
+                                                                <td class="align-top" id="summaryInputFile"></td>
+                                                            </tr>
                                                             <tr>
                                                                 <td class="align-top"><strong>Report Date</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
@@ -223,6 +224,11 @@
                                                             </tr>
                                                         </tbody>
                                                     </table>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <p><strong>Notes :</strong><br>
+                                                        <span id="summaryNotes"></span>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -261,11 +267,12 @@
             </div>
             <form class="formLoad" action="{{ route('createTicket.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="id_mst_status_final" value="">
-                <input type="hidden" name="id_mst_category_final" value="">
-                <input type="hidden" name="id_mst_sub_category_final" value="">
-                <input type="hidden" name="notes_final" value="">
-                <input type="hidden" name="file_1_final" value="">
+                <input type="hidden" name="priority" value="">
+                <input type="hidden" name="category" value="">
+                <input type="hidden" name="sub_category" value="">
+                <input type="hidden" name="report_date" value="">
+                <input type="hidden" name="target_solved_date" value="">
+                <input type="hidden" name="notes" value="">
                 <div class="modal-body">
                     <div class="text-center">
                         Are You Sure to <b>Send</b> This Ticket?
@@ -280,11 +287,13 @@
     </div>
 </div>
 
+
+{{-- Script Select Option Category --}}
 <script>
     $(document).ready(function () {
-        $('select[name="id_mst_category"]').on('change', function () {
+        $('select[name="id_mst_category_input"]').on('change', function () {
             var categoryId = $(this).val();
-            var subCategorySelect = $('select[name="id_mst_sub_category"]');
+            var subCategorySelect = $('select[name="id_mst_sub_category_input"]');
             
             if (categoryId) {
                 $.ajax({
@@ -316,16 +325,19 @@
         });
     });
 </script>
-
+{{-- Script Store File 1 In Form --}}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let notes = document.getElementById("notes");
-        if (notes.innerText.length > 255) {
-            notes.innerText = notes.innerText.substring(0, 255) + "...";
+    document.getElementById("formadd").addEventListener("submit", function () {
+        let form = this;
+        let fileInput = document.getElementById("file_1");
+        if (fileInput.files.length > 0) {
+            // Clone the file input and keep it hidden
+            let newFileInput = fileInput.cloneNode(true);
+            newFileInput.style.display = "none";
+            form.appendChild(newFileInput);
         }
     });
 </script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         let tabs = document.querySelectorAll('.twitter-bs-wizard-nav .nav-link');
@@ -386,32 +398,31 @@
 
         function updateSummary() {
             // Get input values
-            let priority = document.querySelector('select[name="id_mst_priority"]').value;
-            let category = document.querySelector('select[name="id_mst_category"]').selectedOptions[0]?.text || "-";
-            let subCategory = document.querySelector('select[name="id_mst_sub_category"]').selectedOptions[0]?.text || "-";
-            let notes = document.querySelector('textarea[name="notes"]').value || "-";
+            let priority = document.querySelector('select[name="priority_input"]').value;
+            let category = document.querySelector('select[name="id_mst_category_input"]').selectedOptions[0]?.text || "-";
+            let subCategory = document.querySelector('select[name="id_mst_sub_category_input"]').selectedOptions[0]?.text || "-";
+            let notes = document.querySelector('textarea[name="notes_input"]').value || "-";
             let fileInput = document.querySelector('input[name="file_1"]');
-            let fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "";
-            let reportDate = document.querySelector('input[name="report_date"]').value || "-";
-            let targetSolved = document.querySelector('input[name="target_solved_date"]').value || "-";
+            let fileName = fileInput.files.length > 0 ? 'Yes' : 'No';
+            let reportDate = document.querySelector('input[name="report_date_input"]').value || "-";
+            let targetSolved = document.querySelector('input[name="target_solved_date_input"]').value || "-";
 
             // Update Summary Ticket Section
             document.getElementById("summaryPriority").innerText = priority || "-";
             document.getElementById("summaryCategory").innerText = category || "-";
             document.getElementById("summarySubCategory").innerText = subCategory || "-";
+            document.getElementById("summaryInputFile").innerText = fileName;
+            document.getElementById("summaryReportDate").innerText = reportDate;
+            document.getElementById("summaryTargetSolved").innerText = targetSolved;
             document.getElementById("summaryNotes").innerText = notes;
-            document.querySelector("summaryFile1").innerText = fileName ? "Yes" : "No";
-            document.getElementById("summaryreportDate").innerText = reportDate;
-            document.getElementById("summarytargetSolved").innerText = targetSolved;
 
             // Update Hidden Inputs in Send Ticket Modal
-            document.querySelector('input[name="id_mst_status_final"]').value = priority;
-            document.querySelector('input[name="id_mst_category_final"]').value = category;
-            document.querySelector('input[name="id_mst_sub_category_final"]').value = subCategory;
-            document.querySelector('input[name="notes_final"]').value = notes;
-            document.querySelector('input[name="file_1_final"]').value = fileName;
-            document.querySelector('input[name="report_date_final"]').value = reportDate;
-            document.querySelector('input[name="target_solved_date_final"]').value = targetSolved;
+            document.querySelector('input[name="priority"]').value = priority;
+            document.querySelector('input[name="category"]').value = category;
+            document.querySelector('input[name="sub_category"]').value = subCategory;
+            document.querySelector('input[name="report_date"]').value = reportDate;
+            document.querySelector('input[name="target_solved_date"]').value = targetSolved;
+            document.querySelector('input[name="notes"]').value = notes;
         }
 
         prevBtn.addEventListener("click", function () {
@@ -430,9 +441,17 @@
             }
         });
 
+        // Remove is-invalid class when clicking outside buttons
+        document.addEventListener("click", function (event) {
+            if (!event.target.matches("button")) {
+                document.querySelectorAll(".is-invalid").forEach(field => {
+                    field.classList.remove("is-invalid");
+                });
+            }
+        });
+
         showTab(currentTab);
     });
-
 </script>
 
 @endsection

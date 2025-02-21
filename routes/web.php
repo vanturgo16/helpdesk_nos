@@ -14,7 +14,8 @@ use App\Http\Controllers\MstDropdownController;
 use App\Http\Controllers\MstRuleController;
 use App\Http\Controllers\MstPrioritiesController;
 use App\Http\Controllers\MstCategoryController;
-use App\Http\Controllers\MstCreateTicketController;
+use App\Http\Controllers\CreateTicketController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\MstSubCategoryController;
 use App\Http\Controllers\MstUserController;
 
@@ -104,10 +105,21 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
 
     
     // CREATE TICKET
-    Route::controller(MstCreateTicketController::class)->group(function () {
+    Route::controller(CreateTicketController::class)->group(function () {
         Route::prefix('create-ticket')->group(function () {
             Route::get('/', 'index')->name('createTicket.index');
             Route::post('/store', 'store')->name('createTicket.store');
+        });
+    });
+
+    // INDEX TICKET
+    Route::controller(TicketController::class)->group(function () {
+        Route::prefix('ticket')->group(function () {
+            Route::get('/', 'index')->name('ticket.index');
+            Route::get('/datas', 'datas')->name('ticket.datas');
+            Route::post('/store', 'store')->name('ticket.store');
+            Route::get('/detail/{id}', 'detail')->name('ticket.detail');
+            Route::get('/detail/log/datas/{id}', 'logDatas')->name('ticket.log.datas');
         });
     });
 

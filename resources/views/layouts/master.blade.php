@@ -145,7 +145,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="">
+                            <a href="{{ route('ticket.index') }}" class="{{ request()->is('ticket*') ? 'bg-light active' : '' }}">
                                 <i class="mdi mdi-ticket-confirmation"></i><span>List Ticket</span>
                             </a>
                         </li>
@@ -363,18 +363,18 @@
             // Scroll Table
             $('#ssTable_wrapper .dataTables_scrollBody').css({
                 'overflow-x': 'hidden', 'overflow-y': 'scroll',
-                'max-height': '45vh', // Default
+                'max-height': '44vh', // Default
             });
             function setTableHeight() {
                 const windowHeight = $(window).height();
                 let maxHeight;
     
                 if (windowHeight < 550) { maxHeight = '10vh'; } 
-                else if (windowHeight < 600) { maxHeight = '20vh'; } 
-                else if (windowHeight < 700) { maxHeight = '30vh'; } 
-                else if (windowHeight < 800) { maxHeight = '38vh'; } 
-                else if (windowHeight < 900) { maxHeight = '43vh'; } 
-                else if (windowHeight < 1000) { maxHeight = '45vh'; }
+                else if (windowHeight < 600) { maxHeight = '19vh'; } 
+                else if (windowHeight < 700) { maxHeight = '29vh'; } 
+                else if (windowHeight < 800) { maxHeight = '37vh'; } 
+                else if (windowHeight < 900) { maxHeight = '42vh'; } 
+                else if (windowHeight < 1000) { maxHeight = '44vh'; }
                 $('#ssTable_wrapper .dataTables_scrollBody').css('max-height', maxHeight);
             }
             setTableHeight();

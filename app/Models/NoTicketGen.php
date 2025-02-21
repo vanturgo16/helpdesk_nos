@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Log extends Model
+class NoTicketGen extends Model
 {
     use HasFactory;
-    protected $table = 'logs';
+    protected $table = 'no_ticket_generates';
     protected $guarded = [
         'id'
     ];
