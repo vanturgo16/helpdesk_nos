@@ -10,84 +10,84 @@ use Illuminate\Http\Request;
 use App\Traits\AuditLogsTrait;
 
 // Model
-use App\Models\MstStatus;
+use App\Models\MstPriorities;
 
-class MstStatusController extends Controller
+class MstPrioritiesController extends Controller
 {
     use AuditLogsTrait;
 
     public function index(Request $request)
     {
-        $datas = MstStatus::orderBy('created_at', 'desc')->get();
+        $datas = MstPriorities::orderBy('created_at', 'desc')->get();
 
         if ($request->ajax()) {
             return DataTables::of($datas)
                 ->addColumn('action', function ($data) {
-                    return view('status.action', compact('data'));
+                    return view('priority.action', compact('data'));
                 })->toJson();
         }
 
         //Audit Log
-        $this->auditLogs('View List Master Status');
-        return view('status.index');
+        $this->auditLogs('View List Master Priority');
+        return view('priority.index');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'status' => 'required',
+            'priority' => 'required',
         ]);
         // Check Existing Data
-        if (MstStatus::where('status', $request->status)->exists()) {
+        if (MstPriorities::where('priority', $request->priority)->exists()) {
             return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
         }
 
         DB::beginTransaction();
         try {
-            $store = MstStatus::create([
-                'status' => $request->status,
+            $store = MstPriorities::create([
+                'priority' => $request->priority,
                 'is_active' => 1
             ]);
 
             // Audit Log
-            $this->auditLogs('Store New Status ID: ' . $store->id);
+            $this->auditLogs('Store New Priority ID: ' . $store->id);
             DB::commit();
-            return redirect()->back()->with('success', 'Success, New Status Added');
+            return redirect()->back()->with('success', 'Success, New Priority Added');
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['fail' => 'Failed to Add New Status!']);
+            return redirect()->back()->with(['fail' => 'Failed to Add New Priority!']);
         }
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required',
+            'priority' => 'required',
         ]);
 
         $id = decrypt($id);
         // Check Existing Data
-        if(MstStatus::where('status', $request->status)->where('id', '!=', $id)->exists()) {
+        if(MstPriorities::where('priority', $request->priority)->where('id', '!=', $id)->exists()) {
             return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
         }
         // Check With Data Before
-        $dataBefore = MstStatus::where('id', $id)->first();
-        $dataBefore->status = $request->status;
+        $dataBefore = MstPriorities::where('id', $id)->first();
+        $dataBefore->priority = $request->priority;
 
         if ($dataBefore->isDirty()) {
             DB::beginTransaction();
             try {
-                MstStatus::where('id', $id)->update([
-                    'status' => $request->status
+                MstPriorities::where('id', $id)->update([
+                    'priority' => $request->priority
                 ]);
 
                 // Audit Log
-                $this->auditLogs('Update Selected Status ID: ' . $id);
+                $this->auditLogs('Update Selected Priority ID: ' . $id);
                 DB::commit();
-                return redirect()->back()->with('success', 'Success, Selected Status Updated');
+                return redirect()->back()->with('success', 'Success, Selected Priority Updated');
             } catch (Exception $e) {
                 DB::rollBack();
-                return redirect()->back()->with(['fail' => 'Failed to Update Status Dropdown!']);
+                return redirect()->back()->with(['fail' => 'Failed to Update Priority!']);
             }
         } else {
             return redirect()->back()->with(['info' => 'Nothing Change, The data entered is the same as the previous one!']);
@@ -99,11 +99,11 @@ class MstStatusController extends Controller
         $id = decrypt($id);
         DB::beginTransaction();
         try {
-            MstStatus::where('id', $id)->update(['is_active' => 1]);
-            $nameValue = MstStatus::where('id', $id)->first()->status;
+            MstPriorities::where('id', $id)->update(['is_active' => 1]);
+            $nameValue = MstPriorities::where('id', $id)->first()->priority;
 
             // Audit Log
-            $this->auditLogs('Enable Selected Status ID: ' . $id);
+            $this->auditLogs('Enable Selected Priority ID: ' . $id);
             DB::commit();
             return redirect()->back()->with(['success' => 'Success Activate : ' . $nameValue]);
         } catch (Exception $e) {
@@ -117,11 +117,11 @@ class MstStatusController extends Controller
         $id = decrypt($id);
         DB::beginTransaction();
         try {
-            MstStatus::where('id', $id)->update(['is_active' => 0]);
-            $nameValue = MstStatus::where('id', $id)->first()->status;
+            MstPriorities::where('id', $id)->update(['is_active' => 0]);
+            $nameValue = MstPriorities::where('id', $id)->first()->priority;
 
             // Audit Log
-            $this->auditLogs('Disable Selected Status ID: ' . $id);
+            $this->auditLogs('Disable Selected Priority ID: ' . $id);
             DB::commit();
             return redirect()->back()->with(['success' => 'Success Deactivate : ' . $nameValue]);
         } catch (Exception $e) {

@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MstStatus extends Model
+class MstPriorities extends Model
 {
     use HasFactory;
-    protected $table = 'mst_status';
+    protected $table = 'mst_priority';
     protected $guarded = [
         'id'
     ];

@@ -12,9 +12,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MstDropdownController;
 use App\Http\Controllers\MstRuleController;
-use App\Http\Controllers\MstStatusController;
+use App\Http\Controllers\MstPrioritiesController;
 use App\Http\Controllers\MstCategoryController;
-use App\Http\Controllers\MstCreateTicketController;
+use App\Http\Controllers\CreateTicketController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\MstSubCategoryController;
 use App\Http\Controllers\MstUserController;
 
@@ -57,7 +58,9 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
     Route::controller(MstUserController::class)->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('/', 'index')->name('user.index');
+            Route::get('/datas', 'datas')->name('user.datas');
             Route::post('/store', 'store')->name('user.store');
+            Route::get('/edit/{id}', 'edit')->name('user.edit');
             Route::post('/update/{id}', 'update')->name('user.update');
             Route::post('/reset/{id}', 'reset')->name('user.reset');
             Route::post('/activate/{id}', 'activate')->name('user.activate');
@@ -66,14 +69,14 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::post('/check_email_employee', 'check_email')->name('user.check_email_employee');
         });
     });
-    // MASTER STATUS
-    Route::controller(MstStatusController::class)->group(function () {
-        Route::prefix('status')->group(function () {
-            Route::get('/', 'index')->name('status.index');
-            Route::post('/store', 'store')->name('status.store');
-            Route::post('/update/{id}', 'update')->name('status.update');
-            Route::post('/disable/{id}', 'disable')->name('status.disable');
-            Route::post('/enable/{id}', 'enable')->name('status.enable');
+    // MASTER Priority
+    Route::controller(MstPrioritiesController::class)->group(function () {
+        Route::prefix('priority')->group(function () {
+            Route::get('/', 'index')->name('priority.index');
+            Route::post('/store', 'store')->name('priority.store');
+            Route::post('/update/{id}', 'update')->name('priority.update');
+            Route::post('/disable/{id}', 'disable')->name('priority.disable');
+            Route::post('/enable/{id}', 'enable')->name('priority.enable');
         });
     });
     // MASTER CATEGORY
@@ -94,15 +97,29 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::post('/update/{id}', 'update')->name('subcategory.update');
             Route::post('/disable/{id}', 'disable')->name('subcategory.disable');
             Route::post('/enable/{id}', 'enable')->name('subcategory.enable');
+
+            // Ajax
+            Route::get('/get-subcategory/{id}', 'getSubcategory')->name('subcategory.getSubcategory');
         });
     });
 
     
     // CREATE TICKET
-    Route::controller(MstCreateTicketController::class)->group(function () {
+    Route::controller(CreateTicketController::class)->group(function () {
         Route::prefix('create-ticket')->group(function () {
             Route::get('/', 'index')->name('createTicket.index');
             Route::post('/store', 'store')->name('createTicket.store');
+        });
+    });
+
+    // INDEX TICKET
+    Route::controller(TicketController::class)->group(function () {
+        Route::prefix('ticket')->group(function () {
+            Route::get('/', 'index')->name('ticket.index');
+            Route::get('/datas', 'datas')->name('ticket.datas');
+            Route::post('/store', 'store')->name('ticket.store');
+            Route::get('/detail/{id}', 'detail')->name('ticket.detail');
+            Route::get('/detail/log/datas/{id}', 'logDatas')->name('ticket.log.datas');
         });
     });
 

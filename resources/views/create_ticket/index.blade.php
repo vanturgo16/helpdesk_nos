@@ -1,7 +1,6 @@
 @extends('layouts.master')
 @section('konten')
 
-
 <style>
     .ticket-container {
         background: linear-gradient(135deg, #f8f9fa 25%, #e9ecef 100%);
@@ -98,13 +97,14 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Status</label> <label class="text-danger">*</label>
-                                            <select class="form-control select2" name="id_mst_status" required>
-                                                <option value="" disabled selected>- Select -</option>
-                                                @foreach($statuses as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->status }}</option>
+                                            <label class="form-label">Priority</label> <label class="text-danger">*</label>
+                                            <select class="form-control select2" name="priority_input" required>
+                                                <option value="" disabled selected>- Select Priority -</option>
+                                                @foreach($priorities as $item)
+                                                    <option value="{{ $item->priority }}">{{ $item->priority }}</option>
                                                 @endforeach
                                             </select>
+                                            <div class="invalid-feedback">Please select a priority.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -112,22 +112,24 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Category</label> <label class="text-danger">*</label>
-                                            <select class="form-control select2" name="id_mst_category" required>
-                                                <option value="" disabled selected>- Select -</option>
+                                            <select class="form-control select2" name="id_mst_category_input" required>
+                                                <option value="" disabled selected>- Select Category -</option>
                                                 @foreach($categories as $item)
                                                     <option value="{{ $item->id }}">{{ $item->category }}</option>
                                                 @endforeach
                                             </select>
+                                            <div class="invalid-feedback">Please select a Category.</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Sub Category</label> <label class="text-danger">*</label>
-                                            <select class="form-control select2" name="id_mst_sub_category" required>
-                                                <option value="" disabled selected>- Select -</option>
+                                            <select class="form-control select2" name="id_mst_sub_category_input" required>
+                                                <option value="" disabled selected>- Select Sub Category -</option>
                                                 <option disabled>──────────</option>
                                                 <option value="Other">Other</option>
                                             </select>
+                                            <div class="invalid-feedback">Please select a Sub Category.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,23 +143,27 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Notes (max 255 character)</label> <label class="text-danger">*</label>
-                                            <textarea name="remarks" rows="3" cols="50" class="form-control" placeholder="Input Note.."></textarea>
+                                            <textarea name="notes_input" rows="3" cols="50" class="form-control" placeholder="Input Note.." required></textarea>
+                                            <div class="invalid-feedback">Please fill notes.</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Upload Document</label>
-                                            <input type="file" class="form-control">
+                                            <input type="file" name="file_1" id="file_1" class="form-control">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Assign To</label> <label class="text-danger">*</label>
-                                            <select class="form-control select2" name="id_department" required>
-                                                <option value="" disabled selected>- Select -</option>
-                                            </select>
+                                            <label class="form-label">Report Date</label> <label class="text-danger">*</label>
+                                            <input type="date" name="report_date_input" class="form-control" required>
+                                            <div class="invalid-feedback">Please fill report date.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Target Solved</label>
+                                            <input type="date" name="target_solved_date_input" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -170,7 +176,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="ticket-container">
-                                            <h3 class="text-center">No. Ticket : <b><u>TCK123IT</u></b></h3>
+                                            <h3 class="text-center">No. Ticket : <b><u>{{ $noTicket }}</u></b></h3>
                                             <div class="row mt-4">
                                                 <div class="col-lg-6 mb-4">
                                                     <table>
@@ -178,45 +184,51 @@
                                                             <tr>
                                                                 <td class="align-top"><strong>Requester</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
-                                                                <td class="align-top">admindev@gmail.com</td>
+                                                                <td class="align-top">{{ auth()->user()->email }}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="align-top"><strong>Level</strong></td>
+                                                                <td class="align-top"><strong>Priority</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
-                                                                <td class="align-top">High</td>
+                                                                <td class="align-top" id="summaryPriority"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="align-top"><strong>Category</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
-                                                                <td class="align-top">Incident</td>
+                                                                <td class="align-top" id="summaryCategory"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="align-top"><strong>Sub Category</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
-                                                                <td class="align-top">Jaringan lambat atau terputus</td>
+                                                                <td class="align-top" id="summarySubCategory"></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <div class="col-lg-6">
-                                                    <p><strong>Notes :</strong><br>
-                                                    <span id="notes" class="notes">
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.
-                                                    </span></p>
-                                                    <table class="mb-3">
+                                                <div class="col-lg-6 mb-4">
+                                                    <table>
                                                         <tbody>
                                                             <tr>
-                                                                <td class="align-top"><strong>Upload Document</strong></td>
+                                                                <td class="align-top"><strong>Input File</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
-                                                                <td class="align-top">Yes</td>
+                                                                <td class="align-top" id="summaryInputFile"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="align-top"><strong>Assign To</strong></td>
+                                                                <td class="align-top"><strong>Report Date</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
-                                                                <td class="align-top">IT</td>
+                                                                <td class="align-top" id="summaryReportDate"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="align-top"><strong>Target Solved</strong></td>
+                                                                <td class="align-top" style="padding-left: 15px;">:</td>
+                                                                <td class="align-top" id="summaryTargetSolved"></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <p><strong>Notes :</strong><br>
+                                                        <span id="summaryNotes"></span>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -245,7 +257,7 @@
     </div>
 </div>
 
-{{-- Modal Add --}}
+{{-- Modal Send --}}
 <div class="modal fade" id="sendTicket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-top" role="document">
         <div class="modal-content">
@@ -255,11 +267,12 @@
             </div>
             <form class="formLoad" action="{{ route('createTicket.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="id_mst_status_final" value="">
-                <input type="hidden" name="id_mst_category_final" value="">
-                <input type="hidden" name="id_mst_sub_category_final" value="">
-                <input type="hidden" name="remarks_final" value="">
-                <input type="hidden" name="id_department_final" value="">
+                <input type="hidden" name="priority" value="">
+                <input type="hidden" name="category" value="">
+                <input type="hidden" name="sub_category" value="">
+                <input type="hidden" name="report_date" value="">
+                <input type="hidden" name="target_solved_date" value="">
+                <input type="hidden" name="notes" value="">
                 <div class="modal-body">
                     <div class="text-center">
                         Are You Sure to <b>Send</b> This Ticket?
@@ -275,15 +288,56 @@
 </div>
 
 
+{{-- Script Select Option Category --}}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let notes = document.getElementById("notes");
-        if (notes.innerText.length > 255) {
-            notes.innerText = notes.innerText.substring(0, 255) + "...";
+    $(document).ready(function () {
+        $('select[name="id_mst_category_input"]').on('change', function () {
+            var categoryId = $(this).val();
+            var subCategorySelect = $('select[name="id_mst_sub_category_input"]');
+            
+            if (categoryId) {
+                $.ajax({
+                    url: '/subcategory/get-subcategory/' + categoryId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        subCategorySelect.empty();
+                        subCategorySelect.append('<option value="" disabled selected>- Select Sub Category -</option>');
+                        
+                        if (response.success) {
+                            $.each(response.data[0], function (key, item) {
+                                subCategorySelect.append('<option value="' + item.id + '">' + item.sub_category + '</option>');
+                            });
+                        }
+                        
+                        subCategorySelect.append('<option disabled>──────────</option>');
+                        subCategorySelect.append('<option value="Other">Other</option>');
+                    },
+                    error: function () {
+                        alert('Error fetching subcategories. Please try again.');
+                    }
+                });
+            } else {
+                subCategorySelect.empty().append('<option value="" disabled selected>- Select Sub Category -</option>');
+                subCategorySelect.append('<option disabled>──────────</option>');
+                subCategorySelect.append('<option value="Other">Other</option>');
+            }
+        });
+    });
+</script>
+{{-- Script Store File 1 In Form --}}
+<script>
+    document.getElementById("formadd").addEventListener("submit", function () {
+        let form = this;
+        let fileInput = document.getElementById("file_1");
+        if (fileInput.files.length > 0) {
+            // Clone the file input and keep it hidden
+            let newFileInput = fileInput.cloneNode(true);
+            newFileInput.style.display = "none";
+            form.appendChild(newFileInput);
         }
     });
 </script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         let tabs = document.querySelectorAll('.twitter-bs-wizard-nav .nav-link');
@@ -291,21 +345,22 @@
         let prevBtn = document.getElementById('prevBtn');
         let nextBtn = document.getElementById('nextBtn');
         let currentTab = 0;
-    
+
         function showTab(index) {
             tabs.forEach((tab, i) => {
                 tab.classList.toggle('active', i === index);
                 tabContents[i].classList.toggle('active', i === index);
             });
-    
+
             prevBtn.disabled = index === 0;
-    
+
             if (index === tabs.length - 1) {
                 nextBtn.innerHTML = 'Submit &nbsp;<i class="bx bx-paper-plane"></i>';
                 nextBtn.classList.remove('btn-primary');
                 nextBtn.classList.add('btn-success');
                 nextBtn.setAttribute("data-bs-toggle", "modal");
                 nextBtn.setAttribute("data-bs-target", "#sendTicket");
+                updateSummary();
             } else {
                 nextBtn.innerHTML = 'Next &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>';
                 nextBtn.classList.remove('btn-success');
@@ -314,21 +369,87 @@
                 nextBtn.removeAttribute("data-bs-target");
             }
         }
-    
+
+        function validateCurrentTab() {
+            let currentTabContent = tabContents[currentTab];
+            let requiredFields = currentTabContent.querySelectorAll('[required]');
+            let isValid = true;
+            let firstInvalidField = null;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                    if (!firstInvalidField) {
+                        firstInvalidField = field;
+                    }
+                } else {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                }
+            });
+
+            if (firstInvalidField) {
+                firstInvalidField.focus();
+            }
+
+            return isValid;
+        }
+
+        function updateSummary() {
+            // Get input values
+            let priority = document.querySelector('select[name="priority_input"]').value;
+            let category = document.querySelector('select[name="id_mst_category_input"]').selectedOptions[0]?.text || "-";
+            let subCategory = document.querySelector('select[name="id_mst_sub_category_input"]').selectedOptions[0]?.text || "-";
+            let notes = document.querySelector('textarea[name="notes_input"]').value || "-";
+            let fileInput = document.querySelector('input[name="file_1"]');
+            let fileName = fileInput.files.length > 0 ? 'Yes' : 'No';
+            let reportDate = document.querySelector('input[name="report_date_input"]').value || "-";
+            let targetSolved = document.querySelector('input[name="target_solved_date_input"]').value || "-";
+
+            // Update Summary Ticket Section
+            document.getElementById("summaryPriority").innerText = priority || "-";
+            document.getElementById("summaryCategory").innerText = category || "-";
+            document.getElementById("summarySubCategory").innerText = subCategory || "-";
+            document.getElementById("summaryInputFile").innerText = fileName;
+            document.getElementById("summaryReportDate").innerText = reportDate;
+            document.getElementById("summaryTargetSolved").innerText = targetSolved;
+            document.getElementById("summaryNotes").innerText = notes;
+
+            // Update Hidden Inputs in Send Ticket Modal
+            document.querySelector('input[name="priority"]').value = priority;
+            document.querySelector('input[name="category"]').value = category;
+            document.querySelector('input[name="sub_category"]').value = subCategory;
+            document.querySelector('input[name="report_date"]').value = reportDate;
+            document.querySelector('input[name="target_solved_date"]').value = targetSolved;
+            document.querySelector('input[name="notes"]').value = notes;
+        }
+
         prevBtn.addEventListener("click", function () {
             if (currentTab > 0) {
                 currentTab--;
                 showTab(currentTab);
             }
         });
-    
+
         nextBtn.addEventListener("click", function () {
             if (currentTab < tabs.length - 1) {
-                currentTab++;
-                showTab(currentTab);
+                if (validateCurrentTab()) {
+                    currentTab++;
+                    showTab(currentTab);
+                }
             }
         });
-    
+
+        // Remove is-invalid class when clicking outside buttons
+        document.addEventListener("click", function (event) {
+            if (!event.target.matches("button")) {
+                document.querySelectorAll(".is-invalid").forEach(field => {
+                    field.classList.remove("is-invalid");
+                });
+            }
+        });
+
         showTab(currentTab);
     });
 </script>

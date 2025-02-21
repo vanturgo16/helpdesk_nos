@@ -4,11 +4,11 @@
     <span>
         @if($type == 'New')
             Dear New User,
-            <br> We would like to inform you that your email has been used to register in the Dashboard AUDIT NOS Kemakmuran.
+            <br> We would like to inform you that your email has been used to register in the Dashboard Helpdesk Kemakmuran.
             <br> Use this email and password to log in to the dashboard:
         @else
             Dear User,
-            <br> We have received a request to reset your password for the Dashboard AUDIT NOS Kemakmuran.
+            <br> We have received a request to reset your password for the Dashboard Helpdesk Kemakmuran.
             <br> Use this email and new password to log in to the dashboard:
         @endif
 
@@ -65,7 +65,7 @@
 
         <br>
         <br>
-        <br> [Dashboard AUDIT HELPDESK] <br>
+        <br> [Dashboard HELPDESK] <br>
 
     </span>
 </body>

@@ -25,21 +25,26 @@ class MstUserController extends Controller
 {
     use AuditLogsTrait;
 
-    public function index(Request $request)
+    public function index()
     {
-        $roleUsers = MstDropdowns::where('category', 'Role User')->get();
-        $datas = User::orderBy('last_seen')->get();
-
-        if ($request->ajax()) {
-            return DataTables::of($datas)
-                ->addColumn('action', function ($data) use ($roleUsers) {
-                    return view('users.action', compact('data', 'roleUsers'));
-                })->toJson();
-        }
+        $roleUsers = MstDropdowns::where('category', 'Role User')->where('is_active', 1)->get();
+        $dealerTypes = MstDropdowns::where('category', 'Type Dealer')->where('is_active', 1)->get();
+        $departments = MstDropdowns::where('category', 'Department')->where('is_active', 1)->get();
 
         //Audit Log
         $this->auditLogs('View List Manage User');
-        return view('users.index', compact('roleUsers'));
+        return view('users.index', compact('roleUsers', 'dealerTypes', 'departments'));
+    }
+
+    public function datas(Request $request)
+    {
+        if ($request->ajax()) {
+            $datas = User::orderBy('last_seen')->get();
+            return DataTables::of($datas)
+                ->addColumn('action', function ($data) {
+                    return view('users.action', compact('data'));
+                })->toJson();
+        }
     }
 
     private function generateRandomPassword($length)
@@ -57,22 +62,22 @@ class MstUserController extends Controller
     {
         // Validate Request
         $request->validate([
+            'name' => 'required',
             'email' => 'required',
+            'dealer_type' => 'required',
+            'dealer_name' => 'required',
+            'department' => 'required',
             'role' => 'required',
         ]);
         //Prevent Create Role Super Admin, If Not Super Admin
         if (auth()->user()->role != 'Super Admin' && $request->role == 'Super Admin') {
             return redirect()->back()->withInput()->with(['fail' => 'Failed, You Do Not Have Access to Add Role as Super Admin']);
         }
-        if (!MstEmployees::where('email', $request->email)->exists()) {
-            return redirect()->back()->with('warning', 'Email Have Not Registered As Employee');
-        }
         if (User::where('email', $request->email)->exists()) {
             return redirect()->back()->with('warning', 'Email Was Already Registered As User');
         }
 
         // Initiate Variable
-        $name = MstEmployees::where('email', $request->email)->first()->employee_name;
         $development = MstRules::where('rule_name', 'Development')->first()->rule_value;
         $toemail = ($development == 1) 
                 ? MstRules::where('rule_name', 'Email Development')->pluck('rule_value')->toArray() 
@@ -82,15 +87,18 @@ class MstUserController extends Controller
         try {
             $password = $this->generateRandomPassword(8);
             User::create([
-                'name' => $name,
+                'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($password),
-                'is_active' => '1',
+                'dealer_type' => $request->dealer_type,
+                'dealer_name' => $request->dealer_name,
+                'department' => $request->department,
+                'is_active' => 1,
                 'role' => $request->role
             ]);
 
             // [ MAILING ]
-            $mailContent = new SendEmailPassword('New', $name, $request->email, $password);
+            $mailContent = new SendEmailPassword('New', $request->name, $request->email, $password);
             Mail::to($toemail)->send($mailContent);
 
             // Audit Log
@@ -134,10 +142,28 @@ class MstUserController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $id = decrypt($id);
+        $data = User::where('id', $id)->first();
+        $roleUsers = MstDropdowns::where('category', 'Role User')->where('is_active', 1)->orWhere('name_value', $data->role)->get();
+        $dealerTypes = MstDropdowns::where('category', 'Type Dealer')->where('is_active', 1)->orWhere('name_value', $data->dealer_type)->get();
+        $departments = MstDropdowns::where('category', 'Department')->where('is_active', 1)->orWhere('name_value', $data->department)->get();
+
+        //Audit Log
+        $this->auditLogs('View Edit User ID (' . $id . ')');
+        return view('users.edit', compact('data', 'roleUsers', 'dealerTypes', 'departments'));
+    }
+
     public function update(Request $request, $id)
     {
         // Validate Request
         $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'dealer_type' => 'required',
+            'dealer_name' => 'required',
+            'department' => 'required',
             'role' => 'required',
         ]);
         //Prevent Create Role Super Admin, If Not Super Admin
@@ -147,23 +173,35 @@ class MstUserController extends Controller
 
         $iduser = decrypt($id);
         $dataBefore = User::where('id', $iduser)->first();
+        $dataBefore->name = $request->name;
+        $dataBefore->email = $request->email;
+        $dataBefore->dealer_type = $request->dealer_type;
+        $dataBefore->dealer_name = $request->dealer_name;
+        $dataBefore->department = $request->department;
         $dataBefore->role = $request->role;
 
         if ($dataBefore->isDirty()) {
             DB::beginTransaction();
             try {
-                User::where('id', $iduser)->update([ 'role' => $request->role ]);
+                User::where('id', $iduser)->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'dealer_type' => $request->dealer_type,
+                    'dealer_name' => $request->dealer_name,
+                    'department' => $request->department,
+                    'role' => $request->role
+                ]);
 
                 //Audit Log
                 $this->auditLogs('Update User (' . $dataBefore->email . ')');
                 DB::commit();
-                return redirect()->back()->with(['success' => 'Success Update User']);
+                return redirect()->route('user.index')->with(['success' => 'Success Update User']);
             } catch (Exception $e) {
                 DB::rollback();
                 return redirect()->back()->with(['fail' => 'Failed to Update User!']);
             }
         } else {
-            return redirect()->back()->with(['info' => 'Nothing Change, The data entered is the same as the previous one!']);
+            return redirect()->route('user.index')->with(['info' => 'Nothing Change, The data entered is the same as the previous one!']);
         }
     }
 
