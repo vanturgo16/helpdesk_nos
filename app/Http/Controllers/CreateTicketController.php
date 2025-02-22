@@ -85,7 +85,7 @@ class CreateTicketController extends Controller
                 'assign_by' => $user,
                 'assign_to_dept' => $assignTo,
                 'assign_date' => Carbon::now(),
-                'assign_status' => 0,
+                'assign_status' => 1,
                 'preclosed_status' => 0,
             ]);
 

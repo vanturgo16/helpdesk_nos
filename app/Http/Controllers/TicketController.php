@@ -69,6 +69,7 @@ class TicketController extends Controller
                     'log_tickets.created_at as assignDate', 'log_tickets.accept_date as acceptDate',
                     'log_tickets.preclosed_date as preclosedDate')
                 ->leftjoin('users', 'log_tickets.assign_by', 'users.email')
+                ->leftjoin('logs', 'log_tickets.id_log', 'logs.id')
                 ->where('log_tickets.id_ticket', $id)
                 ->orderBy('log_tickets.created_at', 'desc')
                 ->get();

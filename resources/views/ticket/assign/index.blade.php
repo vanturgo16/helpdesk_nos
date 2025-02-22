@@ -64,8 +64,8 @@
                     className: 'align-top text-center',
                     render: function(data, type, row) {
                         let html;
-                        if (data === 1) {
-                            html = `<span class="badge bg-success text-white">Close</span>`;
+                        if (data === 0) {
+                            html = `<span class="badge bg-success text-white">Preclose</span>`;
                         } else {
                             html = `<span class="badge bg-info">Open</span>`;
                         }
