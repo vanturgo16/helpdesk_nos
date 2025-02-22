@@ -126,8 +126,6 @@
                                             <label class="form-label">Sub Category</label> <label class="text-danger">*</label>
                                             <select class="form-control select2" name="id_mst_sub_category_input" required>
                                                 <option value="" disabled selected>- Select Sub Category -</option>
-                                                <option disabled>──────────</option>
-                                                <option value="Other">Other</option>
                                             </select>
                                             <div class="invalid-feedback">Please select a Sub Category.</div>
                                         </div>
@@ -309,9 +307,6 @@
                                 subCategorySelect.append('<option value="' + item.id + '">' + item.sub_category + '</option>');
                             });
                         }
-                        
-                        subCategorySelect.append('<option disabled>──────────</option>');
-                        subCategorySelect.append('<option value="Other">Other</option>');
                     },
                     error: function () {
                         alert('Error fetching subcategories. Please try again.');
@@ -319,8 +314,6 @@
                 });
             } else {
                 subCategorySelect.empty().append('<option value="" disabled selected>- Select Sub Category -</option>');
-                subCategorySelect.append('<option disabled>──────────</option>');
-                subCategorySelect.append('<option value="Other">Other</option>');
             }
         });
     });
