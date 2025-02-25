@@ -1,6 +1,6 @@
-{{-- <button type="button" class="btn btn-sm btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#edit{{ $data->id }}">
+<button type="button" class="btn btn-sm btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#edit{{ $data->id }}">
     <i class="mdi mdi-file-edit label-icon"></i> Edit
-</button> --}}
+</button>
 @if($data->is_active == 1)
     <button type="button" class="btn btn-sm btn-danger waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#disable{{ $data->id }}">
         <i class="mdi mdi-window-close label-icon"></i> Disable
@@ -37,6 +37,13 @@
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Sub Category Name</label> <label class="text-danger">*</label>
                                 <input class="form-control" type="text" name="sub_category" value="{{ $data->sub_category }}" placeholder="Input Sub Category Name.." required>
+                            </div>
+                            <div class="col-lg-12 mb-3">
+                                <label class="form-label">SLA - Over Due</label> <label class="text-danger">*</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="Input Over Due in minutes.." name="sla" value="{{ $data->sla }}" required>
+                                    <span class="input-group-text">Minutes</span>
+                                </div>
                             </div>
                         </div>
                     </div>
