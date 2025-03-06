@@ -43,6 +43,13 @@ class CreateTicketController extends Controller
             'notes' => 'required',
             'file_1' => 'nullable|file|max:10240|mimes:jpg,png,pdf,docx,xls,xlsx',
         ]);
+        dd($request->all());
+
+        //IF report_date_option_val now get date now (format H-m) for report date
+        //Else get report_date val for report_date (Validate Less Than Now)
+
+        //IF target_date_option_val sla_target find sla from sub_category for target_solved_date (Calculate date now H-m + sla)
+        //ELSE get target_solved_date val for target_solved_date (Validate More Than Now)
         $assignTo = 'IT';
         DB::beginTransaction();
         try {

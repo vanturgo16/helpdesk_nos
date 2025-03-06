@@ -100,6 +100,7 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
 
             // Ajax
             Route::get('/get-subcategory/{id}', 'getSubcategory')->name('subcategory.getSubcategory');
+            Route::get('/get-sla/{id}', 'getSLA')->name('subcategory.getSLA');
         });
     });
 

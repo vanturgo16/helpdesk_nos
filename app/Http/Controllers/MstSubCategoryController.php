@@ -147,7 +147,16 @@ class MstSubCategoryController extends Controller
     // AJAX
     public function getSubcategory($id)
     {
-        $datas = MstSubCategory::where('id_mst_category', $id)->get();
+        $datas = MstSubCategory::where('id_mst_category', $id)->where('is_active', 1)->get();
+        if ($datas) {
+            return response()->json(['success' => true, 'data' => [$datas]]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+    public function getSLA($id)
+    {
+        $datas = MstSubCategory::where('id', $id)->first();
         if ($datas) {
             return response()->json(['success' => true, 'data' => [$datas]]);
         } else {

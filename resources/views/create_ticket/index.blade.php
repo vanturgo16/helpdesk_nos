@@ -53,6 +53,26 @@
     }
 </style>
 
+<!-- Loading Overlay -->
+<div id="loadingOverlay" style="
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    padding-top: 20%;
+">
+    <i class="fas fa-spinner fa-spin fa-3x"></i>
+    <p>Loading...</p>
+</div>
+
+
 <div class="page-content position-relative">
     <div class="row">
         <div class="col-lg-12">
@@ -107,8 +127,6 @@
                                             <div class="invalid-feedback">Please select a priority.</div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Category</label> <label class="text-danger">*</label>
@@ -128,6 +146,15 @@
                                                 <option value="" disabled selected>- Select Sub Category -</option>
                                             </select>
                                             <div class="invalid-feedback">Please select a Sub Category.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">SLA / Over Due </label> <small class="text-muted"> - (auto-filled)</small>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" placeholder=".." name="sla" value="" readonly>
+                                                <span class="input-group-text">Minutes</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -154,11 +181,24 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Report Date</label> <label class="text-danger">*</label>
-                                            {{-- <input type="date" name="report_date_input" class="form-control" required> --}}
-                                            <input type="datetime-local" name="report_date_input" class="form-control" required id="report_date_input">
+                                            <div class="d-flex">
+                                                <div class="form-check me-5">
+                                                    <input class="form-check-input" type="radio" id="use_now" name="report_date_option" value="now" checked>
+                                                    <label class="form-check-label" for="use_now">Use Current Time </label> <small class="text-muted"> - (now)</small>
+                                                </div>
+                                    
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" id="use_custom" name="report_date_option" value="custom">
+                                                    <label class="form-check-label" for="use_custom">Custom </label> <small class="text-muted"> - (back date)</small>
+                                                </div>
+                                            </div>
+                                            <input type="datetime-local" name="report_date_input" class="form-control mt-2" required id="report_date_input">
                                             <script>
                                                 document.addEventListener("DOMContentLoaded", function() {
                                                     const input = document.getElementById("report_date_input");
+                                                    const nowRadio = document.getElementById("use_now");
+                                                    const customRadio = document.getElementById("use_custom");
+
                                                     function setMaxDateTime() {
                                                         const now = new Date();
                                                         const year = now.getFullYear();
@@ -167,14 +207,29 @@
                                                         const hours = String(now.getHours()).padStart(2, '0');
                                                         const minutes = String(now.getMinutes()).padStart(2, '0');
                                                         const maxDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                                                        if (nowRadio.checked) {
+                                                            input.value = maxDateTime;
+                                                        }
                                                         input.max = maxDateTime;
+                                                    }
+                                                    function toggleInput() {
+                                                        if (nowRadio.checked) {
+                                                            input.readOnly = true;
+                                                            setMaxDateTime();
+                                                        } else {
+                                                            input.readOnly = false;
+                                                        }
                                                     }
                                                     function validateInput() {
                                                         if (input.value > input.max) {
                                                             input.value = input.max; // Reset to max allowed if user selects future time
                                                         }
                                                     }
+                                                    
+                                                    toggleInput();
                                                     setMaxDateTime(); // Set the max date/time on page load
+                                                    nowRadio.addEventListener("change", toggleInput);
+                                                    customRadio.addEventListener("change", toggleInput);
                                                     input.addEventListener("input", validateInput); // Prevent future selection
                                                     setInterval(setMaxDateTime, 60000); // Update every minute
                                                 });
@@ -186,11 +241,38 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Target Solved</label>
-                                            {{-- <input type="date" name="target_solved_date_input" class="form-control"> --}}
-                                            <input type="datetime-local" name="target_solved_date_input" class="form-control" required id="target_solved_date_input">
+                                            <div class="d-flex">
+                                                <div class="form-check me-5">
+                                                    <input class="form-check-input" type="radio" id="use_sla" name="target_date_option" value="sla_target" checked>
+                                                    <label class="form-check-label" for="use_sla">Use SLA </label> <small class="text-muted"> - (calculated from ticket creation)</small>
+                                                </div>
+                                    
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" id="use_custom_target" name="target_date_option" value="custom_target">
+                                                    <label class="form-check-label" for="use_custom_target">Custom </label> <small class="text-muted"> - (set manually)</small>
+                                                </div>
+                                            </div>
+                                            <div class="input-group mt-2" id="sla_input_group">
+                                                <input type="number" class="form-control" placeholder=".." name="sla" id="sla_input" readonly>
+                                                <span class="input-group-text">Minutes</span>
+                                            </div>
+                                            <input type="datetime-local" name="target_solved_date_input" class="form-control mt-2" id="target_solved_date_input" style="display: none;">
                                             <script>
                                                 document.addEventListener("DOMContentLoaded", function() {
+                                                    const slaRadio = document.getElementById("use_sla");
+                                                    const customRadio = document.getElementById("use_custom_target");
+                                                    const slaInputGroup = document.getElementById("sla_input_group");
                                                     const input = document.getElementById("target_solved_date_input");
+
+                                                    function toggleInputFields() {
+                                                        if (slaRadio.checked) {
+                                                            slaInputGroup.style.display = "flex"; 
+                                                            input.style.display = "none";
+                                                        } else {
+                                                            slaInputGroup.style.display = "none";
+                                                            input.style.display = "block";
+                                                        }
+                                                    }
                                                     function setMinDateTime() {
                                                         const now = new Date();
                                                         const year = now.getFullYear();
@@ -206,7 +288,10 @@
                                                             input.value = input.min; // Reset to min allowed if user selects a past time
                                                         }
                                                     }
+                                                    toggleInputFields();
                                                     setMinDateTime(); // Set the min date/time on page load
+                                                    slaRadio.addEventListener("change", toggleInputFields);
+                                                    customRadio.addEventListener("change", toggleInputFields);
                                                     input.addEventListener("input", validateInput); // Prevent past selection
                                                     setInterval(setMinDateTime, 60000); // Update min every minute
                                                 });
@@ -317,7 +402,9 @@
                 <input type="hidden" name="priority" value="">
                 <input type="hidden" name="category" value="">
                 <input type="hidden" name="sub_category" value="">
+                <input type="hidden" name="report_date_option_val" value="">
                 <input type="hidden" name="report_date" value="">
+                <input type="hidden" name="target_date_option_val" value="">
                 <input type="hidden" name="target_solved_date" value="">
                 <input type="hidden" name="notes" value="">
                 <div class="modal-body">
@@ -338,10 +425,16 @@
 {{-- Script Select Option Category --}}
 <script>
     $(document).ready(function () {
+        var subCategorySelect = $('select[name="id_mst_sub_category_input"]');
+        var slaInput = $('input[name="sla"]');
         $('select[name="id_mst_category_input"]').on('change', function () {
             var categoryId = $(this).val();
-            var subCategorySelect = $('select[name="id_mst_sub_category_input"]');
-            
+            subCategorySelect.empty();
+            subCategorySelect.append('<option value="" disabled selected>- Select Sub Category -</option>');
+            slaInput.val('');
+
+            $("#loadingOverlay").fadeIn();
+
             if (categoryId) {
                 $.ajax({
                     url: '/subcategory/get-subcategory/' + categoryId,
@@ -359,10 +452,38 @@
                     },
                     error: function () {
                         alert('Error fetching subcategories. Please try again.');
+                    },
+                    complete: function() {
+                        $("#loadingOverlay").fadeOut();
                     }
                 });
             } else {
                 subCategorySelect.empty().append('<option value="" disabled selected>- Select Sub Category -</option>');
+            }
+        });
+        $('select[name="id_mst_sub_category_input"]').on('change', function () {
+            var subCategoryId = $(this).val();
+            slaInput.val('');
+            $("#loadingOverlay").fadeIn();
+            if (subCategoryId) {
+                $.ajax({
+                    url: '/subcategory/get-sla/' + subCategoryId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            slaInput.val(response.data[0].sla);
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching SLA. Please try again.');
+                    },
+                    complete: function() {
+                        $("#loadingOverlay").fadeOut();
+                    }
+                });
+            } else {
+                slaInput.val('');
             }
         });
     });
@@ -447,24 +568,42 @@
             let fileInput = document.querySelector('input[name="file_1"]');
             let fileName = fileInput.files.length > 0 ? 'Yes' : 'No';
             let reportDate = document.querySelector('input[name="report_date_input"]').value || "-";
-            const formattedReportDate = formatDateTime(reportDate);
             let targetSolved = document.querySelector('input[name="target_solved_date_input"]').value || "-";
-            const formattedTargetSolved = formatDateTime(targetSolved);
+
+            const reportDateOption = document.querySelector('input[name="report_date_option"]:checked').value;
+            const targetDateOption = document.querySelector('input[name="target_date_option"]:checked').value;
+            if (targetDateOption === "sla_target") {
+                let slaInput = document.querySelector('input[name="sla"]');
+                if (slaInput) {
+                    targetSolved = slaInput.value + " Minutes (From Creation Ticket)";
+                }
+            } else {
+                let targetInput = document.querySelector('input[name="target_solved_date_input"]');
+                if (targetInput) {
+                    targetSolved = targetInput.value.replace("T", " ");
+                }
+            }
+
+            console.log(targetSolved);
+            
+            
 
             // Update Summary Ticket Section
             document.getElementById("summaryPriority").innerText = priority || "-";
             document.getElementById("summaryCategory").innerText = category || "-";
             document.getElementById("summarySubCategory").innerText = subCategory || "-";
             document.getElementById("summaryInputFile").innerText = fileName;
-            document.getElementById("summaryReportDate").innerText = formattedReportDate;
-            document.getElementById("summaryTargetSolved").innerText = formattedTargetSolved;
+            document.getElementById("summaryReportDate").innerText = reportDate.replace("T", " ");
+            document.getElementById("summaryTargetSolved").innerText = targetSolved;
             document.getElementById("summaryNotes").innerText = notes;
 
             // Update Hidden Inputs in Send Ticket Modal
             document.querySelector('input[name="priority"]').value = priority;
             document.querySelector('input[name="category"]').value = category;
             document.querySelector('input[name="sub_category"]').value = subCategory;
+            document.querySelector('input[name="report_date_option_val"]').value = reportDateOption;
             document.querySelector('input[name="report_date"]').value = reportDate;
+            document.querySelector('input[name="target_date_option_val"]').value = targetDateOption;
             document.querySelector('input[name="target_solved_date"]').value = targetSolved;
             document.querySelector('input[name="notes"]').value = notes;
         }
