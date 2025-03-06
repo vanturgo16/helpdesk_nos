@@ -154,14 +154,63 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Report Date</label> <label class="text-danger">*</label>
-                                            <input type="date" name="report_date_input" class="form-control" required>
+                                            {{-- <input type="date" name="report_date_input" class="form-control" required> --}}
+                                            <input type="datetime-local" name="report_date_input" class="form-control" required id="report_date_input">
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function() {
+                                                    const input = document.getElementById("report_date_input");
+                                                    function setMaxDateTime() {
+                                                        const now = new Date();
+                                                        const year = now.getFullYear();
+                                                        const month = String(now.getMonth() + 1).padStart(2, '0');
+                                                        const day = String(now.getDate()).padStart(2, '0');
+                                                        const hours = String(now.getHours()).padStart(2, '0');
+                                                        const minutes = String(now.getMinutes()).padStart(2, '0');
+                                                        const maxDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                                                        input.max = maxDateTime;
+                                                    }
+                                                    function validateInput() {
+                                                        if (input.value > input.max) {
+                                                            input.value = input.max; // Reset to max allowed if user selects future time
+                                                        }
+                                                    }
+                                                    setMaxDateTime(); // Set the max date/time on page load
+                                                    input.addEventListener("input", validateInput); // Prevent future selection
+                                                    setInterval(setMaxDateTime, 60000); // Update every minute
+                                                });
+                                            </script>
+
                                             <div class="invalid-feedback">Please fill report date.</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Target Solved</label>
-                                            <input type="date" name="target_solved_date_input" class="form-control">
+                                            {{-- <input type="date" name="target_solved_date_input" class="form-control"> --}}
+                                            <input type="datetime-local" name="target_solved_date_input" class="form-control" required id="target_solved_date_input">
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function() {
+                                                    const input = document.getElementById("target_solved_date_input");
+                                                    function setMinDateTime() {
+                                                        const now = new Date();
+                                                        const year = now.getFullYear();
+                                                        const month = String(now.getMonth() + 1).padStart(2, '0');
+                                                        const day = String(now.getDate()).padStart(2, '0');
+                                                        const hours = String(now.getHours()).padStart(2, '0');
+                                                        const minutes = String(now.getMinutes()).padStart(2, '0');
+                                                        const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                                                        input.min = minDateTime;
+                                                    }
+                                                    function validateInput() {
+                                                        if (input.value < input.min) {
+                                                            input.value = input.min; // Reset to min allowed if user selects a past time
+                                                        }
+                                                    }
+                                                    setMinDateTime(); // Set the min date/time on page load
+                                                    input.addEventListener("input", validateInput); // Prevent past selection
+                                                    setInterval(setMinDateTime, 60000); // Update min every minute
+                                                });
+                                            </script>
                                         </div>
                                     </div>
                                 </div>
@@ -398,15 +447,17 @@
             let fileInput = document.querySelector('input[name="file_1"]');
             let fileName = fileInput.files.length > 0 ? 'Yes' : 'No';
             let reportDate = document.querySelector('input[name="report_date_input"]').value || "-";
+            const formattedReportDate = formatDateTime(reportDate);
             let targetSolved = document.querySelector('input[name="target_solved_date_input"]').value || "-";
+            const formattedTargetSolved = formatDateTime(targetSolved);
 
             // Update Summary Ticket Section
             document.getElementById("summaryPriority").innerText = priority || "-";
             document.getElementById("summaryCategory").innerText = category || "-";
             document.getElementById("summarySubCategory").innerText = subCategory || "-";
             document.getElementById("summaryInputFile").innerText = fileName;
-            document.getElementById("summaryReportDate").innerText = reportDate;
-            document.getElementById("summaryTargetSolved").innerText = targetSolved;
+            document.getElementById("summaryReportDate").innerText = formattedReportDate;
+            document.getElementById("summaryTargetSolved").innerText = formattedTargetSolved;
             document.getElementById("summaryNotes").innerText = notes;
 
             // Update Hidden Inputs in Send Ticket Modal
