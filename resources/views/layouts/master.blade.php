@@ -356,6 +356,7 @@
     <script src="{{ asset('assets/js/pages/dashboard.init.js') }}"></script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="{{ asset('assets/libs/dayjs@1/dayjs.min.js') }}"></script>
 
     <!-- DATATABLE CUSTOM SCROLL -->
     <script>
@@ -372,7 +373,7 @@
                 if (windowHeight < 550) { maxHeight = '10vh'; } 
                 else if (windowHeight < 600) { maxHeight = '19vh'; } 
                 else if (windowHeight < 700) { maxHeight = '29vh'; } 
-                else if (windowHeight < 800) { maxHeight = '37vh'; } 
+                else if (windowHeight < 800) { maxHeight = '36vh'; } 
                 else if (windowHeight < 900) { maxHeight = '42vh'; } 
                 else if (windowHeight < 1000) { maxHeight = '44vh'; }
                 $('#ssTable_wrapper .dataTables_scrollBody').css('max-height', maxHeight);

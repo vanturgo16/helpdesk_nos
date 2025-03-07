@@ -1,4 +1,4 @@
-<table class="table table-bordered dt-responsive w-100" id="ssTable">
+<table class="table table-bordered dt-responsive w-100" id="ssTable" style="font-size: small">
     <thead class="table-light">
         <tr>
             <th class="align-middle text-center">Action By</th>
@@ -18,6 +18,7 @@
                 url: url,
                 type: 'GET',
             },
+            order: [[0, 'desc']],
             columns: [
                 {
                     data: 'created',
@@ -26,7 +27,7 @@
                     orderable: true,
                     className: 'align-top',
                     render: function(data, type, row) {
-                        return row.created_by + '<br><b>At.</b>' + row.created;
+                        return row.created_by + '<br><b>At.</b>' + dayjs(row.created).format('YYYY-MM-DD HH:mm');
                     },
                 },
                 {

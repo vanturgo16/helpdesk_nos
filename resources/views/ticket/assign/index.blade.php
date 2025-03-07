@@ -1,10 +1,10 @@
-<table class="table table-bordered dt-responsive w-100" id="ssTableAssign">
+<table class="table table-bordered dt-responsive w-100" id="ssTableAssign" style="font-size: small">
     <thead class="table-light">
         <tr>
             <th class="align-middle text-center">Assign By</th>
             <th class="align-middle text-center">Assign To</th>
-            <th class="align-middle text-center">Message</th>
             <th class="align-middle text-center">Date Detail</th>
+            <th class="align-middle text-center">Pre-close Message</th>
             <th class="align-middle text-center">Status</th>
         </tr>
     </thead>
@@ -24,6 +24,7 @@
                 url: url,
                 type: 'GET',
             },
+            order: [[0, 'desc']],
             columns: [
                 {
                     data: 'assignBy',
@@ -43,18 +44,18 @@
                     className: 'align-top',
                 },
                 {
-                    data: 'preclosed_message',
-                    name: 'preclosed_message',
-                    orderable: true,
-                    searchable: true,
-                    className: 'align-top',
-                },
-                {
                     data: 'dateDetail',
                     name: 'dateDetail',
                     orderable: true,
                     searchable: true,
                     className: 'align-top p-0',
+                },
+                {
+                    data: 'preclosed_message',
+                    name: 'preclosed_message',
+                    orderable: true,
+                    searchable: true,
+                    className: 'align-top',
                 },
                 {
                     data: 'assign_status',

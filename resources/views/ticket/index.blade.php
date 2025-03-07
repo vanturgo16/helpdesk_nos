@@ -6,28 +6,59 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-4">
-                    @if(in_array(Auth::user()->role, ['Super Admin', 'Admin']))
-                        <a href="{{ route('createTicket.index') }}" type="button" class="btn btn-primary waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i> Add New Ticket</a>
-                    @endif
+                    <a href="{{ route('createTicket.index') }}" type="button" class="btn btn-sm btn-primary waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i> Add New Ticket</a>
                 </div>
                 <div class="col-4">
                     <div class="text-center">
-                        <h4 class="text-bold">List Ticket</h4>
+                        <h4 class="text-bold mb-0">List Ticket</h4>
+                        <span class="badge bg-info text-white">Year: {{ \Carbon\Carbon::createFromFormat('Y', $year)->translatedFormat('Y') }}</span>
                     </div>
                 </div>
-                <div class="col-4"></div>
+                <div class="col-4">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm btn-secondary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#modalFilter">
+                            <i class="mdi mdi-filter label-icon"></i> Filter Year
+                        </button>
+                        {{-- Modal Filter --}}
+                        <div class="modal fade" id="modalFilter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-top" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Filter Year</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form class="formLoad" action="{{ route('ticket.index') }}" method="GET" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="modal-body p-4">
+                                            <div class="row">
+                                                <div class="col-lg-12 mb-3">
+                                                    <label class="form-label">Year</label> <label class="text-danger">*</label>
+                                                    <input type="number" class="form-control" name="year" value="{{ $year }}" min="1900" max="2100" step="1" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-eye label-icon"></i></i>Show</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered dt-responsive w-100" id="ssTable">
+            <table class="table table-bordered dt-responsive w-100" id="ssTable" style="font-size: small">
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">#</th>
                         <th class="align-middle text-center">No. Ticket</th>
-                        <th class="align-middle text-center">Priority</th>
                         <th class="align-middle text-center">Category</th>
                         <th class="align-middle text-center">Requestor</th>
                         <th class="align-middle text-center">Target Closed</th>
+                        <th class="align-middle text-center">Aging</th>
                         <th class="align-middle text-center">Last Assign To</th>
                         <th class="align-middle text-center">Status</th>
                         <th class="align-middle text-center">Action</th>
@@ -51,6 +82,7 @@
                 data: function(d) {
                     d.filterPriority = $('#filterPriority').val();
                     d.filterStatus = $('#filterStatus').val();
+                    d.year = '{{ $year }}';
                 }
             },
             columns: [{
@@ -68,23 +100,17 @@
                     orderable: true,
                     searchable: true,
                     className: 'align-top fw-bold',
-                },
-                {
-                    data: 'priority',
-                    name: 'priority',
-                    orderable: true,
-                    searchable: true,
-                    className: 'align-top text-center',
                     render: function(data, type, row) {
                         let badgeClass = 'bg-info';
-                        if (data === 'Low') {
+                        if (row.priority === 'Low') {
                             badgeClass = 'bg-secondary';
-                        } else if (data === 'Medium') {
+                        } else if (row.priority === 'Medium') {
                             badgeClass = 'bg-warning';
-                        } else if (data === 'High') {
+                        } else if (row.priority === 'High') {
                             badgeClass = 'bg-danger';
                         }
-                        return `<span class="badge ${badgeClass}">${data}</span>`;
+
+                        return `${data}<br><span class="badge ${badgeClass}">${row.priority}</span>`;
                     },
                 },
                 {
@@ -102,23 +128,49 @@
                     orderable: true,
                     className: 'align-top',
                     render: function(data, type, row) {
-                        return row.created_by + '<br><b>At.</b>' + row.created;
+                        return row.created_by + '<br><b>At.</b> ' + dayjs(row.created).format('YYYY-MM-DD HH:mm');
                     },
                 },
                 {
-                    data: 'target_solved_date',
-                    name: 'target_solved_date',
+                    data: 'targetDate',
+                    name: 'targetDate',
+                    searchable: true,
+                    orderable: true,
+                    className: 'align-top',
+                    render: function(data, type, row) {
+                        let targetDate = `<small><b>Target:</b> ${dayjs(data).format('YYYY-MM-DD HH:mm')}</small>`;
+                        let actualDate = row.closedDate 
+                            ? `<br><small><b>Actual:</b> ${dayjs(row.closedDate).format('YYYY-MM-DD HH:mm')}</small>` 
+                            : '<br><small><b>Actual:</b> -</small>';
+
+                        return targetDate + actualDate;
+                    },
+                },
+                {
+                    data: null,
+                    name: 'aging',
                     orderable: false,
                     searchable: false,
                     className: 'align-top text-center',
                     render: function(data, type, row) {
-                        if (!data) return '-';
-                        let date = new Date(data);
-                        let day = String(date.getDate()).padStart(2, '0');
-                        let month = String(date.getMonth() + 1).padStart(2, '0');
-                        let year = date.getFullYear();
-                        return `${day}-${month}-${year}`;
-                    }
+                        if (!row.created) return ''; // Ensure created date exists
+
+                        let createdDate = dayjs(row.created);
+                        let endDate = row.closedDate ? dayjs(row.closedDate) : dayjs(); // Use now if closedDate is missing
+
+                        let diffDays = endDate.diff(createdDate, 'day');
+                        let diffHours = endDate.diff(createdDate, 'hour') % 24;
+                        let diffMinutes = endDate.diff(createdDate, 'minute') % 60;
+
+                        let agingText = `<strong>${diffDays}</strong>d, <strong>${diffHours}</strong>h, <strong>${diffMinutes}</strong>m`;
+
+                        // Highlight in red if past targetDate and ticket is still open
+                        if (!row.closedDate && row.targetDate && endDate.isAfter(dayjs(row.targetDate))) {
+                            return `<small class="text-danger">${agingText}</small>`;
+                        }
+
+                        return `<small>${agingText}</small>`;
+                    },
                 },
                 {
                     data: 'lastAssign',
@@ -138,9 +190,9 @@
                         if (data === 0) {
                             html = `<span class="badge bg-secondary text-white"><i class="fas fa-play-circle"></i> Requested</span>`;
                         } else if (data === 1) {
-                            html = `<span class="badge bg-warning text-white"><i class="fa-solid fa-spinner"></i> In-Progress</span>`;
+                            html = `<span class="badge bg-warning text-white"><i class="fas fa-spinner"></i> In-Progress</span>`;
                         } else {
-                            html = `<span class="badge bg-success text-white"><i class="fa-solid fa-square-check"></i> Done</span>`;
+                            html = `<span class="badge bg-success text-white"><i class="fas fa-check"></i> Done</span>`;
                         }
                         return html;
                     },

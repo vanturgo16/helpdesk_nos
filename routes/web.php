@@ -122,6 +122,9 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::get('/detail/{id}', 'detail')->name('ticket.detail');
             Route::get('/detail/assign/datas/{id}', 'assignDatas')->name('ticket.assign.datas');
             Route::get('/detail/log/datas/{id}', 'logDatas')->name('ticket.log.datas');
+
+            Route::post('/accept/{id}', 'accept')->name('ticket.accept');
+            Route::post('/add-activity/{id}', 'addActivity')->name('ticket.addActivity');
         });
     });
 

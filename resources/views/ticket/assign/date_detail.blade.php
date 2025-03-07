@@ -5,7 +5,7 @@
                 <small>Assign Date</small>
             </th>
             <td class="align-top px-2 py-0" style="border: none;">
-                <small>: {{ $data->assign_date }}</small>
+                <small>: {{ $data->assign_date ? \Carbon\Carbon::parse($data->assign_date)->format('Y-m-d H:i') : '-' }}</small>
             </td>
         </tr>
         <tr>
@@ -13,7 +13,7 @@
                 <small>Accept Date</small>
             </th>
             <td class="align-top px-2 py-0" style="border: none;">
-                <small>: {{ $data->accept_date ?? '-' }}</small>
+                <small>: {{ $data->accept_date ? \Carbon\Carbon::parse($data->accept_date)->format('Y-m-d H:i') : '-' }}</small>
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 <small>Preclose Date</small>
             </th>
             <td class="align-top px-2 py-0" style="border: none;">
-                <small>: {{ $data->preclosed_date ?? '-' }}</small>
+                <small>: {{ $data->preclosed_date ? \Carbon\Carbon::parse($data->preclosed_date)->format('Y-m-d H:i') : '-' }}</small>
             </td>
         </tr>
     </tbody>
