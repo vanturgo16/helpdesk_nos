@@ -19,7 +19,7 @@ class MstSubCategoryController extends Controller
 
     public function index(Request $request)
     {
-        $categories = MstCategory::where('is_active', 1)->get();
+        $categories = MstCategory::get();
         $datas = MstSubCategory::select('mst_sub_category.*', 'mst_category.category')
             ->leftjoin('mst_category', 'mst_category.id', 'mst_sub_category.id_mst_category')
             ->orderBy('mst_sub_category.created_at', 'desc')->get();
@@ -41,6 +41,7 @@ class MstSubCategoryController extends Controller
         $request->validate([
             'id_mst_category' => 'required',
             'sub_category' => 'required',
+            'sla' => 'required',
         ]);
         // Check Existing Data
         if (MstSubCategory::where('id_mst_category', $request->id_mst_category)->where('sub_category', $request->sub_category)->exists()) {
@@ -52,6 +53,7 @@ class MstSubCategoryController extends Controller
             $store = MstSubCategory::create([
                 'id_mst_category' => $request->id_mst_category,
                 'sub_category' => $request->sub_category,
+                'sla' => $request->sla,
                 'is_active' => 1
             ]);
 
@@ -70,6 +72,7 @@ class MstSubCategoryController extends Controller
         $request->validate([
             'id_mst_category' => 'required',
             'sub_category' => 'required',
+            'sla' => 'required',
         ]);
 
         $id = decrypt($id);
@@ -81,6 +84,7 @@ class MstSubCategoryController extends Controller
         $dataBefore = MstSubCategory::where('id', $id)->first();
         $dataBefore->id_mst_category = $request->id_mst_category;
         $dataBefore->sub_category = $request->sub_category;
+        $dataBefore->sla = $request->sla;
 
         if ($dataBefore->isDirty()) {
             DB::beginTransaction();
@@ -88,6 +92,7 @@ class MstSubCategoryController extends Controller
                 MstSubCategory::where('id', $id)->update([
                     'id_mst_category' => $request->id_mst_category,
                     'sub_category' => $request->sub_category,
+                    'sla' => $request->sla,
                 ]);
 
                 // Audit Log
@@ -142,7 +147,16 @@ class MstSubCategoryController extends Controller
     // AJAX
     public function getSubcategory($id)
     {
-        $datas = MstSubCategory::where('id_mst_category', $id)->get();
+        $datas = MstSubCategory::where('id_mst_category', $id)->where('is_active', 1)->get();
+        if ($datas) {
+            return response()->json(['success' => true, 'data' => [$datas]]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+    public function getSLA($id)
+    {
+        $datas = MstSubCategory::where('id', $id)->first();
         if ($datas) {
             return response()->json(['success' => true, 'data' => [$datas]]);
         } else {

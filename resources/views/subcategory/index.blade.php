@@ -34,6 +34,13 @@
                                                     <label class="form-label">Category Name</label> <label class="text-danger">*</label>
                                                     <input class="form-control" type="text" name="sub_category" placeholder="Input Sub Category Name.." required>
                                                 </div>
+                                                <div class="col-lg-12 mb-3">
+                                                    <label class="form-label">SLA - Over Due</label> <label class="text-danger">*</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" placeholder="Input Over Due in minutes.." name="sla" required>
+                                                        <span class="input-group-text">Minutes</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -61,6 +68,7 @@
                         <th class="align-middle text-center">No</th>
                         <th class="align-middle text-center">Category</th>
                         <th class="align-middle text-center">Sub Category</th>
+                        <th class="align-middle text-center">SLA / Over Due (In Minutes)</th>
                         <th class="align-middle text-center">Status</th>
                         <th class="align-middle text-center">Action</th>
                     </tr>
@@ -95,6 +103,11 @@
                     data: 'sub_category',
                     orderable: true,
                     className: 'align-top',
+                },
+                {
+                    data: 'sla',
+                    orderable: true,
+                    className: 'align-top text-center',
                 },
                 {
                     data: 'is_active',

@@ -26,7 +26,7 @@ trait GenNoTicketTrait
         }
         // Format no_urut to 4 digits
         $noUrutFormatted = str_pad($noUrut, 4, '0', STR_PAD_LEFT);
-        return "{$year}{$month}{$noUrutFormatted}";
+        return "T/{$year}{$month}/{$noUrutFormatted}";
     }
     public function showNoTicket()
     {
