@@ -68,7 +68,7 @@
         <br>
         <br>
         <br> {{ $requester }} <br>
-        <br> [Requester] <br>
+        <br> [Requestor] <br>
 
     </span>
 </body>
