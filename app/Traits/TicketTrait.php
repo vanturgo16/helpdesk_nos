@@ -8,7 +8,7 @@ trait TicketTrait
 {
     public function activityLog($idTicket, $desc, $message, $url)
     {
-        Log::create([
+        return Log::create([
             'id_ticket' => $idTicket,
             'created_by' => auth()->user()->email,
             'description' => $desc,
