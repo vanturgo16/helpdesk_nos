@@ -81,7 +81,7 @@ class CreateTicketController extends Controller
         }
         $assignToDept = 'IT';
         $url1 = null;
-        $user = auth()->user()->email;
+        $requestor = auth()->user()->email;
 
         // Initiate Email
         $dealerTypeHandle = MstRules::where('rule_name', 'Type Dealer Handle Ticket')->pluck('rule_value')->toArray();
@@ -90,8 +90,9 @@ class CreateTicketController extends Controller
             ->where('department', $assignToDept)->whereIn('role', $roleHandle)
             ->pluck('email')->toArray();
         $development = MstRules::where('rule_name', 'Development')->first()->rule_value;
-        $toEmail = ($development == 1) ? MstRules::where('rule_name', 'Email Development')->pluck('rule_value')->toArray() : $emailAssigns;
-        $ccEmail = ($development == 1) ? MstRules::where('rule_name', 'Email Development')->pluck('rule_value')->toArray() : $user;
+        $emailDev = MstRules::where('rule_name', 'Email Development')->pluck('rule_value')->toArray();
+        $toEmail = ($development == 1) ? $emailDev : $emailAssigns;
+        $ccEmail = ($development == 1) ? $emailDev : $requestor;
 
         DB::beginTransaction();
         try {
@@ -99,8 +100,8 @@ class CreateTicketController extends Controller
                 $path = $request->file('file_1');
                 $url1 = $path->move('storage/attachmentTicket', $path->hashName());
             }
-            // Store Ticket
-            $store = Ticket::create([
+            // Store Data Ticket
+            $dataTicket = Ticket::create([
                 'no_ticket' => $this->genNoTicket(),
                 'priority' => $request->priority,
                 'category' => $request->category,
@@ -109,21 +110,17 @@ class CreateTicketController extends Controller
                 'target_solved_date' => $targetDate,
                 'notes' => $request->notes,
                 'file_1' => $url1,
-                'created_by' => $user,
+                'created_by' => $requestor,
                 'status' => 0,
             ]);
             // Activity Ticket Log
-            $this->activityLog($store->id, 'Success Created Ticket', $request->notes, null);
-            $logAssign = Log::create([
-                'id_ticket' => $store->id, 'created_by' => $user,
-                'description' => 'Success Assign Ticket',
-                'message' => 'Assign To:' . $assignToDept
-            ]);
+            $this->activityLog($dataTicket->id, 'Success Created Ticket', $request->notes, null);
+            $logAssign = $this->activityLog($dataTicket->id, 'Success Assign Ticket', 'Assign To:' . $assignToDept, null);
             // Assign Ticket Log
             LogTicket::create([
-                'id_ticket' => $store->id,
+                'id_ticket' => $dataTicket->id,
                 'id_log' => $logAssign->id,
-                'assign_by' => $user,
+                'assign_by' => $requestor,
                 'assign_to_dept' => $assignToDept,
                 'assign_date' => now()->format('Y-m-d H:i'),
                 'assign_status' => 1,
@@ -131,11 +128,11 @@ class CreateTicketController extends Controller
             ]);
 
             // Send Email
-            $mailContent = new NewTicketAssign($store, $assignToDept, $user);
+            $mailContent = new NewTicketAssign($dataTicket, $assignToDept, $requestor);
             Mail::to($toEmail)->cc($ccEmail)->send($mailContent);
 
             // Audit Log
-            $this->auditLogs('Store New Ticket ID: ' . $store->id);
+            $this->auditLogs('Store New Ticket ID: ' . $dataTicket->id);
             DB::commit();
             return redirect()->route('ticket.index')->with('success', 'Success, New Ticket Requested');
         } catch (Exception $e) {

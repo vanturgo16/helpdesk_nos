@@ -11,11 +11,8 @@ trait GenNoTicketTrait
     {
         $year = Carbon::now()->format('y');
         $month = Carbon::now()->format('m');
-        // Find the latest record for this year and month
-        $record = NoTicketGen::where('year', $year)
-            ->where('month', $month)
-            ->orderBy('no_urut', 'desc')
-            ->first();
+        // Find the latest record for this year and month (Lock the row to prevent race conditions)
+        $record = NoTicketGen::where('year', $year)->where('month', $month)->orderByDesc('no_urut')->lockForUpdate()->first();
         $noUrut = $record ? $record->no_urut + 1 : 1;
         if ($create) {
             NoTicketGen::create([

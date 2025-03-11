@@ -16,13 +16,13 @@ class NewTicketAssign extends Mailable
 
     public $dataTicket;
     public $assignToDept;
-    public $requester;
+    public $requestor;
 
-    public function __construct($dataTicket, $assignToDept, $requester)
+    public function __construct($dataTicket, $assignToDept, $requestor)
     {
         $this->dataTicket = $dataTicket;
         $this->assignToDept = $assignToDept;
-        $this->requester = $requester;
+        $this->requestor = $requestor;
     }
 
     public function build()
