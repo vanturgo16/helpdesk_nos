@@ -254,23 +254,27 @@
 
         // Filter Type
         let priorities = @json($priorities);
+        var messages = {
+            allText: "{{ __('messages.all') }}",
+            priority: "{{ __('messages.priority') }}"
+        };
         var filterPriority = `
             <label>
                 <select id="filterPriority">
-                    <option value="">-- All Priority --</option>
+                    <option value="">-- ${messages.allText} ${messages.priority} --</option>
                     ${priorities.map(priority => `<option value="${priority.priority}">${priority.priority}</option>`).join('')}
                 </select>
             </label>
         `;
         $('.dataTables_length').before(filterPriority);
-        $('#filterPriority').select2({width: '150px' });
+        $('#filterPriority').select2({width: '180px' });
         $('#filterPriority').on('change', function() { $("#ssTable").DataTable().ajax.reload(); });
 
         // Filter Status
         var filterStatus = `
             <label>
                 <select id="filterStatus">
-                    <option value="">-- All Status --</option>
+                    <option value="">-- ${messages.allText} Status --</option>
                     <option value="0">Requested</option>
                     <option value="1">In-Progress</option>
                     <option value="2">Done</option>
