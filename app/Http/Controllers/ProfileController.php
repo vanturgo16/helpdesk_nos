@@ -11,15 +11,17 @@ use App\Traits\AuditLogsTrait;
 // Model
 use App\Models\User;
 
-class DashboardController extends Controller
+class ProfileController extends Controller
 {
     use AuditLogsTrait;
 
     public function index(Request $request)
     {
-        return view('dashboard.index');
+        //Audit Log
+        $this->auditLogs('View Page Profile');
+        return view('profile.index');
     }
-    public function switchTheme(Request $request)
+    public function updatePhoto(Request $request)
     {
         DB::beginTransaction();
         try {
@@ -28,12 +30,12 @@ class DashboardController extends Controller
             User::where('id', auth()->user()->id)->update(['is_darkmode' => $status]);
 
             //Audit Log
-            $this->auditLogs('Switch Theme');
+            $this->auditLogs('Update Photo Profile');
             DB::commit();
-            return redirect()->back()->with('success', __('messages.success_switch_theme'));
+            return redirect()->back()->with('success', __('messages.success_update'));
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['fail' => __('messages.fail_switch_theme')]);
+            return redirect()->back()->with(['fail' => __('messages.fail_update')]);
         }
     }
 }

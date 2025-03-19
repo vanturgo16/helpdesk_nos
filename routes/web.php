@@ -11,6 +11,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MstDropdownController;
 use App\Http\Controllers\MstRuleController;
 use App\Http\Controllers\MstPrioritiesController;
@@ -36,6 +37,13 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
         Route::prefix('dashboard')->group(function () {
             Route::get('/', 'index')->name('dashboard');
             Route::post('/', 'switchTheme')->name('switchTheme');
+        });
+    });
+    // PROFIL
+    Route::controller(ProfileController::class)->group(function () {
+        Route::prefix('profile')->group(function () {
+            Route::get('/', 'index')->name('profile.index');
+            Route::post('/update-photo', 'updatePhoto')->name('profile.updatePhoto');
         });
     });
     // RULE CONFIGURATION

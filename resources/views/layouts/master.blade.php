@@ -110,6 +110,7 @@
                             <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ Auth::user()->name }}</span> <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
                             <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#logout"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                         </div>
                     </div>
@@ -313,17 +314,17 @@
         <div class="modal-dialog modal-dialog-top" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Switch Theme</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.switch_theme') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <h5>Switch To <b>@if(Auth::user()->is_darkmode) Light @else Dark @endif</b> Mode ?</h5>
+                    <h5>{{ __('messages.switch_to') }} <b>@if(Auth::user()->is_darkmode) Light @else Dark @endif</b> Mode ?</h5>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
                     <form class="formLoad" action="{{ route('switchTheme') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-check label-icon"></i>Apply</button>
+                        <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-check label-icon"></i>{{ __('messages.apply') }}</button>
                     </form>
                 </div>
             </div>
