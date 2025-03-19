@@ -3,8 +3,8 @@
         <tr>
             <th class="align-middle text-center">Assign By</th>
             <th class="align-middle text-center">Assign To</th>
-            <th class="align-middle text-center">Date Detail</th>
-            <th class="align-middle text-center">Pre-close Message</th>
+            <th class="align-middle text-center">{{ __('messages.date_detail') }}</th>
+            <th class="align-middle text-center">{{ __('messages.preclose_message') }}</th>
             <th class="align-middle text-center">Status</th>
         </tr>
     </thead>

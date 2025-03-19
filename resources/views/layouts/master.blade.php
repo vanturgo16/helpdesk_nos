@@ -69,7 +69,30 @@
                         <?php Auth::logout(); ?>
                     @endif
                 </div>
+
                 <div class="d-flex">
+                    <div class="dropdown d-none d-sm-inline-block">
+                        <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img id="header-lang-img" src="{{ asset('assets/images/flags/' . (App::getLocale() == 'id' ? 'id.png' : (App::getLocale() == 'sd' ? 'sunda.jpg' : 'us.jpg'))) }}" alt="Header Language" height="16">
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <!-- English -->
+                            <a href="{{ route('change.language', 'en') }}" class="dropdown-item notify-item language">
+                                <img src="{{ asset('assets/images/flags/us.jpg') }}" alt="user-image" class="me-1" height="12"> 
+                                <span class="align-middle">English</span>
+                            </a>
+                            <!-- Indonesian -->
+                            <a href="{{ route('change.language', 'id') }}" class="dropdown-item notify-item language">
+                                <img src="{{ asset('assets/images/flags/id.png') }}" alt="user-image" class="me-1" height="12"> 
+                                <span class="align-middle">Indonesia</span>
+                            </a>
+                            <!-- Sundanese -->
+                            <a href="{{ route('change.language', 'sd') }}" class="dropdown-item notify-item language">
+                                <img src="{{ asset('assets/images/flags/sunda.jpg') }}" alt="user-image" class="me-1" height="12"> 
+                                <span class="align-middle">Sunda</span>
+                            </a>
+                        </div>                        
+                    </div>                    
                     <div class="dropdown d-none d-sm-inline-block">
                         <button type="button" class="btn header-item" data-bs-toggle="modal" data-bs-target="#switchTheme">
                             <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
@@ -107,53 +130,53 @@
                         <li class="menu-title mt-2" data-key="t-menu">Configuration</li>
                         <li>
                             <a href="{{ route('user.index') }}" class="{{ request()->is('user*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-account-supervisor"></i><span>Manage Users</span>
+                                <i class="mdi mdi-account-supervisor"></i><span>{{ __('messages.mng_user') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('rule.index') }}" class="{{ request()->is('rule*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-cog-box"></i><span>Manage Rules</span>
+                                <i class="mdi mdi-cog-box"></i><span>{{ __('messages.mng_rule') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('dropdown.index') }}" class="{{ request()->is('dropdown*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-package-down"></i><span>Manage Dropdowns</span>
+                                <i class="mdi mdi-package-down"></i><span>{{ __('messages.mng_dropdown') }}</span>
                             </a>
                         </li>
 
                         <li class="menu-title mt-2" data-key="t-menu">Master</li>
                         <li>
                             <a href="{{ route('priority.index') }}" class="{{ request()->is('priority*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-list-status"></i><span>Priority</span>
+                                <i class="mdi mdi-list-status"></i><span>{{ __('messages.priority') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('category.index') }}" class="{{ request()->is('category*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-sitemap-outline"></i><span>Category</span>
+                                <i class="mdi mdi-sitemap-outline"></i><span>{{ __('messages.category') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('subcategory.index') }}" class="{{ request()->is('subcategory*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-sitemap"></i><span>Sub Category</span>
+                                <i class="mdi mdi-sitemap"></i><span>{{ __('messages.sub_category') }}</span>
                             </a>
                         </li>
 
                         <li class="menu-title mt-2" data-key="t-menu">Helpdesk</li>
                         <li>
                             <a href="{{ route('createTicket.index') }}" class="{{ request()->is('create-ticket*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-ticket-outline"></i><span>Create Ticket</span>
+                                <i class="mdi mdi-ticket-outline"></i><span>{{ __('messages.ticket_create') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('ticket.index') }}" class="{{ request()->is('ticket*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-ticket-confirmation"></i><span>List Ticket</span>
+                                <i class="mdi mdi-ticket-confirmation"></i><span>{{ __('messages.ticket_list') }}</span>
                             </a>
                         </li>
 
-                        <li class="menu-title mt-2" data-key="t-menu">Other</li>
+                        <li class="menu-title mt-2" data-key="t-menu">{{ __('messages.other') }}</li>
                         <li>
                             <a href="{{ route('auditlog.index') }}" class="{{ request()->is('auditlog*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-chart-donut"></i><span>Audit Log</span>
+                                <i class="mdi mdi-chart-donut"></i><span>{{ __('messages.audit_log') }}</span>
                             </a>
                         </li>
                     </ul>

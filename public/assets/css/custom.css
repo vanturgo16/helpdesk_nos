@@ -122,3 +122,18 @@
     border: 2px solid #bbbbbb;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
 }
+
+/* BG COLOR CARD */
+body:not([data-bs-theme="dark"]) .header-detail-a  {
+    background-color: #dddddd;
+}
+body:not([data-bs-theme="dark"]) .body-detail-a  {
+    background-color: #eeeeee;
+}
+/* Dark Theme */
+body[data-bs-theme="dark"] .header-detail-a  {
+    background-color: #383d3b;
+}
+body[data-bs-theme="dark"] .body-detail-a  {
+    background-color: #495057;
+}

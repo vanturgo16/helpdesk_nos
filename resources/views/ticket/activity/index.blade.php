@@ -2,7 +2,7 @@
     <thead class="table-light">
         <tr>
             <th class="align-middle text-center">Action By</th>
-            <th class="align-middle text-center">Message</th>
+            <th class="align-middle text-center">{{ __('messages.message') }}</th>
             <th class="align-middle text-center">Attachment</th>
         </tr>
     </thead>

@@ -133,10 +133,10 @@ class TicketController extends Controller
             // Audit Log
             $this->auditLogs('Accept Log Assign Ticket ID: ' . $id);
             DB::commit();
-            return redirect()->back()->with('success', 'Success, Accept Ticket');
+            return redirect()->back()->with('success', __('messages.ticket_fail1'));
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['fail' => 'Failed to Accept Ticket!']);
+            return redirect()->back()->with(['fail' => __('messages.ticket_success1')]);
         }
     }
 
@@ -160,11 +160,11 @@ class TicketController extends Controller
             // Audit Log
             $this->auditLogs('Add Activity Ticket ID: ' . $id);
             DB::commit();
-            return redirect()->back()->with('success', 'Success, Add Activity Ticket');
+            return redirect()->back()->with('success', __('messages.ticket_success2'));
         } catch (Exception $e) {
             DB::rollBack();
             if ($url && file_exists(public_path($url))) { unlink(public_path($url)); }
-            return redirect()->back()->with(['fail' => 'Failed to Add Activity Ticket!']);
+            return redirect()->back()->with(['fail' => __('messages.ticket_fail2')]);
         }
     }
 }

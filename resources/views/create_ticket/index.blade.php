@@ -78,7 +78,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header bg-light text-primary">
-                    <h4 class="card-title mb-0">Create New Ticket</h4>
+                    <h4 class="card-title mb-0">{{ __('messages.ticket_new_create') }}</h4>
                 </div>
                 <div class="card-body" style="max-height: 70vh; overflow-y: auto;">
                     <div id="progrss-wizard" class="twitter-bs-wizard">
@@ -111,15 +111,15 @@
                         <div class="tab-content twitter-bs-wizard-tab-content" style="max-height: 45vh; overflow-y: auto; overflow-x: hidden;">
                             <div class="tab-pane" id="categoryTicket">
                                 <div class="text-center mb-4">
-                                    <h5>Category Ticket</h5>
+                                    <h5>{{ __('messages.ticket_cat') }}</h5>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Priority</label> <label class="text-danger">*</label>
+                                            <label class="form-label">{{ __('messages.priority') }}</label> <label class="text-danger">*</label>
                                             <select class="form-control select2" name="priority_input" required>
-                                                <option value="" disabled selected>- Select Priority -</option>
+                                                <option value="" disabled selected>- {{ __('messages.select') }} {{ __('messages.priority') }} -</option>
                                                 @foreach($priorities as $item)
                                                     <option value="{{ $item->priority }}">{{ $item->priority }}</option>
                                                 @endforeach
@@ -129,9 +129,9 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Category</label> <label class="text-danger">*</label>
+                                            <label class="form-label">{{ __('messages.category') }}</label> <label class="text-danger">*</label>
                                             <select class="form-control select2" name="id_mst_category_input" required>
-                                                <option value="" disabled selected>- Select Category -</option>
+                                                <option value="" disabled selected>- {{ __('messages.select') }} {{ __('messages.category') }} -</option>
                                                 @foreach($categories as $item)
                                                     <option value="{{ $item->id }}">{{ $item->category }}</option>
                                                 @endforeach
@@ -141,19 +141,19 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Sub Category</label> <label class="text-danger">*</label>
+                                            <label class="form-label">{{ __('messages.sub_category') }}</label> <label class="text-danger">*</label>
                                             <select class="form-control select2" name="id_mst_sub_category_input" required>
-                                                <option value="" disabled selected>- Select Sub Category -</option>
+                                                <option value="" disabled selected>- {{ __('messages.select') }} {{ __('messages.sub_category') }} -</option>
                                             </select>
                                             <div class="invalid-feedback">Please select a Sub Category.</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">SLA / Over Due </label> <small class="text-muted"> - (auto-filled)</small>
+                                            <label class="form-label">{{ __('messages.sla_form') }} </label> <small class="text-muted"> - ({{ __('messages.auto_fill') }})</small>
                                             <div class="input-group">
                                                 <input type="number" class="form-control" placeholder=".." name="sla" value="" readonly>
-                                                <span class="input-group-text">Minutes</span>
+                                                <span class="input-group-text">{{ __('messages.minutes') }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -161,35 +161,35 @@
                             </div>
                             <div class="tab-pane" id="detailTicket">
                                 <div class="text-center mb-4">
-                                    <h5>Detail Ticket</h5>
+                                    <h5>Detail {{ __('messages.ticket') }}</h5>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Notes (max 255 character)</label> <label class="text-danger">*</label>
-                                            <textarea name="notes_input" rows="3" cols="50" class="form-control" placeholder="Input Note.." required></textarea>
+                                            <label class="form-label">{{ __('messages.notes') }} (max 255 character)</label> <label class="text-danger">*</label>
+                                            <textarea name="notes_input" rows="3" cols="50" class="form-control" placeholder="Input {{ __('messages.notes') }}.." required></textarea>
                                             <div class="invalid-feedback">Please fill notes.</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Upload Document</label>
+                                            <label class="form-label">{{ __('messages.upload_doc') }}</label>
                                             <input type="file" name="file_1" id="file_1" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Report Date</label> <label class="text-danger">*</label>
+                                            <label class="form-label">{{ __('messages.report_date') }}</label> <label class="text-danger">*</label>
                                             <div class="d-flex">
                                                 <div class="form-check me-5">
                                                     <input class="form-check-input" type="radio" id="use_now" name="report_date_option" value="now" checked>
-                                                    <label class="form-check-label" for="use_now">Use Current Time </label> <small class="text-muted"> - (now)</small>
+                                                    <label class="form-check-label" for="use_now">{{ __('messages.use_current') }} </label> <small class="text-muted"> - ({{ __('messages.now') }})</small>
                                                 </div>
                                     
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" id="use_custom" name="report_date_option" value="custom">
-                                                    <label class="form-check-label" for="use_custom">Custom </label> <small class="text-muted"> - (back date)</small>
+                                                    <label class="form-check-label" for="use_custom">{{ __('messages.custom') }} </label> <small class="text-muted"> - ({{ __('messages.back_date') }})</small>
                                                 </div>
                                             </div>
                                             <input type="datetime-local" name="report_date_input" class="form-control mt-2" required id="report_date_input">
@@ -240,16 +240,16 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Target Solved</label>
+                                            <label class="form-label">{{ __('messages.target_solved') }}</label>
                                             <div class="d-flex">
                                                 <div class="form-check me-5">
                                                     <input class="form-check-input" type="radio" id="use_sla" name="target_date_option" value="sla_target" checked>
-                                                    <label class="form-check-label" for="use_sla">Use SLA </label> <small class="text-muted"> - (calculated from ticket creation)</small>
+                                                    <label class="form-check-label" for="use_sla">{{ __('messages.use_sla') }} </label> <small class="text-muted"> - ({{ __('messages.calc_sla') }})</small>
                                                 </div>
                                     
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" id="use_custom_target" name="target_date_option" value="custom_target">
-                                                    <label class="form-check-label" for="use_custom_target">Custom </label> <small class="text-muted"> - (set manually)</small>
+                                                    <label class="form-check-label" for="use_custom_target">{{ __('messages.custom') }} </label> <small class="text-muted"> - ({{ __('messages.set_manual') }})</small>
                                                 </div>
                                             </div>
                                             <div class="input-group mt-2" id="sla_input_group">
@@ -302,34 +302,34 @@
                             </div>
                             <div class="tab-pane" id="summaryTicket">
                                 <div class="text-center mb-4">
-                                    <h5>Summary Ticket</h5>
+                                    <h5>{{ __('messages.summary_ticket') }}</h5>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="ticket-container">
-                                            <h3 class="text-center">No. Ticket : <b><u>{{ $noTicket }}</u></b></h3>
+                                            <h3 class="text-center">No. {{ __('messages.ticket') }} : <b><u>{{ $noTicket }}</u></b></h3>
                                             <div class="row mt-4">
                                                 <div class="col-lg-6 mb-4">
                                                     <table>
                                                         <tbody>
                                                             <tr>
-                                                                <td class="align-top"><strong>Requester</strong></td>
+                                                                <td class="align-top"><strong>{{ __('messages.requestor') }}</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
                                                                 <td class="align-top">{{ auth()->user()->email }}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="align-top"><strong>Priority</strong></td>
+                                                                <td class="align-top"><strong>{{ __('messages.priority') }}</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
                                                                 <td class="align-top" id="summaryPriority"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="align-top"><strong>Category</strong></td>
+                                                                <td class="align-top"><strong>{{ __('messages.category') }}</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
                                                                 <td class="align-top" id="summaryCategory"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="align-top"><strong>Sub Category</strong></td>
+                                                                <td class="align-top"><strong>{{ __('messages.sub_category') }}</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
                                                                 <td class="align-top" id="summarySubCategory"></td>
                                                             </tr>
@@ -340,17 +340,17 @@
                                                     <table>
                                                         <tbody>
                                                             <tr>
-                                                                <td class="align-top"><strong>Input File</strong></td>
+                                                                <td class="align-top"><strong>{{ __('messages.input_file') }}</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
                                                                 <td class="align-top" id="summaryInputFile"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="align-top"><strong>Report Date</strong></td>
+                                                                <td class="align-top"><strong>{{ __('messages.report_date') }}</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
                                                                 <td class="align-top" id="summaryReportDate"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="align-top"><strong>Target Solved</strong></td>
+                                                                <td class="align-top"><strong>{{ __('messages.target_solved') }}</strong></td>
                                                                 <td class="align-top" style="padding-left: 15px;">:</td>
                                                                 <td class="align-top" id="summaryTargetSolved"></td>
                                                             </tr>
@@ -358,7 +358,7 @@
                                                     </table>
                                                 </div>
                                                 <div class="col-lg-12">
-                                                    <p><strong>Notes :</strong><br>
+                                                    <p><strong>{{ __('messages.notes') }} :</strong><br>
                                                         <span id="summaryNotes"></span>
                                                     </p>
                                                 </div>
@@ -379,10 +379,10 @@
         <div class="card-body text-center p-0">
             <div class="d-flex justify-content-between align-items-center">
                 <button class="btn btn-secondary" id="prevBtn">
-                    <i class="fas fa-arrow-left"></i>&nbsp;&nbsp; Previous
+                    <i class="fas fa-arrow-left"></i>&nbsp;&nbsp; {{ __('messages.prev') }}
                 </button>
                 <button class="btn btn-primary" id="nextBtn">
-                    Next &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
+                    {{ __('messages.next') }} &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
                 </button>
             </div>
         </div>
@@ -394,7 +394,7 @@
     <div class="modal-dialog modal-dialog-top" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Send Ticket</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.send') }} {{ __('messages.ticket') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form class="formLoad" action="{{ route('createTicket.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
@@ -409,12 +409,12 @@
                 <input type="hidden" name="notes" value="">
                 <div class="modal-body">
                     <div class="text-center">
-                        Are You Sure to <b>Send</b> This Ticket?
+                        {{ __('messages.are_u_sure') }} <b>{{ __('messages.send') }}</b> {{ __('messages.this_ticket') }}?
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="bx bx-paper-plane label-icon"></i>Send Ticket</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
+                    <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="bx bx-paper-plane label-icon"></i>{{ __('messages.send') }} {{ __('messages.ticket') }}</button>
                 </div>
             </form>
         </div>
@@ -502,6 +502,9 @@
     });
 </script>
 <script>
+    var messages = {
+        info_fct: "{{ __('messages.info_fct') }}"
+    };
     document.addEventListener("DOMContentLoaded", function () {
         let tabs = document.querySelectorAll('.twitter-bs-wizard-nav .nav-link');
         let tabContents = document.querySelectorAll('.tab-pane');
@@ -575,7 +578,7 @@
             if (targetDateOption === "sla_target") {
                 let slaInput = document.querySelector('input[name="sla"]');
                 if (slaInput) {
-                    targetSolved = slaInput.value + " Minutes (From Creation Ticket)";
+                    targetSolved = slaInput.value + " " + messages.info_fct;
                 }
             } else {
                 let targetInput = document.querySelector('input[name="target_solved_date_input"]');

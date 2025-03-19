@@ -39,7 +39,7 @@ class MstPrioritiesController extends Controller
         ]);
         // Check Existing Data
         if (MstPriorities::where('priority', $request->priority)->exists()) {
-            return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_duplicate')]);
         }
 
         DB::beginTransaction();
@@ -52,10 +52,10 @@ class MstPrioritiesController extends Controller
             // Audit Log
             $this->auditLogs('Store New Priority ID: ' . $store->id);
             DB::commit();
-            return redirect()->back()->with('success', 'Success, New Priority Added');
+            return redirect()->back()->with('success', __('messages.success_add'));
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['fail' => 'Failed to Add New Priority!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_add')]);
         }
     }
 
@@ -68,7 +68,7 @@ class MstPrioritiesController extends Controller
         $id = decrypt($id);
         // Check Existing Data
         if(MstPriorities::where('priority', $request->priority)->where('id', '!=', $id)->exists()) {
-            return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_duplicate')]);
         }
         // Check With Data Before
         $dataBefore = MstPriorities::where('id', $id)->first();
@@ -84,13 +84,13 @@ class MstPrioritiesController extends Controller
                 // Audit Log
                 $this->auditLogs('Update Selected Priority ID: ' . $id);
                 DB::commit();
-                return redirect()->back()->with('success', 'Success, Selected Priority Updated');
+                return redirect()->back()->with('success', __('messages.success_update'));
             } catch (Exception $e) {
                 DB::rollBack();
-                return redirect()->back()->with(['fail' => 'Failed to Update Priority!']);
+                return redirect()->back()->with(['fail' => __('messages.fail_update')]);
             }
         } else {
-            return redirect()->back()->with(['info' => 'Nothing Change, The data entered is the same as the previous one!']);
+            return redirect()->back()->with(['info' => __('messages.same_data')]);
         }
     }
 
@@ -105,10 +105,10 @@ class MstPrioritiesController extends Controller
             // Audit Log
             $this->auditLogs('Enable Selected Priority ID: ' . $id);
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Activate : ' . $nameValue]);
+            return redirect()->back()->with(['success' => __('messages.success_activate') . $nameValue]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Activate : ' . $nameValue . '!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_activate') . $nameValue . '!']);
         }
     }
 
@@ -123,10 +123,10 @@ class MstPrioritiesController extends Controller
             // Audit Log
             $this->auditLogs('Disable Selected Priority ID: ' . $id);
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Deactivate : ' . $nameValue]);
+            return redirect()->back()->with(['success' => __('messages.success_deactivate') . $nameValue]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Deactivate : ' . $nameValue . '!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_deactivate') . $nameValue . '!']);
         }
     }
 }

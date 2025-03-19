@@ -45,7 +45,7 @@ class MstSubCategoryController extends Controller
         ]);
         // Check Existing Data
         if (MstSubCategory::where('id_mst_category', $request->id_mst_category)->where('sub_category', $request->sub_category)->exists()) {
-            return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_duplicate')]);
         }
 
         DB::beginTransaction();
@@ -60,10 +60,10 @@ class MstSubCategoryController extends Controller
             // Audit Log
             $this->auditLogs('Store New SubCategory ID: ' . $store->id);
             DB::commit();
-            return redirect()->back()->with('success', 'Success, New SubCategory Added');
+            return redirect()->back()->with('success', __('messages.success_add'));
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['fail' => 'Failed to Add New SubCategory!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_add')]);
         }
     }
 
@@ -78,7 +78,7 @@ class MstSubCategoryController extends Controller
         $id = decrypt($id);
         // Check Existing Data
         if(MstSubCategory::where('id_mst_category', $request->id_mst_category)->where('sub_category', $request->sub_category)->where('id', '!=', $id)->exists()) {
-            return redirect()->back()->with(['fail' => 'Duplicate data entry is not allowed!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_duplicate')]);
         }
         // Check With Data Before
         $dataBefore = MstSubCategory::where('id', $id)->first();
@@ -98,13 +98,13 @@ class MstSubCategoryController extends Controller
                 // Audit Log
                 $this->auditLogs('Update Selected SubCategory ID: ' . $id);
                 DB::commit();
-                return redirect()->back()->with('success', 'Success, Selected SubCategory Updated');
+                return redirect()->back()->with('success', __('messages.success_update'));
             } catch (Exception $e) {
                 DB::rollBack();
-                return redirect()->back()->with(['fail' => 'Failed to Update SubCategory Dropdown!']);
+                return redirect()->back()->with(['fail' => __('messages.fail_update')]);
             }
         } else {
-            return redirect()->back()->with(['info' => 'Nothing Change, The data entered is the same as the previous one!']);
+            return redirect()->back()->with(['info' => __('messages.same_data')]);
         }
     }
 
@@ -114,15 +114,15 @@ class MstSubCategoryController extends Controller
         DB::beginTransaction();
         try {
             MstSubCategory::where('id', $id)->update(['is_active' => 1]);
-            $nameValue = MstSubCategory::where('id', $id)->first()->category;
+            $nameValue = MstSubCategory::where('id', $id)->first()->sub_category;
 
             // Audit Log
             $this->auditLogs('Enable Selected SubCategory ID: ' . $id);
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Activate : ' . $nameValue]);
+            return redirect()->back()->with(['success' => __('messages.success_activate') . $nameValue]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Activate : ' . $nameValue . '!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_activate') . $nameValue . '!']);
         }
     }
 
@@ -132,15 +132,15 @@ class MstSubCategoryController extends Controller
         DB::beginTransaction();
         try {
             MstSubCategory::where('id', $id)->update(['is_active' => 0]);
-            $nameValue = MstSubCategory::where('id', $id)->first()->category;
+            $nameValue = MstSubCategory::where('id', $id)->first()->sub_category;
 
             // Audit Log
             $this->auditLogs('Disable Selected SubCategory ID: ' . $id);
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Deactivate : ' . $nameValue]);
+            return redirect()->back()->with(['success' => __('messages.success_deactivate') . $nameValue]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Deactivate : ' . $nameValue . '!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_deactivate') . $nameValue . '!']);
         }
     }
 

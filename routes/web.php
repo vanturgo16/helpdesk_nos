@@ -9,6 +9,7 @@ use App\Http\Middleware\UpdateLastSeen;
 // CONTROLLER
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MstDropdownController;
 use App\Http\Controllers\MstRuleController;
@@ -25,6 +26,8 @@ Route::post('auth/login', [AuthController::class, 'postlogin'])->name('postlogin
 // LOGOUT
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/expired-logout', [AuthController::class, 'expiredlogout'])->name('expiredlogout');
+
+Route::get('/change-language/{lang}', [LanguageController::class, 'change'])->name('change.language');
 
 // LOGGED IN
 Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])->group(function () {

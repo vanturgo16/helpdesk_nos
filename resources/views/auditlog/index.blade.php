@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-4">
                     <div class="text-center">
-                        <h4 class="text-bold">Audit Log</h4>
+                        <h4 class="text-bold">{{ __('messages.audit_log') }}</h4>
                     </div>
                 </div>
                 <div class="col-4">
@@ -23,7 +23,7 @@
                             <div class="modal-dialog modal-dialog-top" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Filter Month</h5>
+                                        <h5 class="modal-title" id="staticBackdropLabel">Filter {{ __('messages.month') }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form class="formLoad" action="{{ route('auditlog.index') }}" method="GET" enctype="multipart/form-data">
@@ -37,8 +37,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-eye label-icon"></i></i>Show</button>
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
+                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-eye label-icon"></i></i>{{ __('messages.show') }}</button>
                                         </div>
                                     </form>
                                 </div>
