@@ -503,7 +503,8 @@
 </script>
 <script>
     var messages = {
-        info_fct: "{{ __('messages.info_fct') }}"
+        info_fct: "{{ __('messages.info_fct') }}",
+        nexts: "{{ __('messages.next') }}"
     };
     document.addEventListener("DOMContentLoaded", function () {
         let tabs = document.querySelectorAll('.twitter-bs-wizard-nav .nav-link');
@@ -528,7 +529,7 @@
                 nextBtn.setAttribute("data-bs-target", "#sendTicket");
                 updateSummary();
             } else {
-                nextBtn.innerHTML = 'Next &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>';
+                nextBtn.innerHTML = messages.nexts + ' &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>';
                 nextBtn.classList.remove('btn-success');
                 nextBtn.classList.add('btn-primary');
                 nextBtn.removeAttribute("data-bs-toggle");

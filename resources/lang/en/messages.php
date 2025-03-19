@@ -57,6 +57,7 @@ return [
     'success_deactivate' => 'Success Deactivate :',
     'success_delete' => 'Success Deleted data Selected',
     'success_switch_theme' => 'Success, Theme Switched',
+    'success_update_language' => 'Success, Language Updated',
     // Manage Users
     'name' => 'Name',
     'dealer_type' => 'Dealer Type',
@@ -137,4 +138,10 @@ return [
     'ticket_fail2' => 'Failed to Add Activity Ticket!',
     'ticket_success1' => 'Success, Accept Ticket',
     'ticket_success2' => 'Success, Add Activity Ticket',
+    // Profile
+    'photo_profile' => 'Photo Profile',
+    'update_pp' => 'Update Your Photo Profile',
+    'user_info' => 'User information',
+    'full_name' => 'Full Name',
+    'role_in_system' => 'Role In System',
 ];

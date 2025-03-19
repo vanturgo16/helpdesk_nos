@@ -57,6 +57,7 @@ return [
     'success_deactivate' => 'Suksés Nanonaktipkeun :',
     'success_delete' => 'Suksés Mupus Data Anu Dipilih',
     'success_switch_theme' => 'Suksés Robah Téma',
+    'success_update_language' => 'Suksés, Basa Diapdet',
     // Manage Users
     'name' => 'Ngaran',
     'dealer_type' => 'Jenis Dealer',
@@ -137,4 +138,10 @@ return [
     'ticket_fail2' => 'Gagal Nambahkeun Kagiatan Tikét!',
     'ticket_success1' => 'Suksés, Tikét Ditampa',
     'ticket_success2' => 'Suksés, Nambahkeun Kagiatan Tikét',
+    // Profil  
+    'photo_profile' => 'Poto Profil',  
+    'update_pp' => 'Ngapdet Poto Profil Anjeun',  
+    'user_info' => 'Émbaran Pangguna',  
+    'full_name' => 'Nami Lengkep',  
+    'role_in_system' => 'Peran Dina Sistim',
 ];

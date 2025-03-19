@@ -105,8 +105,22 @@
                         </button>
                     </div>
                     <div class="dropdown d-inline-block">
+                        @php use Illuminate\Support\Facades\File; $defaultImagePath = public_path('assets/images/users/userDefault.png'); @endphp
                         <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/userDefault.png') }}" alt="Header Avatar">
+                            @if(Auth::user()->photo_path)
+                                @php $userImagePath = public_path(Auth::user()->photo_path); @endphp
+                                @if(File::exists($userImagePath))
+                                    <img class="rounded-circle header-profile-user" src="{{ asset(Auth::user()->photo_path) }}" alt="Header Avatar">
+                                @else
+                                    @if(File::exists($defaultImagePath))
+                                        <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/userDefault.png') }}" alt="Header Avatar">
+                                    @endif
+                                @endif
+                            @else 
+                                @if(File::exists($defaultImagePath))
+                                    <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/userDefault.png') }}" alt="Header Avatar">
+                                @endif
+                            @endif
                             <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ Auth::user()->name }}</span> <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">

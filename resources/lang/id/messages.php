@@ -57,6 +57,7 @@ return [
     'success_deactivate' => 'Berhasil Menonaktifkan : ',
     'success_delete' => 'Berhasil Menghapus Data yang Dipilih',
     'success_switch_theme' => 'Berhasil Mengganti Tema',
+    'success_update_language' => 'Berhasil, Bahasa Diperbarui',
     // Manage Users
     'name' => 'Nama',
     'dealer_type' => 'Jenis Dealer',
@@ -137,4 +138,10 @@ return [
     'ticket_fail2' => 'Gagal Menambahkan Aktivitas Tiket!',
     'ticket_success1' => 'Berhasil, Tiket Diterima',
     'ticket_success2' => 'Berhasil, Menambahkan Aktivitas Tiket',
+    // Profile
+    'photo_profile' => 'Profil Foto',
+    'update_pp' => 'Perbaharui Foto Anda',
+    'user_info' => 'Informasi Pengguna',
+    'full_name' => 'Nama Lengkap',
+    'role_in_system' => 'Peran Dalam Sistem',
 ];

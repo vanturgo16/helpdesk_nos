@@ -26,6 +26,6 @@ class LanguageController extends Controller
             $user->save();
         }
 
-        return redirect()->back(); // Reload the page with the new language
+        return redirect()->back()->with('success', __('messages.success_update_language')); // Reload the page with the new language
     }
 }

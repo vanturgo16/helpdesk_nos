@@ -137,3 +137,18 @@ body[data-bs-theme="dark"] .header-detail-a  {
 body[data-bs-theme="dark"] .body-detail-a  {
     background-color: #495057;
 }
+
+.card-profile-image {
+    text-align: center;
+}
+.card-profile-image img {
+    margin: 8px 0;
+    max-width: 180px;
+    border-radius: 0.35rem;
+    transition: all 0.2s ease-in-out;
+}
+@media (max-width: 767.98px) {
+    .card-profile-image img {
+        max-width: 150px;
+    }
+}
