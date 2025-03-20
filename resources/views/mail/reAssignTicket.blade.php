@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Ticket Submission Notification</title>
+    <title>Ticket Re Assign Notification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,8 +25,8 @@
 <body>
     <p>Dear Department {{ $assignToDept }},<br>
     
-    <p>We would like to inform you that a ticket has been submitted and assigned to your department.<br>
-    <span class="small-text">Kami ingin memberitahukan bahwa tiket telah diajukan dan ditugaskan ke departemen Anda.</span></p>
+    <p>We would like to inform you that a ticket has been submitted and assigned to your department (Re Assign).<br>
+    <span class="small-text">Kami ingin memberitahukan bahwa tiket telah diajukan dan ditugaskan ke departemen Anda (Re Assign).</span></p>
     
     <p>Below are the details of the ticket:<br>
     <span class="small-text">Berikut adalah detail tiket:</span></p>
@@ -53,9 +53,9 @@
             <td>{{ $dataTicket->sub_category }}</td>
         </tr>
         <tr>
-            <td><strong>Notes</strong><br><span class="small-text">Catatan</span></td>
+            <td><strong>Re Assign Notes</strong><br><span class="small-text">Catatan Re Assign</span></td>
             <td>:</td>
-            <td>{{ $dataTicket->notes }}</td>
+            <td>{{ $messageContent }}</td>
         </tr>
         <tr>
             <td><strong>Target Solved Date</strong><br><span class="small-text">Tanggal Target Penyelesaian</span></td>
@@ -67,6 +67,6 @@
     <p>Best regards,<br>
     Hormat kami,</p>
     
-    <p>{{ $requestor }}<br>[Requestor]</p>
+    <p>{{ $assignBy }}</p>
 </body>
 </html>

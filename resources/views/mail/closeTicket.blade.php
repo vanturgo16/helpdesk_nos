@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Ticket Submission Notification</title>
+    <title>Ticket Close Notification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,10 +23,13 @@
     </style>
 </head>
 <body>
-    <p>Dear Department {{ $assignToDept }},<br>
+    <p>Dear Department 
+        {{ implode(', ', $assignToDept) }},
+    </p>
+    <br>    
     
-    <p>We would like to inform you that a ticket has been submitted and assigned to your department.<br>
-    <span class="small-text">Kami ingin memberitahukan bahwa tiket telah diajukan dan ditugaskan ke departemen Anda.</span></p>
+    <p>We would like to inform you that this ticket has been Closed.<br>
+    <span class="small-text">Kami ingin memberitahukan bahwa tiket ini telah di tutup.</span></p>
     
     <p>Below are the details of the ticket:<br>
     <span class="small-text">Berikut adalah detail tiket:</span></p>
@@ -58,15 +61,40 @@
             <td>{{ $dataTicket->notes }}</td>
         </tr>
         <tr>
+            <td><strong>Created Ticket Date</strong><br><span class="small-text">Tanggal Pembuatan Tiket</span></td>
+            <td>:</td>
+            <td>{{ \Carbon\Carbon::parse($dataTicket->created_at)->format('Y-m-d H:i') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Report Date</strong><br><span class="small-text">Tanggal Laporan</span></td>
+            <td>:</td>
+            <td>{{ \Carbon\Carbon::parse($dataTicket->report_date)->format('Y-m-d H:i') }}</td>
+        </tr>
+        <tr>
             <td><strong>Target Solved Date</strong><br><span class="small-text">Tanggal Target Penyelesaian</span></td>
             <td>:</td>
             <td>{{ \Carbon\Carbon::parse($dataTicket->target_solved_date)->format('Y-m-d H:i') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Closed Date</strong><br><span class="small-text">Tanggal Close</span></td>
+            <td>:</td>
+            <td>{{ \Carbon\Carbon::parse($dataTicket->closed_date)->format('Y-m-d H:i') }}</td>
+        </tr>        
+        <tr>
+            <td><strong>Duration</strong><br><span class="small-text">Durasi</span></td>
+            <td>:</td>
+            <td>{{ $dataTicket->duration }}</td>
+        </tr>
+        <tr>
+            <td><strong>Closed Message</strong><br><span class="small-text">Pesan Close</span></td>
+            <td>:</td>
+            <td>{{ $dataTicket->closed_notes }}</td>
         </tr>
     </table>
     
     <p>Best regards,<br>
     Hormat kami,</p>
     
-    <p>{{ $requestor }}<br>[Requestor]</p>
+    <p>{{ $closeBy }}</p>
 </body>
 </html>

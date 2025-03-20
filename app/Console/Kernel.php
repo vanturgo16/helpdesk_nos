@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,7 +13,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $now = Carbon::now()->format('YmdHis');
+
+        $schedule->command('ClosedTicketCron')
+            ->timezone('Asia/Jakarta')
+            // ->dailyAt('23:59')
+            ->everyMinute()
+            ->sendOutputTo("storage/logs/LogClosedTicketCron_" . $now . ".txt");
     }
 
     /**

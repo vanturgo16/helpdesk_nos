@@ -47,7 +47,7 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
         });
     });
     // RULE CONFIGURATION
-    Route::controller(MstRuleController::class)->group(function () {
+    Route::middleware(['role:Super Admin'])->controller(MstRuleController::class)->group(function () {
         Route::prefix('rule')->group(function () {
             Route::get('/', 'index')->name('rule.index');
             Route::post('/store', 'store')->name('rule.store');
@@ -56,7 +56,7 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
         });
     });
     // DROPDOWN CONFIGURATION
-    Route::controller(MstDropdownController::class)->group(function () {
+    Route::middleware(['role:Admin,Super Admin'])->controller(MstDropdownController::class)->group(function () {
         Route::prefix('dropdown')->group(function () {
             Route::get('/', 'index')->name('dropdown.index');
             Route::post('/store', 'store')->name('dropdown.store');
@@ -66,7 +66,7 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
         });
     });
     // USER CONFIGURATION
-    Route::controller(MstUserController::class)->group(function () {
+    Route::middleware(['role:Admin,Super Admin'])->controller(MstUserController::class)->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('/', 'index')->name('user.index');
             Route::get('/datas', 'datas')->name('user.datas');
@@ -81,7 +81,7 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
         });
     });
     // MASTER Priority
-    Route::controller(MstPrioritiesController::class)->group(function () {
+    Route::middleware(['role:Admin,Super Admin'])->controller(MstPrioritiesController::class)->group(function () {
         Route::prefix('priority')->group(function () {
             Route::get('/', 'index')->name('priority.index');
             Route::post('/store', 'store')->name('priority.store');
@@ -91,7 +91,7 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
         });
     });
     // MASTER CATEGORY
-    Route::controller(MstCategoryController::class)->group(function () {
+    Route::middleware(['role:Admin,Super Admin'])->controller(MstCategoryController::class)->group(function () {
         Route::prefix('category')->group(function () {
             Route::get('/', 'index')->name('category.index');
             Route::post('/store', 'store')->name('category.store');
@@ -101,14 +101,17 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
         });
     });
     // MASTER SUB CATEGORY
-    Route::controller(MstSubCategoryController::class)->group(function () {
+    Route::middleware(['role:Admin,Super Admin'])->controller(MstSubCategoryController::class)->group(function () {
         Route::prefix('subcategory')->group(function () {
             Route::get('/', 'index')->name('subcategory.index');
             Route::post('/store', 'store')->name('subcategory.store');
             Route::post('/update/{id}', 'update')->name('subcategory.update');
             Route::post('/disable/{id}', 'disable')->name('subcategory.disable');
             Route::post('/enable/{id}', 'enable')->name('subcategory.enable');
-
+        });
+    });
+    Route::controller(MstSubCategoryController::class)->group(function () {
+        Route::prefix('subcategory')->group(function () {
             // Ajax
             Route::get('/get-subcategory/{id}', 'getSubcategory')->name('subcategory.getSubcategory');
             Route::get('/get-sla/{id}', 'getSLA')->name('subcategory.getSLA');
@@ -136,12 +139,15 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
 
             Route::post('/accept/{id}', 'accept')->name('ticket.accept');
             Route::post('/add-activity/{id}', 'addActivity')->name('ticket.addActivity');
+            Route::post('/pre-close/{id}', 'preClose')->name('ticket.preClose');
+            Route::post('/re-assign/{id}', 'reAssign')->name('ticket.reAssign');
+            Route::post('/close/{id}', 'close')->name('ticket.close');
         });
     });
 
 
     // AUDIT LOG
-    Route::controller(AuditLogController::class)->group(function () {
+    Route::middleware(['role:Admin,Super Admin'])->controller(AuditLogController::class)->group(function () {
         Route::prefix('auditlog')->group(function () {
             Route::get('/', 'index')->name('auditlog.index');
         });

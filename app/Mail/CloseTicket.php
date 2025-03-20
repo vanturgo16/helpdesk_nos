@@ -10,29 +10,31 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewTicketAssign extends Mailable
+class CloseTicket extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $dataTicket;
     public $assignToDept;
-    public $requestor;
+    public $url;
+    public $closeBy;
 
-    public function __construct($dataTicket, $assignToDept, $requestor)
+    public function __construct($dataTicket, $assignToDept, $url, $closeBy)
     {
         $this->dataTicket = $dataTicket;
         $this->assignToDept = $assignToDept;
-        $this->requestor = $requestor;
+        $this->url = $url;
+        $this->closeBy = $closeBy;
     }
 
     public function build()
     {
         //SUBJECT NAME
-        $subject = "[NEW ASSIGN TICKET] - ". strtoupper($this->dataTicket->priority) . " - " . $this->dataTicket->no_ticket;
-        $email = $this->view('mail.newAssignTicket')->subject($subject);
+        $subject = "[TICKET CLOSED] - ". strtoupper($this->dataTicket->priority) . " - " . $this->dataTicket->no_ticket;
+        $email = $this->view('mail.closeTicket')->subject($subject);
 
-        if ($this->dataTicket->file_1 != null) {
-            $absolutePath = $this->dataTicket->file_1;
+        if ($this->url != null) {
+            $absolutePath = $this->url;
             $extension = File::extension($absolutePath);
             $email->attach($absolutePath, ['as' => 'Attachment.' . $extension]);
         }

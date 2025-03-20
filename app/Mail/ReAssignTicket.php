@@ -10,26 +10,28 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewTicketAssign extends Mailable
+class ReAssignTicket extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $dataTicket;
     public $assignToDept;
-    public $requestor;
+    public $messageContent;
+    public $assignBy;
 
-    public function __construct($dataTicket, $assignToDept, $requestor)
+    public function __construct($dataTicket, $assignToDept, $messageContent, $assignBy)
     {
         $this->dataTicket = $dataTicket;
         $this->assignToDept = $assignToDept;
-        $this->requestor = $requestor;
+        $this->messageContent = $messageContent;
+        $this->assignBy = $assignBy;
     }
 
     public function build()
     {
         //SUBJECT NAME
-        $subject = "[NEW ASSIGN TICKET] - ". strtoupper($this->dataTicket->priority) . " - " . $this->dataTicket->no_ticket;
-        $email = $this->view('mail.newAssignTicket')->subject($subject);
+        $subject = "[RE ASSIGN TICKET] - ". strtoupper($this->dataTicket->priority) . " - " . $this->dataTicket->no_ticket;
+        $email = $this->view('mail.reAssignTicket')->subject($subject);
 
         if ($this->dataTicket->file_1 != null) {
             $absolutePath = $this->dataTicket->file_1;

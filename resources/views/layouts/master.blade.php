@@ -142,39 +142,43 @@
                             </a>
                         </li>
 
-                        <li class="menu-title mt-2" data-key="t-menu">Configuration</li>
-                        <li>
-                            <a href="{{ route('user.index') }}" class="{{ request()->is('user*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-account-supervisor"></i><span>{{ __('messages.mng_user') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('rule.index') }}" class="{{ request()->is('rule*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-cog-box"></i><span>{{ __('messages.mng_rule') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('dropdown.index') }}" class="{{ request()->is('dropdown*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-package-down"></i><span>{{ __('messages.mng_dropdown') }}</span>
-                            </a>
-                        </li>
+                        @if(in_array(auth()->user()->role, ['Super Admin', 'Admin']))
+                            <li class="menu-title mt-2" data-key="t-menu">Configuration</li>
+                            <li>
+                                <a href="{{ route('user.index') }}" class="{{ request()->is('user*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-account-supervisor"></i><span>{{ __('messages.mng_user') }}</span>
+                                </a>
+                            </li>
+                            @if(auth()->user()->role == 'Super Admin')
+                            <li>
+                                <a href="{{ route('rule.index') }}" class="{{ request()->is('rule*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-cog-box"></i><span>{{ __('messages.mng_rule') }}</span>
+                                </a>
+                            </li>
+                            @endif
+                            <li>
+                                <a href="{{ route('dropdown.index') }}" class="{{ request()->is('dropdown*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-package-down"></i><span>{{ __('messages.mng_dropdown') }}</span>
+                                </a>
+                            </li>
 
-                        <li class="menu-title mt-2" data-key="t-menu">Master</li>
-                        <li>
-                            <a href="{{ route('priority.index') }}" class="{{ request()->is('priority*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-list-status"></i><span>{{ __('messages.priority') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('category.index') }}" class="{{ request()->is('category*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-sitemap-outline"></i><span>{{ __('messages.category') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('subcategory.index') }}" class="{{ request()->is('subcategory*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-sitemap"></i><span>{{ __('messages.sub_category') }}</span>
-                            </a>
-                        </li>
+                            <li class="menu-title mt-2" data-key="t-menu">Master</li>
+                            <li>
+                                <a href="{{ route('priority.index') }}" class="{{ request()->is('priority*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-list-status"></i><span>{{ __('messages.priority') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('category.index') }}" class="{{ request()->is('category*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-sitemap-outline"></i><span>{{ __('messages.category') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('subcategory.index') }}" class="{{ request()->is('subcategory*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-sitemap"></i><span>{{ __('messages.sub_category') }}</span>
+                                </a>
+                            </li>
+                        @endif
 
                         <li class="menu-title mt-2" data-key="t-menu">Helpdesk</li>
                         <li>
@@ -188,12 +192,14 @@
                             </a>
                         </li>
 
-                        <li class="menu-title mt-2" data-key="t-menu">{{ __('messages.other') }}</li>
-                        <li>
-                            <a href="{{ route('auditlog.index') }}" class="{{ request()->is('auditlog*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-chart-donut"></i><span>{{ __('messages.audit_log') }}</span>
-                            </a>
-                        </li>
+                        @if(in_array(auth()->user()->role, ['Super Admin', 'Admin']))
+                            <li class="menu-title mt-2" data-key="t-menu">{{ __('messages.other') }}</li>
+                            <li>
+                                <a href="{{ route('auditlog.index') }}" class="{{ request()->is('auditlog*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-chart-donut"></i><span>{{ __('messages.audit_log') }}</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -353,10 +359,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Select "Logout" below if you are ready to end your current session.</p>
+                    <p>{{ __('messages.logout_text') }}</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
                     <form class="formLoad" action="{{ route('logout') }}" id="formlogout" method="POST" enctype="multipart/form-data">
                         @csrf
                         <button type="submit" class="btn btn-danger waves-effect btn-label waves-light" name="sb"><i class="mdi mdi-logout label-icon"></i>Logout</button>

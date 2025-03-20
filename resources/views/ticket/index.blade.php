@@ -6,7 +6,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-4">
-                    <a href="{{ route('createTicket.index') }}" type="button" class="btn btn-sm btn-primary waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i> {{ __('messages.ticket_create') }}</a>
+                    <a href="{{ route('createTicket.index') }}" type="button" class="btn btn-primary waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i> {{ __('messages.ticket_create') }}</a>
                 </div>
                 <div class="col-4">
                     <div class="text-center">
@@ -153,22 +153,33 @@
                     searchable: false,
                     className: 'align-top text-center',
                     render: function(data, type, row) {
-                        if (!row.created) return ''; // Ensure created date exists
+                        if (row.duration) {
+                            let durationClass = '';
+                            // Ensure both dates are valid before comparison
+                            if (row.closed_date && row.target_solved_date) {
+                                let closedDate = new Date(row.closed_date);
+                                let targetSolvedDate = new Date(row.target_solved_date);
+                                // Add text-danger class if closed_date > target_solved_date
+                                if (closedDate > targetSolvedDate) {
+                                    durationClass = 'text-danger';
+                                }
+                            }
+                            // Wrap numbers in <strong> inside the duration string
+                            let durationContent = row.duration ? row.duration.replace(/(\d+)/g, '<strong>$1</strong>') : '';
+                            return row.duration ? `<small class="${durationClass}">${durationContent}</small>` : '';
+                        }
 
+                        if (!row.created) return ''; // Ensure created date exists
                         let createdDate = dayjs(row.created);
                         let endDate = row.closedDate ? dayjs(row.closedDate) : dayjs(); // Use now if closedDate is missing
-
                         let diffDays = endDate.diff(createdDate, 'day');
                         let diffHours = endDate.diff(createdDate, 'hour') % 24;
                         let diffMinutes = endDate.diff(createdDate, 'minute') % 60;
-
                         let agingText = `<strong>${diffDays}</strong>d, <strong>${diffHours}</strong>h, <strong>${diffMinutes}</strong>m`;
-
                         // Highlight in red if past targetDate and ticket is still open
                         if (!row.closedDate && row.targetDate && endDate.isAfter(dayjs(row.targetDate))) {
                             return `<small class="text-danger">${agingText}</small>`;
                         }
-
                         return `<small>${agingText}</small>`;
                     },
                 },
@@ -192,7 +203,7 @@
                         } else if (data === 1) {
                             html = `<span class="badge bg-warning text-white"><i class="fas fa-spinner"></i> In-Progress</span>`;
                         } else {
-                            html = `<span class="badge bg-success text-white"><i class="fas fa-check"></i> Done</span>`;
+                            html = `<span class="badge bg-success text-white"><i class="fas fa-check"></i> Closed</span>`;
                         }
                         return html;
                     },

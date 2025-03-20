@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Ticket Submission Notification</title>
+    <title>Ticket PreClose Notification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,10 +23,10 @@
     </style>
 </head>
 <body>
-    <p>Dear Department {{ $assignToDept }},<br>
+    <p>Dear {{ $dataTicket->requestorName }},<br>
     
-    <p>We would like to inform you that a ticket has been submitted and assigned to your department.<br>
-    <span class="small-text">Kami ingin memberitahukan bahwa tiket telah diajukan dan ditugaskan ke departemen Anda.</span></p>
+    <p>We would like to inform you that the ticket you requested has been processed (Pre-Close).<br>
+    <span class="small-text">Kami ingin memberitahukan bahwa tiket yang Anda ajukan telah diproses (Pre-Close).</span></p>
     
     <p>Below are the details of the ticket:<br>
     <span class="small-text">Berikut adalah detail tiket:</span></p>
@@ -62,11 +62,24 @@
             <td>:</td>
             <td>{{ \Carbon\Carbon::parse($dataTicket->target_solved_date)->format('Y-m-d H:i') }}</td>
         </tr>
+        <tr>
+            <td><strong>Pre Close Date</strong><br><span class="small-text">Tanggal Pre Close</span></td>
+            <td>:</td>
+            <td>{{ \Carbon\Carbon::parse($dataAssign->preclosed_date)->format('Y-m-d H:i') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Pre Close Message</strong><br><span class="small-text">Pesan Pre Close</span></td>
+            <td>:</td>
+            <td>{{ $dataAssign->preclosed_message }}</td>
+        </tr>
     </table>
+    
+    <p>Please check it. If it is correct, please take the action to close the ticket.<br>
+    <span class="small-text">Mohon untuk mengeceknya, apabila sudah sesuai mohon dilakukan aksi close ticket.</span></p><br>
     
     <p>Best regards,<br>
     Hormat kami,</p>
     
-    <p>{{ $requestor }}<br>[Requestor]</p>
+    <p>{{ $precloseBy }}</p>
 </body>
 </html>

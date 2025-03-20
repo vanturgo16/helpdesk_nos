@@ -24,7 +24,7 @@
                 url: url,
                 type: 'GET',
             },
-            order: [[0, 'desc']],
+            order: [[2, 'desc']],
             columns: [
                 {
                     data: 'assignBy',
