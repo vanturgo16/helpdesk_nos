@@ -34,7 +34,7 @@ class AuthController extends Controller
                     'login_counter' => $user->login_counter + 1,
                     'last_session' => $session,
                 ]);
-                return redirect()->route('dashboard')->with('success', 'Successfully Entered The Application');
+                return redirect()->route('dashboard')->with('success', __('messages.success_login'));
             } else {
                 return redirect()->route('login')->with('fail', 'Your Account Is Innactive, Contact Your Administrator');
             }

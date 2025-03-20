@@ -67,26 +67,22 @@ class ClosedTicketCron extends Command
 
                 DB::beginTransaction();
                 try {
-                    if ($request->hasFile('attachment')) {
-                        $path = $request->file('attachment');
-                        $url = $path->move('storage/attachmentActivityTicket', $path->hashName());
-                    }
                     // Update Ticket
-                    Ticket::where('id', $id)->update([
+                    Ticket::where('id', $item->id)->update([
                         'closed_notes' => 'Closed By Scheduller',
                         'closed_date' => now()->format('Y-m-d H:i'),
                         'duration' => $duration,
                         'status' => 2,
                     ]);
                     // Re-Query To Get Updated Data
-                    $dataTicket = Ticket::where('id', $id)->first();
+                    $dataTicket = Ticket::where('id', $item->id)->first();
 
                     // Send Email
                     $mailContent = new CloseTicket($dataTicket, $assignToDept, $url, $closeBy);
                     Mail::to($toEmail)->cc($ccEmail)->send($mailContent);
 
                     // Activity Ticket Log
-                    $this->activityLog($id, 'Close Ticket', $request->message, $url);
+                    $this->activityLog($item->id, 'Close Ticket', 'Closed By Scheduller', $url);
                     DB::commit();
                 } catch (Exception $e) {
                     DB::rollBack();

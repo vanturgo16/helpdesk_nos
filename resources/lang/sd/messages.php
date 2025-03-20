@@ -52,6 +52,7 @@ return [
     'fail_deactivate' => 'Gagal Nanonaktipkeun :',
     'fail_delete' => 'Gagal Mupus Data',
     'fail_switch_theme' => 'Gagal Robah Téma!',
+    'success_login' => 'Suksés Asup ka Aplikasi',
     'success_add' => 'Suksés Nambihkeun Data',
     'success_update' => 'Suksés Ngapdet Data',
     'success_activate' => 'Suksés Ngaktipkeun :',
@@ -153,4 +154,12 @@ return [
     'user_info' => 'Émbaran Pangguna',  
     'full_name' => 'Nami Lengkep',  
     'role_in_system' => 'Peran Dina Sistim',
+    // Page
+    'pnf' => 'Hapunten, kaca henteu kapanggih',
+    'ua' => 'Akses Teu Diidinan',
+    'sub_ua' => 'Hapunten, Anjeun teu gaduh aksés ka rute ieu',
+    'back_to_dashboard' => 'Balik ka Dashboard',
+    'welcome' => 'Wilujeng sumping di "Helpdesk Dashboard"',
+    'welcome_sub' => 'Di dieu Anjeun tiasa ngatur Tiket Helpdesk di PT Mitra Sendang Kemakmuran Wilayah Banten',
+
 ];

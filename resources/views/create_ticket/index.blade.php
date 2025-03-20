@@ -375,7 +375,7 @@
     </div>
 
     <!-- Floating Card at the Bottom of page-content -->
-    <div class="floating-card card shadow">
+    <div class="floating-card card shadow body-detail-a">
         <div class="card-body text-center p-0">
             <div class="d-flex justify-content-between align-items-center">
                 <button class="btn btn-secondary" id="prevBtn">

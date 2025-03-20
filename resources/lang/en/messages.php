@@ -52,6 +52,7 @@ return [
     'fail_deactivate' => 'Failed to Deactivate :',
     'fail_delete' => 'Failed to Delete Data',
     'fail_switch_theme' => 'Failed to Switch Theme!',
+    'success_login' => 'Successfully Entered The Application',
     'success_add' => 'Success Add Data',
     'success_update' => 'Success Updated Data',
     'success_activate' => 'Success Activate :',
@@ -153,4 +154,11 @@ return [
     'user_info' => 'User information',
     'full_name' => 'Full Name',
     'role_in_system' => 'Role In System',
+    // Page
+    'pnf' => 'Sorry, page not found',
+    'ua' => 'Unauthorized Access',
+    'sub_ua' => 'Sorry You Dont Have Access To This Route',
+    'back_to_dashboard' => 'Back to Dashboard',
+    'welcome' => 'Welcome to the "Helpdesk Dashboard"',
+    'welcome_sub' => 'Here you can manage Ticket Helpdesk in PT Mitra Sendang Kemakmuran Banten Regional',
 ];

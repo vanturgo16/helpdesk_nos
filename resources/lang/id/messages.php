@@ -52,6 +52,7 @@ return [
     'fail_deactivate' => 'Gagal Menonaktifkan : ',
     'fail_delete' => 'Gagal Menghapus Data',
     'fail_switch_theme' => 'Gagal Mengganti Tema!',
+    'success_login' => 'Berhasil Masuk ke Aplikasi',
     'success_add' => 'Berhasil Menambahkan Data',
     'success_update' => 'Berhasil Memperbarui Data',
     'success_activate' => 'Berhasil Mengaktifkan : ',
@@ -153,4 +154,12 @@ return [
     'user_info' => 'Informasi Pengguna',
     'full_name' => 'Nama Lengkap',
     'role_in_system' => 'Peran Dalam Sistem',
+    // Page
+    'pnf' => 'Maaf, halaman tidak ditemukan',
+    'ua' => 'Akses Tidak Diizinkan',
+    'sub_ua' => 'Maaf, Anda tidak memiliki akses ke rute ini',
+    'back_to_dashboard' => 'Kembali ke Dashboard',
+    'welcome' => 'Selamat datang di "Helpdesk Dashboard"',
+    'welcome_sub' => 'Di sini Anda dapat mengelola Tiket Helpdesk di PT Mitra Sendang Kemakmuran Regional Banten',
+
 ];

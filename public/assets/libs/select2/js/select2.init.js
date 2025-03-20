@@ -22,10 +22,6 @@ if ($(".select2").length) {
 }
 
 $(document).ready(function() {
-    $('.select2').select2({
-        dir: 'ltr' // Forces left-to-right alignment
-    });
-    
     // Force Select2 dropdown text alignment to left
     $('.select2').on('select2:open', function() {
         $('.select2-results').css('text-align', 'left');

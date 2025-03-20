@@ -13,13 +13,19 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $logPath1 = storage_path('logs/LogClosedTicketCron');
+        // Ensure the directory exists
+        if (!file_exists($logPath1)) {
+            mkdir($logPath1, 0777, true);
+        }
+        
         $now = Carbon::now()->format('YmdHis');
 
         $schedule->command('ClosedTicketCron')
             ->timezone('Asia/Jakarta')
-            // ->dailyAt('23:59')
-            ->everyMinute()
-            ->sendOutputTo("storage/logs/LogClosedTicketCron_" . $now . ".txt");
+            ->dailyAt('23:59')
+            // ->everyMinute()
+            ->sendOutputTo("storage/logs/LogClosedTicketCron/LogClosedTicketCron_" . $now . ".txt");
     }
 
     /**

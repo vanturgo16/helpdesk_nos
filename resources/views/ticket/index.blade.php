@@ -50,7 +50,7 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered dt-responsive w-100" id="ssTable" style="font-size: small">
+            <table class="table table-bordered table-hover dt-responsive w-100" id="ssTable" style="font-size: small">
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">#</th>
@@ -162,6 +162,8 @@
                                 // Add text-danger class if closed_date > target_solved_date
                                 if (closedDate > targetSolvedDate) {
                                     durationClass = 'text-danger';
+                                } else {
+                                    durationClass = 'text-success';
                                 }
                             }
                             // Wrap numbers in <strong> inside the duration string
@@ -288,7 +290,7 @@
                     <option value="">-- ${messages.allText} Status --</option>
                     <option value="0">Requested</option>
                     <option value="1">In-Progress</option>
-                    <option value="2">Done</option>
+                    <option value="2">Closed</option>
                 </select>
             </label>
         `;

@@ -19,7 +19,6 @@ class RoleMiddleware
         if (Auth::check() && in_array(Auth::user()->role, $roles)) {
             return $next($request);
         }
-
-        return abort(403, 'Unauthorized Access');
+        return response()->view('errors.unauthorized_access', [], 404);
     }
 }

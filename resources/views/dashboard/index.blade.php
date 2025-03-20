@@ -17,8 +17,8 @@
                         <div class="row justify-content-center mt-3">
                             <div class="col-12">
                                 <div class="text-center">
-                                    <h5>Welcome to the "Helpdesk Dashboard"</h5>
-                                    <p class="text-muted">Here you can manage Ticket Helpdesk in PT Mitra Sendang Kemakmuran Banten Regional</p>
+                                    <h5>{{ __('messages.welcome') }}</h5>
+                                    <p class="text-muted">{{ __('messages.welcome_sub') }}</p>
                                 </div>
                             </div>
                         </div>
