@@ -69,12 +69,136 @@
     </div>
 </div>
 
+{{-- Modal Export --}}
+<div class="modal fade" id="exportModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Export Data {{ __('messages.ticket') }}</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="exportForm" action="{{ route('ticket.export') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body p-4" style="max-height: 65vh; overflow-y: auto;">
+                    <div class="container">
+                        <div class="row mb-2">
+                            <label class="col-sm-4 col-form-label">{{ __('messages.priority') }}</label>
+                            <div class="col-sm-8">
+                                <select class="form-select data-select2" name="priority" id="" style="width: 100%">
+                                    <option value="">-- {{ __('messages.all') }} {{ __('messages.priority') }} --</option>
+                                    @foreach($priorities as $item)
+                                        <option value="{{ $item->priority }}">{{ $item->priority }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-2 ">
+                            <label class="col-sm-4 col-form-label">Status</label>
+                            <div class="col-sm-8">
+                                <select class="form-select data-select2" name="status" id="" style="width: 100%">
+                                    <option value="">-- {{ __('messages.all') }} Status --</option>
+                                    <option value="0">Requested</option>
+                                    <option value="1">In-Progress</option>
+                                    <option value="2">Closed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <label class="col-sm-4 col-form-label">Date From</label>
+                            <div class="col-sm-8">
+                                <input type="date" name="dateFrom" class="form-control" value="" required>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <label class="col-sm-4 col-form-label">Date To</label>
+                            <div class="col-sm-8">
+                                <input type="date" name="dateTo" class="form-control" value="" required>
+                                <small class="text-danger d-none" id="dateToError"><b>Date To</b> cannot be before <b>Date From</b></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
+                    <button type="submit" class="btn btn-success waves-effect btn-label waves-light">
+                        <i class="mdi mdi-file-excel label-icon"></i>Export To Excel
+                    </button>
+                </div>
+            </form>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const exportForm = document.querySelector("form[action='{{ route('ticket.export') }}']");
+                    const exportButton = exportForm.querySelector("button[type='submit']");
+            
+                    exportForm.addEventListener("submit", function (event) {
+                        event.preventDefault(); // Prevent normal form submission
+            
+                        let formData = new FormData(exportForm);
+                        let url = exportForm.action;
+            
+                        // Disable button to prevent multiple clicks
+                        exportButton.disabled = true;
+                        exportButton.innerHTML = '<i class="mdi mdi-loading mdi-spin label-icon"></i>Exporting...';
+            
+                        fetch(url, {
+                            method: "POST",
+                            body: formData,
+                            headers: {
+                                "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                            }
+                        })
+                        .then(response => response.blob()) // Expect a file response
+                        .then(blob => {
+                            let now = new Date();
+                            let formattedDate = now.getDate().toString().padStart(2, '0') + "_" +
+                                                (now.getMonth() + 1).toString().padStart(2, '0') + "_" +
+                                                now.getFullYear() + "_" +
+                                                now.getHours().toString().padStart(2, '0') + "_" +
+                                                now.getMinutes().toString().padStart(2, '0');
+                            let filename = `Export_Ticket_${formattedDate}.xlsx`;
+            
+                            let downloadUrl = window.URL.createObjectURL(blob);
+                            let a = document.createElement("a");
+                            a.href = downloadUrl;
+                            a.download = filename; // Set dynamic filename
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            window.URL.revokeObjectURL(downloadUrl);
+                        })
+                        .catch(error => {
+                            console.error("Export error:", error);
+                            alert("An error occurred while exporting.");
+                        })
+                        .finally(() => {
+                            exportButton.disabled = false;
+                            exportButton.innerHTML = '<i class="mdi mdi-file-excel label-icon"></i> Export To Excel';
+                        });
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
 <script>
     $(function() {
         var url = '{!! route('ticket.datas') !!}';
+
+        var idUpdated = '{{ $idUpdated }}';
+        var pageNumber = '{{ $page_number }}';
+        var pageLength = 5;
+        var displayStart = (pageNumber - 1) * pageLength;
+        var firstReload = true; 
+
         var dataTable = $('#ssTable').DataTable({
             processing: true,
             serverSide: true,
+
+            displayStart: displayStart,
+            pageLength: pageLength,
+            aaSorting: [],
+
             scrollY: '100vh',
             ajax: {
                 url: url,
@@ -230,6 +354,17 @@
                     visible: false
                 },
             ],
+            drawCallback: function(settings) {
+                if (firstReload && idUpdated) {
+                    // Reset URL
+                    let urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.toString()) {
+                        let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                        history.pushState({}, "", newUrl);
+                    }
+                    firstReload = false;
+                }
+            }
         });
         $('#vertical-menu-btn').on('click', function() {
             setTimeout(function() {
@@ -297,6 +432,14 @@
         $('.dataTables_length').before(filterStatus);
         $('#filterStatus').select2({width: '200px' });
         $('#filterStatus').on('change', function() { $("#ssTable").DataTable().ajax.reload(); });
+
+        // Export Modal Button
+        var exportButton = `
+            <button id="exportBtn" data-bs-toggle="modal" data-bs-target="#exportModal" class="btn btn-light waves-effect btn-label waves-light">
+                <i class="mdi mdi-export label-icon"></i> Export Data
+            </button>
+        `;
+        $('.dataTables_length').before(exportButton);
     });
 </script>
 

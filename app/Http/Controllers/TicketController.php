@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+
+// Exports
+use App\Exports\TicketExport;
 
 // Mail
 use App\Mail\PreCloseTicket;
@@ -40,10 +44,27 @@ class TicketController extends Controller
         } else {
             $year = $request->year;
         }
+        
+        $idUpdated = $request->get('idUpdated');
+        // Get Page Number
+        $page_number = 1;
+        if ($idUpdated) {
+            $page_size = 5;
+            $datas = $this->datas($request);
+            $item = $datas->firstWhere('id', $idUpdated);
+            if ($item) {
+                $index = $datas->search(function ($value) use ($idUpdated) {
+                    return $value->id == $idUpdated;
+                });
+                $page_number = (int) ceil(($index + 1) / $page_size);
+            } else {
+                $page_number = 1;
+            }
+        }
     
         //Audit Log
         $this->auditLogs('View Index List Ticket');
-        return view('ticket.index', compact('priorities', 'year'));
+        return view('ticket.index', compact('priorities', 'year', 'idUpdated', 'page_number'));
     }
 
     public function datas(Request $request)
@@ -52,40 +73,42 @@ class TicketController extends Controller
         $department = auth()->user()->department;
         $email = auth()->user()->email;
 
-        if ($request->ajax()) {
-            $datas = Ticket::select(
-                'tickets.*', 'tickets.created_at as created', 'tickets.target_solved_date as targetDate', 'tickets.closed_date as closedDate',
-                'log_tickets.assign_to_dept as lastAssign',
-                DB::raw('(SELECT JSON_ARRAYAGG(assign_to_dept) FROM log_tickets WHERE log_tickets.id_ticket = tickets.id) as assignToDeptHistory')
-            )
-            ->leftJoin('log_tickets', function ($join) {
-                $join->on('log_tickets.id_ticket', 'tickets.id')->whereRaw('log_tickets.id = (SELECT MAX(id) FROM log_tickets WHERE log_tickets.id_ticket = tickets.id)');
+        $datas = Ticket::select(
+            'tickets.*', 'tickets.created_at as created', 'tickets.target_solved_date as targetDate', 'tickets.closed_date as closedDate',
+            'log_tickets.assign_to_dept as lastAssign',
+            DB::raw('(SELECT JSON_ARRAYAGG(assign_to_dept) FROM log_tickets WHERE log_tickets.id_ticket = tickets.id) as assignToDeptHistory')
+        )
+        ->leftJoin('log_tickets', function ($join) {
+            $join->on('log_tickets.id_ticket', 'tickets.id')->whereRaw('log_tickets.id = (SELECT MAX(id) FROM log_tickets WHERE log_tickets.id_ticket = tickets.id)');
+        });
+        // Filter
+        if (!in_array($role, ['Super Admin', 'Admin'])) {
+            $datas->where(function ($query) use ($department, $email) {
+                $query->whereRaw(
+                    "JSON_CONTAINS((SELECT JSON_ARRAYAGG(assign_to_dept) FROM log_tickets WHERE log_tickets.id_ticket = tickets.id), ?)", 
+                    [json_encode($department)]
+                )
+                ->orWhere('tickets.created_by', $email);
             });
-            // Filter
-            if (!in_array($role, ['Super Admin', 'Admin'])) {
-                $datas->where(function ($query) use ($department, $email) {
-                    $query->whereRaw(
-                        "JSON_CONTAINS((SELECT JSON_ARRAYAGG(assign_to_dept) FROM log_tickets WHERE log_tickets.id_ticket = tickets.id), ?)", 
-                        [json_encode($department)]
-                    )
-                    ->orWhere('tickets.created_by', $email);
-                });
-            }
-            if ($request->has('filterPriority') && $request->filterPriority != '') {
-                $datas->where('tickets.priority', $request->filterPriority);
-            }
-            if ($request->has('filterStatus') && $request->filterStatus != '') {
-                $datas->where('tickets.status', $request->filterStatus);
-            }
-            if ($request->has('year') && $request->year != '') {
-                $datas->whereYear('tickets.created_at', $request->year);
-            }
-            $datas = $datas->orderBy('created_at', 'desc')->get();
-            
+        }
+        if ($request->has('filterPriority') && $request->filterPriority != '') {
+            $datas->where('tickets.priority', $request->filterPriority);
+        }
+        if ($request->has('filterStatus') && $request->filterStatus != '') {
+            $datas->where('tickets.status', $request->filterStatus);
+        }
+        if ($request->has('year') && $request->year != '') {
+            $datas->whereYear('tickets.created_at', $request->year);
+        }
+        $datas = $datas->orderBy('created_at', 'desc')->get();
+
+        if ($request->ajax()) {
             return DataTables::of($datas)->addColumn('action', function ($data) {
                     return view('ticket.action', compact('data'));
                 })->toJson();
         }
+
+        return $datas;
     }
 
     public function detail($id)
@@ -380,5 +403,28 @@ class TicketController extends Controller
             if ($url && file_exists(public_path($url))) { unlink(public_path($url)); }
             return redirect()->back()->with(['fail' => __('messages.ticket_fail5')]);
         }
+    }
+    
+    public function export(Request $request)
+    {
+        $datas = Ticket::select('tickets.*', 'tickets.created_at as createdTicket', 'tickets.updated_at as updatedTicket', 
+                'log_tickets.*', 'log_tickets.created_at as createdAssignTicket', 'log_tickets.updated_at as updatedAssignTicket')
+            ->leftjoin('log_tickets', 'tickets.id', 'log_tickets.id_ticket')
+            ->orderBy('tickets.created_at', 'desc');
+
+        if ($request->has('priority') && $request->priority != '') {
+            $datas->where('tickets.priority', $request->priority);
+        }
+        if ($request->has('status') && $request->status != '') {
+            $datas->where('tickets.status', $request->status);
+        }
+        if ($request->has('dateFrom') && $request->dateFrom != '' && $request->has('dateTo') && $request->dateTo != '') {
+            $startDate = $request->dateFrom . ' 00:00:00';
+            $endDate = $request->dateTo . ' 23:59:59';
+            $datas = $datas->whereBetween('tickets.created_at', [$startDate, $endDate]);
+        }
+
+        $filename = 'Export_Ticket_' . Carbon::now()->format('d_m_Y_H_i') . '.xlsx';
+        return Excel::download(new TicketExport($datas->get(), $request), $filename);
     }
 }

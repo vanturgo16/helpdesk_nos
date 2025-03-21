@@ -6,9 +6,13 @@
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                 <div class="page-title-left">
-                    <a href="{{ route('ticket.index') }}" class="btn btn-light waves-effect btn-label waves-light">
-                        <i class="mdi mdi-arrow-left label-icon"></i> {{ __('messages.back_to_list') }} {{ __('messages.ticket') }}
-                    </a>
+                    <form action="{{ route('ticket.index') }}" method="GET" id="resetForm" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="idUpdated" value="{{ $data->id }}">
+                        <button type="submit" class="btn btn-light waves-effect btn-label waves-light">
+                            <i class="mdi mdi-arrow-left label-icon"></i> {{ __('messages.back_to_list') }} {{ __('messages.ticket') }}
+                        </button>
+                    </form>
                 </div>
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">

@@ -142,6 +142,8 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::post('/pre-close/{id}', 'preClose')->name('ticket.preClose');
             Route::post('/re-assign/{id}', 'reAssign')->name('ticket.reAssign');
             Route::post('/close/{id}', 'close')->name('ticket.close');
+
+            Route::post('/export', 'export')->name('ticket.export');
         });
     });
 
