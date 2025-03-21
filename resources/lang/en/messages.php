@@ -12,6 +12,9 @@ return [
     'other' => 'Other',
     'audit_log' => 'Audit Log',
     // Component
+    'today' => 'Today',
+    'ticket_summary' => 'Ticket Summary',
+    'ticket_summary_sub' => '(Request/Assign To You)',
     'please_wait' => 'Please Wait',
     'success' => 'Success',
     'fail' => 'Fail',

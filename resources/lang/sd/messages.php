@@ -12,6 +12,9 @@ return [
     'other' => 'Lain-lain',
     'audit_log' => 'Log Audit',
     // Component
+    'today' => 'Kiwari',
+    'ticket_summary' => 'Ihtisar tikét',
+    'ticket_summary_sub' => '(Nyuhunkeun/Tugaskeun Ka Anjeun)',
     'please_wait' => 'Punters, Cekap Sakedap',
     'success' => 'Suksés',
     'fail' => 'Gagal',

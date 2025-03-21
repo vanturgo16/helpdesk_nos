@@ -434,12 +434,15 @@
         $('#filterStatus').on('change', function() { $("#ssTable").DataTable().ajax.reload(); });
 
         // Export Modal Button
-        var exportButton = `
-            <button id="exportBtn" data-bs-toggle="modal" data-bs-target="#exportModal" class="btn btn-light waves-effect btn-label waves-light">
-                <i class="mdi mdi-export label-icon"></i> Export Data
-            </button>
-        `;
-        $('.dataTables_length').before(exportButton);
+        var showExportBtn = {{ in_array(auth()->user()->role, ['Super Admin', 'Admin']) ? 'true' : 'false' }};
+        if(showExportBtn) {
+            var exportButton = `
+                <button id="exportBtn" data-bs-toggle="modal" data-bs-target="#exportModal" class="btn btn-light waves-effect btn-label waves-light">
+                    <i class="mdi mdi-export label-icon"></i> Export Data
+                </button>
+            `;
+            $('.dataTables_length').before(exportButton);
+        }
     });
 </script>
 

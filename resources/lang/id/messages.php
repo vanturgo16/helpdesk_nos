@@ -12,6 +12,9 @@ return [
     'other' => 'Lainnya',
     'audit_log' => 'Log Audit',
     // Component
+    'today' => 'Hari Ini',
+    'ticket_summary' => 'Ringkasan Tiket',
+    'ticket_summary_sub' => '(Permintaan/Tugaskan Kepada Anda)',
     'please_wait' => 'Mohon Tunggu',
     'success' => 'Berhasil',
     'fail' => 'Gagal',
