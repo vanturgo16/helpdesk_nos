@@ -69,7 +69,30 @@
                         <?php Auth::logout(); ?>
                     @endif
                 </div>
+
                 <div class="d-flex">
+                    <div class="dropdown d-none d-sm-inline-block">
+                        <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img id="header-lang-img" src="{{ asset('assets/images/flags/' . (App::getLocale() == 'id' ? 'id.png' : (App::getLocale() == 'sd' ? 'sunda.jpg' : 'us.jpg'))) }}" alt="Header Language" height="16">
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <!-- English -->
+                            <a href="{{ route('change.language', 'en') }}" class="dropdown-item notify-item language">
+                                <img src="{{ asset('assets/images/flags/us.jpg') }}" alt="user-image" class="me-1" height="12"> 
+                                <span class="align-middle">English</span>
+                            </a>
+                            <!-- Indonesian -->
+                            <a href="{{ route('change.language', 'id') }}" class="dropdown-item notify-item language">
+                                <img src="{{ asset('assets/images/flags/id.png') }}" alt="user-image" class="me-1" height="12"> 
+                                <span class="align-middle">Indonesia</span>
+                            </a>
+                            <!-- Sundanese -->
+                            <a href="{{ route('change.language', 'sd') }}" class="dropdown-item notify-item language">
+                                <img src="{{ asset('assets/images/flags/sunda.jpg') }}" alt="user-image" class="me-1" height="12"> 
+                                <span class="align-middle">Sunda</span>
+                            </a>
+                        </div>                        
+                    </div>                    
                     <div class="dropdown d-none d-sm-inline-block">
                         <button type="button" class="btn header-item" data-bs-toggle="modal" data-bs-target="#switchTheme">
                             <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
@@ -82,11 +105,26 @@
                         </button>
                     </div>
                     <div class="dropdown d-inline-block">
+                        @php use Illuminate\Support\Facades\File; $defaultImagePath = public_path('assets/images/users/userDefault.png'); @endphp
                         <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/userDefault.png') }}" alt="Header Avatar">
+                            @if(Auth::user()->photo_path)
+                                @php $userImagePath = public_path(Auth::user()->photo_path); @endphp
+                                @if(File::exists($userImagePath))
+                                    <img class="rounded-circle header-profile-user" src="{{ asset(Auth::user()->photo_path) }}" alt="Header Avatar">
+                                @else
+                                    @if(File::exists($defaultImagePath))
+                                        <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/userDefault.png') }}" alt="Header Avatar">
+                                    @endif
+                                @endif
+                            @else 
+                                @if(File::exists($defaultImagePath))
+                                    <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/userDefault.png') }}" alt="Header Avatar">
+                                @endif
+                            @endif
                             <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ Auth::user()->name }}</span> <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
                             <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#logout"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                         </div>
                     </div>
@@ -104,58 +142,64 @@
                             </a>
                         </li>
 
-                        <li class="menu-title mt-2" data-key="t-menu">Configuration</li>
-                        <li>
-                            <a href="{{ route('user.index') }}" class="{{ request()->is('user*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-account-supervisor"></i><span>Manage Users</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('rule.index') }}" class="{{ request()->is('rule*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-cog-box"></i><span>Manage Rules</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('dropdown.index') }}" class="{{ request()->is('dropdown*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-package-down"></i><span>Manage Dropdowns</span>
-                            </a>
-                        </li>
+                        @if(in_array(auth()->user()->role, ['Super Admin', 'Admin']))
+                            <li class="menu-title mt-2" data-key="t-menu">Configuration</li>
+                            <li>
+                                <a href="{{ route('user.index') }}" class="{{ request()->is('user*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-account-supervisor"></i><span>{{ __('messages.mng_user') }}</span>
+                                </a>
+                            </li>
+                            @if(auth()->user()->role == 'Super Admin')
+                            <li>
+                                <a href="{{ route('rule.index') }}" class="{{ request()->is('rule*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-cog-box"></i><span>{{ __('messages.mng_rule') }}</span>
+                                </a>
+                            </li>
+                            @endif
+                            <li>
+                                <a href="{{ route('dropdown.index') }}" class="{{ request()->is('dropdown*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-package-down"></i><span>{{ __('messages.mng_dropdown') }}</span>
+                                </a>
+                            </li>
 
-                        <li class="menu-title mt-2" data-key="t-menu">Master</li>
-                        <li>
-                            <a href="{{ route('priority.index') }}" class="{{ request()->is('priority*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-list-status"></i><span>Priority</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('category.index') }}" class="{{ request()->is('category*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-sitemap-outline"></i><span>Category</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('subcategory.index') }}" class="{{ request()->is('subcategory*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-sitemap"></i><span>Sub Category</span>
-                            </a>
-                        </li>
+                            <li class="menu-title mt-2" data-key="t-menu">Master</li>
+                            <li>
+                                <a href="{{ route('priority.index') }}" class="{{ request()->is('priority*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-list-status"></i><span>{{ __('messages.priority') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('category.index') }}" class="{{ request()->is('category*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-sitemap-outline"></i><span>{{ __('messages.category') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('subcategory.index') }}" class="{{ request()->is('subcategory*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-sitemap"></i><span>{{ __('messages.sub_category') }}</span>
+                                </a>
+                            </li>
+                        @endif
 
                         <li class="menu-title mt-2" data-key="t-menu">Helpdesk</li>
                         <li>
                             <a href="{{ route('createTicket.index') }}" class="{{ request()->is('create-ticket*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-ticket-outline"></i><span>Create Ticket</span>
+                                <i class="mdi mdi-ticket-outline"></i><span>{{ __('messages.ticket_create') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('ticket.index') }}" class="{{ request()->is('ticket*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-ticket-confirmation"></i><span>List Ticket</span>
+                                <i class="mdi mdi-ticket-confirmation"></i><span>{{ __('messages.ticket_list') }}</span>
                             </a>
                         </li>
 
-                        <li class="menu-title mt-2" data-key="t-menu">Other</li>
-                        <li>
-                            <a href="{{ route('auditlog.index') }}" class="{{ request()->is('auditlog*') ? 'bg-light active' : '' }}">
-                                <i class="mdi mdi-chart-donut"></i><span>Audit Log</span>
-                            </a>
-                        </li>
+                        @if(in_array(auth()->user()->role, ['Super Admin', 'Admin']))
+                            <li class="menu-title mt-2" data-key="t-menu">{{ __('messages.other') }}</li>
+                            <li>
+                                <a href="{{ route('auditlog.index') }}" class="{{ request()->is('auditlog*') ? 'bg-light active' : '' }}">
+                                    <i class="mdi mdi-chart-donut"></i><span>{{ __('messages.audit_log') }}</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -290,17 +334,17 @@
         <div class="modal-dialog modal-dialog-top" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Switch Theme</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.switch_theme') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <h5>Switch To <b>@if(Auth::user()->is_darkmode) Light @else Dark @endif</b> Mode ?</h5>
+                    <h5>{{ __('messages.switch_to') }} <b>@if(Auth::user()->is_darkmode) Light @else Dark @endif</b> Mode ?</h5>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
                     <form class="formLoad" action="{{ route('switchTheme') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-check label-icon"></i>Apply</button>
+                        <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-check label-icon"></i>{{ __('messages.apply') }}</button>
                     </form>
                 </div>
             </div>
@@ -315,10 +359,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Select "Logout" below if you are ready to end your current session.</p>
+                    <p>{{ __('messages.logout_text') }}</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
                     <form class="formLoad" action="{{ route('logout') }}" id="formlogout" method="POST" enctype="multipart/form-data">
                         @csrf
                         <button type="submit" class="btn btn-danger waves-effect btn-label waves-light" name="sb"><i class="mdi mdi-logout label-icon"></i>Logout</button>

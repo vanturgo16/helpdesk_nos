@@ -8,13 +8,13 @@
             <div class="row">
                 <div class="col-4">
                     @if(in_array(Auth::user()->role, ['Super Admin', 'Admin']))
-                        <button type="button" class="btn btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addNew"><i class="mdi mdi-plus label-icon"></i> Add New</button>
+                        <button type="button" class="btn btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addNew"><i class="mdi mdi-plus label-icon"></i> {{ __('messages.add_new') }}</button>
                         {{-- Modal Add --}}
                         <div class="modal fade" id="addNew" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-top" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Add New</h5>
+                                        <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.add_new') }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form class="formLoad" action="{{ route('priority.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
@@ -22,14 +22,14 @@
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-lg-12 mb-3">
-                                                    <label class="form-label">Priority Name</label> <label class="text-danger">*</label>
-                                                    <input class="form-control" type="text" name="priority" placeholder="Input Priority Name.." required>
+                                                    <label class="form-label">{{ __('messages.priority_name') }}</label> <label class="text-danger">*</label>
+                                                    <input class="form-control" type="text" name="priority" placeholder="Input {{ __('messages.priority_name') }}.." required>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i>Add</button>
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
+                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i>{{ __('messages.add') }}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="col-4">
                     <div class="text-center">
-                        <h4 class="text-bold">Master Priority</h4>
+                        <h4 class="text-bold">{{ __('messages.mst_priority') }}</h4>
                     </div>
                 </div>
                 <div class="col-4"></div>
@@ -50,9 +50,9 @@
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">No</th>
-                        <th class="align-middle text-center">Priority Name</th>
+                        <th class="align-middle text-center">{{ __('messages.priority_name') }}</th>
                         <th class="align-middle text-center">Status</th>
-                        <th class="align-middle text-center">Action</th>
+                        <th class="align-middle text-center">{{ __('messages.action') }}</th>
                     </tr>
                 </thead>
             </table>

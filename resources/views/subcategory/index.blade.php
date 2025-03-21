@@ -8,13 +8,13 @@
             <div class="row">
                 <div class="col-4">
                     @if(in_array(Auth::user()->role, ['Super Admin', 'Admin']))
-                        <button type="button" class="btn btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addNew"><i class="mdi mdi-plus label-icon"></i> Add New</button>
+                        <button type="button" class="btn btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addNew"><i class="mdi mdi-plus label-icon"></i> {{ __('messages.add_new') }}</button>
                         {{-- Modal Add --}}
                         <div class="modal fade" id="addNew" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-top" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Add New</h5>
+                                        <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.add_new') }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form class="formLoad" action="{{ route('subcategory.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
@@ -22,30 +22,30 @@
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-lg-12 mb-3">
-                                                    <label class="form-label">Category</label> <label class="text-danger">*</label>
+                                                    <label class="form-label">{{ __('messages.category') }}</label> <label class="text-danger">*</label>
                                                     <select class="form-control select2" name="id_mst_category" required>
-                                                        <option value="" disabled selected>- Select -</option>
+                                                        <option value="" disabled selected>- {{ __('messages.select') }} -</option>
                                                         @foreach($categories as $item)
                                                             <option value="{{ $item->id }}">{{ $item->category }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-12 mb-3">
-                                                    <label class="form-label">Category Name</label> <label class="text-danger">*</label>
-                                                    <input class="form-control" type="text" name="sub_category" placeholder="Input Sub Category Name.." required>
+                                                    <label class="form-label">{{ __('messages.subcategory_name') }}</label> <label class="text-danger">*</label>
+                                                    <input class="form-control" type="text" name="sub_category" placeholder="Input Sub {{ __('messages.subcategory_name') }}.." required>
                                                 </div>
                                                 <div class="col-lg-12 mb-3">
-                                                    <label class="form-label">SLA - Over Due</label> <label class="text-danger">*</label>
+                                                    <label class="form-label">{{ __('messages.sla') }}</label> <label class="text-danger">*</label>
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" placeholder="Input Over Due in minutes.." name="sla" required>
-                                                        <span class="input-group-text">Minutes</span>
+                                                        <input type="number" class="form-control" placeholder="Input {{ __('messages.sla') }}.." name="sla" required>
+                                                        <span class="input-group-text">{{ __('messages.minutes') }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i>Add</button>
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
+                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i>{{ __('messages.add') }}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-4">
                     <div class="text-center">
-                        <h4 class="text-bold">Master Sub Category</h4>
+                        <h4 class="text-bold">{{ __('messages.mst_subcategory') }}</h4>
                     </div>
                 </div>
                 <div class="col-4"></div>
@@ -66,11 +66,11 @@
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">No</th>
-                        <th class="align-middle text-center">Category</th>
-                        <th class="align-middle text-center">Sub Category</th>
-                        <th class="align-middle text-center">SLA / Over Due (In Minutes)</th>
+                        <th class="align-middle text-center">{{ __('messages.category') }}</th>
+                        <th class="align-middle text-center">{{ __('messages.subcategory_name') }}</th>
+                        <th class="align-middle text-center">{{ __('messages.sla') }}</th>
                         <th class="align-middle text-center">Status</th>
-                        <th class="align-middle text-center">Action</th>
+                        <th class="align-middle text-center">{{ __('messages.action') }}</th>
                     </tr>
                 </thead>
             </table>

@@ -71,10 +71,10 @@ class MstUserController extends Controller
         ]);
         //Prevent Create Role Super Admin, If Not Super Admin
         if (auth()->user()->role != 'Super Admin' && $request->role == 'Super Admin') {
-            return redirect()->back()->withInput()->with(['fail' => 'Failed, You Do Not Have Access to Add Role as Super Admin']);
+            return redirect()->back()->withInput()->with(['fail' => __('messages.user_fail1')]);
         }
         if (User::where('email', $request->email)->exists()) {
-            return redirect()->back()->with('warning', 'Email Was Already Registered As User');
+            return redirect()->back()->with('warning', __('messages.user_fail2'));
         }
 
         // Initiate Variable
@@ -104,10 +104,10 @@ class MstUserController extends Controller
             // Audit Log
             $this->auditLogs('Create New User (' . $request->email . ')');
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Create New User']);
+            return redirect()->back()->with(['success' => __('messages.success_add')]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Create New User!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_add')]);
         }
     }
 
@@ -135,10 +135,10 @@ class MstUserController extends Controller
             // Audit Log
             $this->auditLogs('Reset Password User (' . $data->email . ')');
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Reset Password User, New Password Has Been Send to Email: ' . $data->email]);
+            return redirect()->back()->with(['success' => __('messages.user_success1') . $data->email]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Reset Password User ' . $data->email . '!']);
+            return redirect()->back()->with(['fail' => __('messages.user_fail3') . $data->email . '!']);
         }
     }
 
@@ -168,7 +168,7 @@ class MstUserController extends Controller
         ]);
         //Prevent Create Role Super Admin, If Not Super Admin
         if (auth()->user()->role != 'Super Admin' && $request->role == 'Super Admin') {
-            return redirect()->back()->withInput()->with(['fail' => 'Failed, You Do Not Have Access to Add Role as Super Admin']);
+            return redirect()->back()->withInput()->with(['fail' => __('messages.user_fail1')]);
         }
 
         $iduser = decrypt($id);
@@ -195,13 +195,13 @@ class MstUserController extends Controller
                 //Audit Log
                 $this->auditLogs('Update User (' . $dataBefore->email . ')');
                 DB::commit();
-                return redirect()->route('user.index')->with(['success' => 'Success Update User']);
+                return redirect()->route('user.index')->with(['success' => __('messages.success_update')]);
             } catch (Exception $e) {
                 DB::rollback();
-                return redirect()->back()->with(['fail' => 'Failed to Update User!']);
+                return redirect()->back()->with(['fail' => __('messages.fail_update')]);
             }
         } else {
-            return redirect()->route('user.index')->with(['info' => 'Nothing Change, The data entered is the same as the previous one!']);
+            return redirect()->route('user.index')->with(['info' => __('messages.same_data')]);
         }
     }
 
@@ -216,10 +216,10 @@ class MstUserController extends Controller
             // Audit Log
             $this->auditLogs('Delete User (' . $email . ')');
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Delete User ' . $email]);
+            return redirect()->back()->with(['success' => __('messages.success_delete') . ' ' . $email]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Delete User ' . $email . '!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_delete') . ' ' . $email . '!']);
         }
     }
 
@@ -234,10 +234,10 @@ class MstUserController extends Controller
             // Audit Log
             $this->auditLogs('Activate User (' . $data->email . ')');
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Activate User ' . $data->email]);
+            return redirect()->back()->with(['success' => __('messages.success_activate') . ' ' . $data->email]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Activate User ' . $data->email . '!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_activate') . ' ' . $data->email . '!']);
         }
     }
 
@@ -252,10 +252,10 @@ class MstUserController extends Controller
             // Audit Log
             $this->auditLogs('Deactivate User (' . $data->email . ')');
             DB::commit();
-            return redirect()->back()->with(['success' => 'Success Deactivate User ' . $data->email]);
+            return redirect()->back()->with(['success' => __('messages.success_deactivate') . ' ' . $data->email]);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->with(['fail' => 'Failed to Deactivate User ' . $data->email . '!']);
+            return redirect()->back()->with(['fail' => __('messages.fail_deactivate') . ' ' . $data->email . '!']);
         }
     }
 

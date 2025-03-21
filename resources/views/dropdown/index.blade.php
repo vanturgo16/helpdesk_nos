@@ -8,13 +8,13 @@
             <div class="row">
                 <div class="col-4">
                     @if(Auth::user()->role == 'Super Admin')
-                        <button type="button" class="btn btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addNew"><i class="mdi mdi-plus label-icon"></i> Add New</button>
+                        <button type="button" class="btn btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addNew"><i class="mdi mdi-plus label-icon"></i> {{ __('messages.add_new') }}</button>
                         {{-- Modal Add --}}
                         <div class="modal fade" id="addNew" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-top" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Add New</h5>
+                                        <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.add_new') }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form class="formLoad" action="{{ route('dropdown.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
@@ -22,19 +22,19 @@
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Category</label> <label class="text-danger">*</label>
+                                                    <label class="form-label">{{ __('messages.category') }}</label> <label class="text-danger">*</label>
                                                     <select class="form-control select2" name="category" required>
-                                                        <option value="" disabled selected>- Select -</option>
+                                                        <option value="" disabled selected>- {{ __('messages.select') }} -</option>
                                                         @foreach($categories as $item)
                                                             <option value="{{ $item->category }}">{{ $item->category }}</option>
                                                         @endforeach
                                                         <option disabled>──────────</option>
-                                                        <option value="NewCat">Add New Category</option>
+                                                        <option value="NewCat">{{ __('messages.add') }} {{ __('messages.new_cat') }}</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6 mb-3" id="newCat" style="display: none;">
-                                                    <label class="form-label">New Category</label> <label class="text-danger">*</label>
-                                                    <input type="text" name="addcategory" class="form-control" placeholder="Input New Category.." required>
+                                                    <label class="form-label">{{ __('messages.new_cat') }}</label> <label class="text-danger">*</label>
+                                                    <input type="text" name="addcategory" class="form-control" placeholder="Input {{ __('messages.new_cat') }}.." required>
                                                 </div>
                                                 <script>
                                                     $(document).ready(function () {
@@ -48,18 +48,18 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-12 mb-3">
-                                                    <label class="form-label">Name Value</label> <label class="text-danger">*</label>
-                                                    <input class="form-control" type="text" name="name_value" placeholder="Input Name Value.." required>
+                                                    <label class="form-label">{{ __('messages.name_value') }}</label> <label class="text-danger">*</label>
+                                                    <input class="form-control" type="text" name="name_value" placeholder="Input {{ __('messages.name_value') }}.." required>
                                                 </div>
                                                 <div class="col-lg-12 mb-3">
-                                                    <label class="form-label">Code Format</label>
-                                                    <input class="form-control" type="text" name="code_format" placeholder="Input Code Format.. (Optional)">
+                                                    <label class="form-label">{{ __('messages.code_format') }}</label>
+                                                    <input class="form-control" type="text" name="code_format" placeholder="Input {{ __('messages.code_format') }}.. ({{ __('messages.optional') }})">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i>Add</button>
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
+                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-plus label-icon"></i>{{ __('messages.add') }}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -69,7 +69,7 @@
                 </div>
                 <div class="col-4">
                     <div class="text-center">
-                        <h4 class="text-bold">Manage Dropdown</h4>
+                        <h4 class="text-bold">{{ __('messages.mng_dropdown') }}</h4>
                     </div>
                 </div>
                 <div class="col-4"></div>
@@ -80,11 +80,11 @@
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">No</th>
-                        <th class="align-middle text-center">Category</th>
-                        <th class="align-middle text-center">Name Value</th>
-                        <th class="align-middle text-center">Code Format</th>
+                        <th class="align-middle text-center">{{ __('messages.category') }}</th>
+                        <th class="align-middle text-center">{{ __('messages.name_value') }}</th>
+                        <th class="align-middle text-center">{{ __('messages.code_format') }}</th>
                         <th class="align-middle text-center">Status</th>
-                        <th class="align-middle text-center">Action</th>
+                        <th class="align-middle text-center">{{ __('messages.action') }}</th>
                     </tr>
                 </thead>
             </table>

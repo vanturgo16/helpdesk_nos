@@ -4,7 +4,7 @@
         <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
             <div class="toast-header bg-success text-white">
                 <span class="badge bg-white text-primary"><i class="mdi mdi-check-all label-icon"></i></span>&nbsp;
-                <strong class="me-auto">Success</strong><small>Just Now</small>
+                <strong class="me-auto">{{ __('messages.success') }}</strong><small>{{ __('messages.just_now') }}</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">{{ session('success') }}</div>
@@ -14,7 +14,7 @@
         <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
             <div class="toast-header bg-danger text-white">
                 <span class="badge bg-white text-primary"><i class="mdi mdi-check-all label-icon"></i></span>&nbsp;
-                <strong class="me-auto">Fail</strong><small>Just Now</small>
+                <strong class="me-auto">{{ __('messages.fail') }}</strong><small>{{ __('messages.just_now') }}</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">{{ session('fail') }}</div>
@@ -24,7 +24,7 @@
         <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
             <div class="toast-header bg-info text-white">
                 <span class="badge bg-white text-primary"><i class="mdi mdi-check-all label-icon"></i></span>&nbsp;
-                <strong class="me-auto">Info</strong><small>Just Now</small>
+                <strong class="me-auto">{{ __('messages.info') }}</strong><small>{{ __('messages.just_now') }}</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">{{ session('info') }}</div>
@@ -34,7 +34,7 @@
         <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
             <div class="toast-header bg-warning text-white">
                 <span class="badge bg-white text-primary"><i class="mdi mdi-check-all label-icon"></i></span>&nbsp;
-                <strong class="me-auto">Warning</strong><small>Just Now</small>
+                <strong class="me-auto">{{ __('messages.warning') }}</strong><small>{{ __('messages.just_now') }}</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">{{ session('warning') }}</div>
@@ -44,7 +44,7 @@
         <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
             <div class="toast-header bg-danger text-white">
                 <span class="badge bg-white text-primary"><i class="mdi mdi-check-all label-icon"></i></span>&nbsp;
-                <strong class="me-auto">Fail</strong><small>Just Now</small>
+                <strong class="me-auto">{{ __('messages.fail') }}</strong><small>{{ __('messages.just_now') }}</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">

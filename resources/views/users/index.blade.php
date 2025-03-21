@@ -7,14 +7,14 @@
             <div class="row">
                 <div class="col-4">
                     @if(in_array(Auth::user()->role, ['Super Admin', 'Admin']))
-                        <button type="button" class="btn btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#add-new"><i class="mdi mdi-account-plus label-icon"></i> Add New User</button>
+                        <button type="button" class="btn btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#add-new"><i class="mdi mdi-account-plus label-icon"></i> {{ __('messages.add_new') }}</button>
                         
                         {{-- Modal Add --}}
                         <div class="modal fade" id="add-new" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-top modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
+                                        <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.add_new') }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form class="formLoad" action="{{ route('user.store') }}" id="formadd" method="POST" enctype="multipart/form-data">
@@ -22,30 +22,30 @@
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Name</label><label style="color: darkred">*</label>
-                                                    <input class="form-control" type="text" name="name" placeholder="Input Name.." required>
+                                                    <label class="form-label">{{ __('messages.name') }}</label><label style="color: darkred">*</label>
+                                                    <input class="form-control" type="text" name="name" placeholder="Input {{ __('messages.name') }}.." required>
                                                 </div>
                                                 <div class="col-lg-6 mb-3">
                                                     <label class="form-label">Email</label><label style="color: darkred">*</label>
                                                     <input class="form-control" type="email" name="email" placeholder="Input Email.." required>
                                                 </div>
                                                 <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Dealer Type</label> <label class="text-danger">*</label>
+                                                    <label class="form-label">{{ __('messages.dealer_type') }}</label> <label class="text-danger">*</label>
                                                     <select class="form-control select2" name="dealer_type" required>
-                                                        <option value="" disabled selected>- Select Dealer Type -</option>
+                                                        <option value="" disabled selected>- {{ __('messages.select') }} {{ __('messages.dealer_type') }} -</option>
                                                         @foreach($dealerTypes as $item)
                                                             <option value="{{ $item->name_value }}">{{ $item->name_value }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Dealer Name</label><label style="color: darkred">*</label>
-                                                    <input class="form-control" type="text" name="dealer_name" placeholder="Input Dealer Name.." required>
+                                                    <label class="form-label">{{ __('messages.dealer_name') }}</label><label style="color: darkred">*</label>
+                                                    <input class="form-control" type="text" name="dealer_name" placeholder="Input {{ __('messages.dealer_name') }}.." required>
                                                 </div>
                                                 <div class="col-lg-6 mb-3">
-                                                    <label class="form-label">Department</label> <label class="text-danger">*</label>
+                                                    <label class="form-label">{{ __('messages.department') }}</label> <label class="text-danger">*</label>
                                                     <select class="form-control select2" name="department" required>
-                                                        <option value="" disabled selected>- Select Department -</option>
+                                                        <option value="" disabled selected>- {{ __('messages.select') }} {{ __('messages.department') }} -</option>
                                                         @foreach($departments as $item)
                                                             <option value="{{ $item->name_value }}">{{ $item->name_value }}</option>
                                                         @endforeach
@@ -54,7 +54,7 @@
                                                 <div class="col-lg-6 mb-3">
                                                     <label class="form-label">Role</label> <label class="text-danger">*</label>
                                                     <select class="form-control select2" name="role" required>
-                                                        <option value="" disabled selected>- Select Role -</option>
+                                                        <option value="" disabled selected>- {{ __('messages.select') }} Role -</option>
                                                         @foreach($roleUsers as $item)
                                                             <option value="{{ $item->name_value }}">{{ $item->name_value }}</option>
                                                         @endforeach
@@ -63,8 +63,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-account-plus label-icon"></i>Add</button>
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
+                                            <button type="submit" class="btn btn-success waves-effect btn-label waves-light"><i class="mdi mdi-account-plus label-icon"></i>{{ __('messages.add') }}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="col-4">
                     <div class="text-center">
-                        <h4 class="text-bold">Manage User</h4>
+                        <h4 class="text-bold">{{ __('messages.mng_user') }}</h4>
                     </div>
                 </div>
                 <div class="col-4"></div>
@@ -85,12 +85,12 @@
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">No</th>
-                        <th class="align-middle text-center">Name</th>
+                        <th class="align-middle text-center">{{ __('messages.name') }}</th>
                         <th class="align-middle text-center">Dealer</th>
-                        <th class="align-middle text-center">Department</th>
+                        <th class="align-middle text-center">{{ __('messages.department') }}</th>
                         <th class="align-middle text-center">Role</th>
                         <th class="align-middle text-center">Status</th>
-                        <th class="align-middle text-center">Action</th>
+                        <th class="align-middle text-center">{{ __('messages.action') }}</th>
                     </tr>
                 </thead>
             </table>
@@ -142,7 +142,7 @@
                     orderable: true,
                     data: 'role',
                     name: 'role',
-                    className: 'align-top text-center fw-bold',
+                    className: 'align-top fw-bold',
                 },
                 {
                     data: 'is_active',

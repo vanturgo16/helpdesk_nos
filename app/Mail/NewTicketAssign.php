@@ -29,7 +29,6 @@ class NewTicketAssign extends Mailable
     {
         //SUBJECT NAME
         $subject = "[NEW ASSIGN TICKET] - ". strtoupper($this->dataTicket->priority) . " - " . $this->dataTicket->no_ticket;
-
         $email = $this->view('mail.newAssignTicket')->subject($subject);
 
         if ($this->dataTicket->file_1 != null) {

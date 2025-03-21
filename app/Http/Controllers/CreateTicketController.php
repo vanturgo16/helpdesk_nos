@@ -134,11 +134,11 @@ class CreateTicketController extends Controller
             // Audit Log
             $this->auditLogs('Store New Ticket ID: ' . $dataTicket->id);
             DB::commit();
-            return redirect()->route('ticket.index')->with('success', 'Success, New Ticket Requested');
+            return redirect()->route('ticket.index')->with('success', __('messages.create_ticket_success1'));
         } catch (Exception $e) {
             DB::rollBack();
             if ($url1 && file_exists(public_path($url1))) { unlink(public_path($url1)); }
-            return redirect()->back()->with(['fail' => 'Failed to Add New Ticket!']);
+            return redirect()->back()->with(['fail' => __('messages.create_ticket_fail1')]);
         }
     }
 }
