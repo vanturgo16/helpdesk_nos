@@ -293,47 +293,45 @@
                 </div>
                 <div class="col-lg-6">
                     {{-- Activity --}}
-                    @if(in_array($emailUser, $userAssign))
+                    @if(in_array($emailUser, $userEnv))
                         <div class="text-end">
-                            @if($lastAssign->accept_date && !$lastAssign->preclosed_date)
-                                <button type="button" class="btn btn-sm btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addActivity">
-                                    <i class="mdi mdi-plus label-icon"></i> {{ __('messages.add') }} {{ __('messages.ticket_activity') }}
-                                </button>
-                                {{-- Modal Add Activity --}}
-                                <div class="modal fade" id="addActivity" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-top" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.add') }} {{ __('messages.ticket_activity') }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <form class="formLoad" action="{{ route('ticket.addActivity', encrypt($data->id)) }}" id="formadd" method="POST" enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="modal-body text-start">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="mb-3">
-                                                                <label class="form-label">{{ __('messages.message') }} (max 255 character)</label> <label class="text-danger">*</label>
-                                                                <textarea name="message" rows="8" cols="50" class="form-control" placeholder="Input {{ __('messages.message') }}.." required></textarea>
-                                                            </div>
+                            <button type="button" class="btn btn-sm btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addActivity">
+                                <i class="mdi mdi-plus label-icon"></i> {{ __('messages.add') }} {{ __('messages.ticket_activity') }}
+                            </button>
+                            {{-- Modal Add Activity --}}
+                            <div class="modal fade" id="addActivity" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-top" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">{{ __('messages.add') }} {{ __('messages.ticket_activity') }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form class="formLoad" action="{{ route('ticket.addActivity', encrypt($data->id)) }}" id="formadd" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="modal-body text-start">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ __('messages.message') }} (max 255 character)</label> <label class="text-danger">*</label>
+                                                            <textarea name="message" rows="8" cols="50" class="form-control" placeholder="Input {{ __('messages.message') }}.." required></textarea>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <div class="mb-3">
-                                                                <label class="form-label">{{ __('messages.upload') }} Attachment</label>
-                                                                <input type="file" name="attachment" class="form-control">
-                                                            </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">{{ __('messages.upload') }} Attachment</label>
+                                                            <input type="file" name="attachment" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
-                                                    <button type="submit" class="btn btn-primary waves-effect btn-label waves-light"><i class="bx bx-plus label-icon"></i>{{ __('messages.add') }}</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('messages.close') }}</button>
+                                                <button type="submit" class="btn btn-primary waves-effect btn-label waves-light"><i class="bx bx-plus label-icon"></i>{{ __('messages.add') }}</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            @endif
+                            </div>
                         </div>
                     @else 
                     @endif

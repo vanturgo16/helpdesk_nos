@@ -128,9 +128,13 @@ class TicketController extends Controller
         $userRequest = $data->created_by;
         $userAssign = User::whereIn('dealer_type', $dealerTypeHandle)->where('department', $lastAssign->assign_to_dept)->whereIn('role', $roleHandle)->pluck('email')->toArray();
 
+        $deptEnv = LogTicket::where('id_ticket', $id)->pluck('assign_to_dept')->toArray();
+        $userEnv = User::whereIn('department', $deptEnv)->whereIn('role', $roleHandle)->pluck('email')->toArray();
+        $userIncluded = array_merge($userEnv, [$data->created_by]);
+        
         //Audit Log
         $this->auditLogs('View Detail Ticket ID (' . $id . ')');
-        return view('ticket.detail', compact('id', 'data', 'emailUser', 'lastAssign', 'departments', 'userRequest', 'userAssign'));
+        return view('ticket.detail', compact('id', 'data', 'emailUser', 'lastAssign', 'departments', 'userRequest', 'userAssign', 'userEnv'));
     }
 
     public function assignDatas(Request $request, $id)
@@ -407,24 +411,29 @@ class TicketController extends Controller
     
     public function export(Request $request)
     {
-        $datas = Ticket::select('tickets.*', 'tickets.created_at as createdTicket', 'tickets.updated_at as updatedTicket', 
-                'log_tickets.*', 'log_tickets.created_at as createdAssignTicket', 'log_tickets.updated_at as updatedAssignTicket')
-            ->leftjoin('log_tickets', 'tickets.id', 'log_tickets.id_ticket')
+        $dataTicket = Ticket::select('tickets.*')->orderBy('tickets.created_at', 'desc');
+        $dataLogAssign = LogTicket::select('tickets.no_ticket', 'log_tickets.*')
+            ->leftjoin('tickets', 'log_tickets.id_ticket', 'tickets.id')
             ->orderBy('tickets.created_at', 'desc');
 
+        // FILTER DATA
         if ($request->has('priority') && $request->priority != '') {
-            $datas->where('tickets.priority', $request->priority);
+            $dataTicket->where('tickets.priority', $request->priority);
+            $dataLogAssign->where('tickets.priority', $request->priority);
         }
         if ($request->has('status') && $request->status != '') {
-            $datas->where('tickets.status', $request->status);
+            $dataTicket->where('tickets.status', $request->status);
+            $dataLogAssign->where('tickets.status', $request->status);
         }
         if ($request->has('dateFrom') && $request->dateFrom != '' && $request->has('dateTo') && $request->dateTo != '') {
             $startDate = $request->dateFrom . ' 00:00:00';
             $endDate = $request->dateTo . ' 23:59:59';
-            $datas = $datas->whereBetween('tickets.created_at', [$startDate, $endDate]);
+
+            $dataTicket->whereBetween('tickets.created_at', [$startDate, $endDate]);
+            $dataLogAssign->whereBetween('tickets.created_at', [$startDate, $endDate]);
         }
 
         $filename = 'Export_Ticket_' . Carbon::now()->format('d_m_Y_H_i') . '.xlsx';
-        return Excel::download(new TicketExport($datas->get(), $request), $filename);
+        return Excel::download(new TicketExport($dataTicket->get(), $dataLogAssign->get(), $request), $filename);
     }
 }
