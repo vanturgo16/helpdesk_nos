@@ -125,7 +125,7 @@
                     </button>
                 </div>
             </form>
-            {{-- <script>
+            <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     const exportForm = document.querySelector("form[action='{{ route('ticket.export') }}']");
                     const exportButton = exportForm.querySelector("button[type='submit']");
@@ -176,7 +176,7 @@
                         });
                     });
                 });
-            </script> --}}
+            </script>
         </div>
     </div>
 </div>
