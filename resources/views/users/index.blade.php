@@ -89,7 +89,9 @@
                         <th class="align-middle text-center">Dealer</th>
                         <th class="align-middle text-center">{{ __('messages.department') }}</th>
                         <th class="align-middle text-center">Role</th>
-                        <th class="align-middle text-center">Status</th>
+                        <th class="align-middle text-center">{{ __('messages.login_counter') }}</th>
+                        <th class="align-middle text-center">{{ __('messages.last_seen') }}</th>
+                        <th class="align-middle text-center">{{ __('messages.account_status') }}</th>
                         <th class="align-middle text-center">{{ __('messages.action') }}</th>
                     </tr>
                 </thead>
@@ -143,6 +145,32 @@
                     data: 'role',
                     name: 'role',
                     className: 'align-top fw-bold',
+                },
+                {
+                    data: 'login_counter',
+                    name: 'login_counter',
+                    orderable: true,
+                    searchable: true,
+                    className: 'align-top text-center',
+                },
+                {
+                    data: 'last_seen',
+                    name: 'last_seen',
+                    searchable: true,
+                    orderable: true,
+                    className: 'align-top',
+                    render: function(data, type, row) {
+                        var statusLogin = '';
+                        var lastSeen = new Date(data);
+                        var now = new Date();
+                        var diffMinutes = (now - lastSeen) / 60000;
+                        if (data && diffMinutes <= 5) {
+                            statusLogin = '<span class="badge bg-success text-white"><i class="fas fa-circle"></i> Online</span>';
+                        } else {
+                            statusLogin = '<span class="badge bg-secondary text-white"><i class="fas fa-circle-notch"></i> Offline</span>';
+                        }
+                        return statusLogin + '<br>' + (data ? data : '-');
+                    },
                 },
                 {
                     data: 'is_active',
