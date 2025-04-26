@@ -95,6 +95,7 @@ return [
     // Sub Category
     'subcategory_name' => 'Nama Sub Kategori',
     'sla' => 'SLA / Lewat Waktu (Dalam Menit)',
+    'priority' => 'Prioritas',
     'minutes' => 'Menit',
     'this_sub_cat' => 'Sub Kategori Ini',
     // Create Ticket

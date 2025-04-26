@@ -45,6 +45,15 @@
                                     <span class="input-group-text">{{ __('messages.minutes') }}</span>
                                 </div>
                             </div>
+                            <div class="col-lg-12 mb-3">
+                                <label class="form-label">{{ __('messages.priority') }}</label> <label class="text-danger">*</label>
+                                <select class="form-control select2" name="priority" required>
+                                    <option value="" disabled selected>- {{ __('messages.select') }} -</option>
+                                    @foreach($priorities as $item)
+                                        <option value="{{ $item->priority }}" @if($data->priority == $item->priority) selected @endif>{{ $item->priority }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

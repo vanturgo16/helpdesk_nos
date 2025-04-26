@@ -41,6 +41,15 @@
                                                         <span class="input-group-text">{{ __('messages.minutes') }}</span>
                                                     </div>
                                                 </div>
+                                                <div class="col-lg-12 mb-3">
+                                                    <label class="form-label">{{ __('messages.priority') }}</label> <label class="text-danger">*</label>
+                                                    <select class="form-control select2" name="priority" required>
+                                                        <option value="" disabled selected>- {{ __('messages.select') }} -</option>
+                                                        @foreach($priorities as $item)
+                                                            <option value="{{ $item->priority }}">{{ $item->priority }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -69,6 +78,7 @@
                         <th class="align-middle text-center">{{ __('messages.category') }}</th>
                         <th class="align-middle text-center">{{ __('messages.subcategory_name') }}</th>
                         <th class="align-middle text-center">{{ __('messages.sla') }}</th>
+                        <th class="align-middle text-center">{{ __('messages.priority') }}</th>
                         <th class="align-middle text-center">Status</th>
                         <th class="align-middle text-center">{{ __('messages.action') }}</th>
                     </tr>
@@ -106,6 +116,11 @@
                 },
                 {
                     data: 'sla',
+                    orderable: true,
+                    className: 'align-top text-center',
+                },
+                {
+                    data: 'priority',
                     orderable: true,
                     className: 'align-top text-center',
                 },
