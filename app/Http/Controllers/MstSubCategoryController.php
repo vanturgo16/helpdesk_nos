@@ -12,6 +12,7 @@ use App\Traits\AuditLogsTrait;
 // Model
 use App\Models\MstSubCategory;
 use App\Models\MstCategory;
+use App\Models\MstPriorities;
 
 class MstSubCategoryController extends Controller
 {
@@ -20,20 +21,21 @@ class MstSubCategoryController extends Controller
     public function index(Request $request)
     {
         $categories = MstCategory::get();
+        $priorities = MstPriorities::orderBy('created_at', 'desc')->where('is_active', 1)->get();
         $datas = MstSubCategory::select('mst_sub_category.*', 'mst_category.category')
             ->leftjoin('mst_category', 'mst_category.id', 'mst_sub_category.id_mst_category')
             ->orderBy('mst_sub_category.created_at', 'desc')->get();
 
         if ($request->ajax()) {
             return DataTables::of($datas)
-                ->addColumn('action', function ($data) use ($categories) {
-                    return view('subcategory.action', compact('data', 'categories'));
+                ->addColumn('action', function ($data) use ($categories, $priorities) {
+                    return view('subcategory.action', compact('data', 'categories', 'priorities'));
                 })->toJson();
         }
 
         //Audit Log
         $this->auditLogs('View List Master SubCategory');
-        return view('subcategory.index', compact('categories'));
+        return view('subcategory.index', compact('categories', 'priorities'));
     }
 
     public function store(Request $request)
@@ -42,6 +44,7 @@ class MstSubCategoryController extends Controller
             'id_mst_category' => 'required',
             'sub_category' => 'required',
             'sla' => 'required',
+            'priority' => 'required',
         ]);
         // Check Existing Data
         if (MstSubCategory::where('id_mst_category', $request->id_mst_category)->where('sub_category', $request->sub_category)->exists()) {
@@ -54,6 +57,7 @@ class MstSubCategoryController extends Controller
                 'id_mst_category' => $request->id_mst_category,
                 'sub_category' => $request->sub_category,
                 'sla' => $request->sla,
+                'priority' => $request->priority,
                 'is_active' => 1
             ]);
 
@@ -73,6 +77,7 @@ class MstSubCategoryController extends Controller
             'id_mst_category' => 'required',
             'sub_category' => 'required',
             'sla' => 'required',
+            'priority' => 'required',
         ]);
 
         $id = decrypt($id);
@@ -85,6 +90,7 @@ class MstSubCategoryController extends Controller
         $dataBefore->id_mst_category = $request->id_mst_category;
         $dataBefore->sub_category = $request->sub_category;
         $dataBefore->sla = $request->sla;
+        $dataBefore->priority = $request->priority;
 
         if ($dataBefore->isDirty()) {
             DB::beginTransaction();
@@ -93,6 +99,7 @@ class MstSubCategoryController extends Controller
                     'id_mst_category' => $request->id_mst_category,
                     'sub_category' => $request->sub_category,
                     'sla' => $request->sla,
+                    'priority' => $request->priority,
                 ]);
 
                 // Audit Log
