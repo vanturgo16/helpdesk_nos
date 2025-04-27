@@ -95,6 +95,7 @@ return [
     // Sub Category
     'subcategory_name' => 'Sub Category Name',
     'sla' => 'SLA / Over Due (In Minutes)',
+    'priority' => 'Priority',
     'minutes' => 'Minutes',
     'this_sub_cat' => 'This Sub Category',
     // Create Ticket

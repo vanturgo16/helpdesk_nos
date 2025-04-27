@@ -117,18 +117,6 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('messages.priority') }}</label> <label class="text-danger">*</label>
-                                            <select class="form-control select2" name="priority_input" required>
-                                                <option value="" disabled selected>- {{ __('messages.select') }} {{ __('messages.priority') }} -</option>
-                                                @foreach($priorities as $item)
-                                                    <option value="{{ $item->priority }}">{{ $item->priority }}</option>
-                                                @endforeach
-                                            </select>
-                                            <div class="invalid-feedback">Please select a priority.</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
                                             <label class="form-label">{{ __('messages.category') }}</label> <label class="text-danger">*</label>
                                             <select class="form-control select2" name="id_mst_category_input" required>
                                                 <option value="" disabled selected>- {{ __('messages.select') }} {{ __('messages.category') }} -</option>
@@ -155,6 +143,19 @@
                                                 <input type="number" class="form-control" placeholder=".." name="sla" value="" readonly>
                                                 <span class="input-group-text">{{ __('messages.minutes') }}</span>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ __('messages.priority') }}</label> <small class="text-muted"> - ({{ __('messages.auto_fill') }})</small>
+                                            <input type="text" class="form-control" placeholder=".." name="priority_input" value="" readonly>
+                                            {{-- <select class="form-control select2" name="priority_input" required>
+                                                <option value="" disabled selected>- {{ __('messages.select') }} {{ __('messages.priority') }} -</option>
+                                                @foreach($priorities as $item)
+                                                    <option value="{{ $item->priority }}">{{ $item->priority }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">Please select a priority.</div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -427,11 +428,13 @@
     $(document).ready(function () {
         var subCategorySelect = $('select[name="id_mst_sub_category_input"]');
         var slaInput = $('input[name="sla"]');
+        var priorityInput = $('input[name="priority_input"]');
         $('select[name="id_mst_category_input"]').on('change', function () {
             var categoryId = $(this).val();
             subCategorySelect.empty();
             subCategorySelect.append('<option value="" disabled selected>- Select Sub Category -</option>');
             slaInput.val('');
+            priorityInput.val('');
 
             $("#loadingOverlay").fadeIn();
 
@@ -464,6 +467,7 @@
         $('select[name="id_mst_sub_category_input"]').on('change', function () {
             var subCategoryId = $(this).val();
             slaInput.val('');
+            priorityInput.val('');
             $("#loadingOverlay").fadeIn();
             if (subCategoryId) {
                 $.ajax({
@@ -473,6 +477,7 @@
                     success: function (response) {
                         if (response.success) {
                             slaInput.val(response.data[0].sla);
+                            priorityInput.val(response.data[0].priority);
                         }
                     },
                     error: function () {
@@ -484,6 +489,7 @@
                 });
             } else {
                 slaInput.val('');
+                priorityInput.val('');
             }
         });
     });
@@ -565,7 +571,7 @@
 
         function updateSummary() {
             // Get input values
-            let priority = document.querySelector('select[name="priority_input"]').value;
+            let priority = document.querySelector('input[name="priority_input"]').value;
             let category = document.querySelector('select[name="id_mst_category_input"]').selectedOptions[0]?.text || "-";
             let subCategory = document.querySelector('select[name="id_mst_sub_category_input"]').selectedOptions[0]?.text || "-";
             let notes = document.querySelector('textarea[name="notes_input"]').value || "-";

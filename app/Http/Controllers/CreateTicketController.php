@@ -16,7 +16,6 @@ use App\Traits\TicketTrait;
 use App\Traits\GenNoTicketTrait;
 
 // Model
-use App\Models\MstPriorities;
 use App\Models\MstCategory;
 use App\Models\MstRules;
 use App\Models\User;
@@ -34,12 +33,11 @@ class CreateTicketController extends Controller
     public function index(Request $request)
     {
         $noTicket = $this->showNoTicket();
-        $priorities = MstPriorities::orderBy('created_at', 'desc')->where('is_active', 1)->get();
         $categories = MstCategory::orderBy('created_at', 'desc')->where('is_active', 1)->get();
 
         //Audit Log
         $this->auditLogs('View Form Create Ticket');
-        return view('create_ticket.index', compact('noTicket', 'priorities', 'categories'));
+        return view('create_ticket.index', compact('noTicket', 'categories'));
     }
 
     public function store(Request $request)
