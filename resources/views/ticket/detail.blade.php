@@ -293,7 +293,7 @@
                 </div>
                 <div class="col-lg-6">
                     {{-- Activity --}}
-                    @if(in_array($emailUser, $userEnv))
+                    @if(in_array($emailUser, $userIncluded))
                         <div class="text-end">
                             <button type="button" class="btn btn-sm btn-primary waves-effect btn-label waves-light" data-bs-toggle="modal" data-bs-target="#addActivity">
                                 <i class="mdi mdi-plus label-icon"></i> {{ __('messages.add') }} {{ __('messages.ticket_activity') }}
