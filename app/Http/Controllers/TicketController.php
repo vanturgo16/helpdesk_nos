@@ -134,7 +134,7 @@ class TicketController extends Controller
         
         //Audit Log
         $this->auditLogs('View Detail Ticket ID (' . $id . ')');
-        return view('ticket.detail', compact('id', 'data', 'emailUser', 'lastAssign', 'departments', 'userRequest', 'userAssign', 'userEnv'));
+        return view('ticket.detail', compact('id', 'data', 'emailUser', 'lastAssign', 'departments', 'userRequest', 'userAssign', 'userEnv', 'userIncluded'));
     }
 
     public function assignDatas(Request $request, $id)
