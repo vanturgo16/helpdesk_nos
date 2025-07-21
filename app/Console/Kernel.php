@@ -23,8 +23,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('ClosedTicketCron')
             ->timezone('Asia/Jakarta')
-            // ->dailyAt('23:59')
-            ->everyMinute()
+            ->dailyAt('23:59')
+            // ->everyMinute()
             ->sendOutputTo("storage/logs/LogClosedTicketCron/LogClosedTicketCron_" . $now . ".txt");
     }
 
