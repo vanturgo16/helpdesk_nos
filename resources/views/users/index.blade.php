@@ -81,7 +81,7 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered dt-responsive w-100" id="ssTable">
+            <table class="table table-bordered dt-responsive w-100" id="ssTableUser">
                 <thead class="table-light">
                     <tr>
                         <th class="align-middle text-center">No</th>
@@ -91,6 +91,7 @@
                         <th class="align-middle text-center">Role</th>
                         <th class="align-middle text-center">{{ __('messages.login_counter') }}</th>
                         <th class="align-middle text-center">{{ __('messages.last_seen') }}</th>
+                        <th class="align-middle text-center">Enable 2-FA</th>
                         <th class="align-middle text-center">{{ __('messages.account_status') }}</th>
                         <th class="align-middle text-center">{{ __('messages.action') }}</th>
                     </tr>
@@ -102,10 +103,10 @@
 
 <script>
     $(function() {
-        var dataTable = $('#ssTable').DataTable({
+        var dataTable = $('#ssTableUser').DataTable({
             processing: true,
             serverSide: true,
-            scrollY: '100vh',
+            // scrollY: '100vh',
             ajax: '{!! route('user.datas') !!}',
             columns: [{
                 data: null,
@@ -171,6 +172,18 @@
                         }
                         return statusLogin + '<br>' + (data ? data : '-');
                     },
+                },
+                {
+                    data: 'is_two_fa',
+                    orderable: true,
+                    className: 'align-top text-center',
+                    render: function(data) {
+                        if (data == 1) {
+                            return '<i class="mdi mdi-check-circle text-success fs-5"></i>';
+                        } else {
+                            return '<i class="mdi mdi-close-circle text-danger fs-5"></i>';
+                        }
+                    }
                 },
                 {
                     data: 'is_active',
