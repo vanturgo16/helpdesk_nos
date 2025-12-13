@@ -20,10 +20,17 @@ use App\Http\Controllers\CreateTicketController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\MstSubCategoryController;
 use App\Http\Controllers\MstUserController;
+use App\Http\Controllers\CaptchaController;
 
 // LOGIN
 Route::get('/', [AuthController::class, 'login'])->name('login');
+Route::get('/captcha/generate', [CaptchaController::class, 'generate'])->name('captcha.generate');
 Route::post('auth/login', [AuthController::class, 'postlogin'])->name('postlogin')->middleware("throttle:5,2");
+
+Route::get('/verify-2fa', [AuthController::class, 'show2fa'])->name('verify.2fa');
+Route::post('/verify-2fa', [AuthController::class, 'verify2fa'])->name('verify.2fa.post');
+Route::post('/resend-2fa', [AuthController::class, 'resend2fa'])->name('resend.2fa');
+
 // LOGOUT
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/expired-logout', [AuthController::class, 'expiredlogout'])->name('expiredlogout');
@@ -74,6 +81,8 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::get('/edit/{id}', 'edit')->name('user.edit');
             Route::post('/update/{id}', 'update')->name('user.update');
             Route::post('/reset/{id}', 'reset')->name('user.reset');
+            Route::post('/enable2fa/{id}', 'enable2fa')->name('user.enable2fa');
+            Route::post('/disable2fa/{id}', 'disable2fa')->name('user.disable2fa');
             Route::post('/activate/{id}', 'activate')->name('user.activate');
             Route::post('/deactivate/{id}', 'deactivate')->name('user.deactivate');
             Route::post('/delete/{id}', 'delete')->name('user.delete');

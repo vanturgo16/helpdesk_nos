@@ -13,6 +13,8 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/icons.min.css') }}"/>
         <!-- PRELOADER CSS -->
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/preloader.min.css') }}"/>
+        <!-- CAPTCHA CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/captcha.css') }}"/>
     </head>
 
     <body>
@@ -55,6 +57,26 @@
                                                     <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                                 </div>
                                             </div>
+
+                                            
+                                            <!-- CAPTCHA display and refresh -->
+                                            <div class="mb-3">
+                                                <label class="form-label">Captcha<span class="text-danger">*</span></label>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="captcha-container me-2">
+                                                        <div class="captcha" id="captcha-text">
+                                                            @foreach(str_split(session('captcha_code')) as $index => $char)
+                                                                <span class="captcha-char" style="--i:{{ $index }}; --rand:{{ rand(0, 4) }};">{{ $char }}</span>
+                                                            @endforeach
+                                                        </div>
+                                                        <div class="middle-line"></div>
+                                                    </div>
+                                                    <button type="button" id="refresh-captcha" title="Refresh Kode Captcha">↻</button>
+                                                </div>
+                                                <input type="text" class="form-control mt-2" name="captcha_input" placeholder="Masukkan kode CAPTCHA" required/>
+                                            </div>
+
+
                                             <div class="row mb-4">
                                                 <div class="col">
                                                     <div class="form-check">
@@ -67,13 +89,13 @@
                                                 
                                             </div>
                                             <div class="mb-3">
-                                                <button class="btn btn-primary w-100 waves-effect waves-light" type="submit" name="sb">Log In</button>
+                                                <button class="btn btn-danger w-100 waves-effect waves-light" type="submit" name="sb">Log In</button>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="mt-4 mt-md-5 text-center">
                                         <p class="mb-0">
-                                            © Dashboard Helpdesk PT Mitra Sendang Kemakmuran Banten 2025
+                                            © Dashboard Helpdesk PT Mitra Sendang Kemakmuran Banten {{ date('Y') }}
                                         </p>
                                     </div>
                                 </div>
@@ -81,21 +103,13 @@
                         </div>
                     </div>
                     <!-- Background Login -->
-                    <div class="col-xxl-9 col-lg-8 col-md-7">
-                        {{-- <div class="auth-bg pt-md-5 p-4 d-flex" style="background-image: url('{{ asset('assets/images/loginPage/auth-bg.jpg') }}');"> --}}
+                    <div class="col-xxl-9 col-lg-8 col-md-7">\
                         <div class="auth-bg pt-md-5 p-4 d-flex" style="background-image: url('{{ asset('assets/images/background/MSK.png') }}');">
-                            <div class="bg-overlay bg-primary"></div>
+                            <div class="bg-overlay bg-secondary-subtle" style="opacity: 0.85"></div>
                             <ul class="bg-bubbles">
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
+                                @foreach(range(1, 10) as $i)
+                                    <li></li>
+                                @endforeach
                             </ul>
                             <!-- end bubble effect -->
                         </div>
@@ -114,5 +128,7 @@
         <script src="{{ asset('assets/js/formLoad.js') }}"></script>
         <!-- PW ADDON INIT -->
         <script src="{{ asset('assets/js/pages/pass-addon.init.js') }}"></script>
+        <!-- CAPTCHA JS -->
+        <script src="{{ asset('assets/js/captcha.js') }}"></script>
     </body>
 </html>
