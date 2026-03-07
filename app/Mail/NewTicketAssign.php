@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class NewTicketAssign extends Mailable
 {
@@ -32,9 +33,12 @@ class NewTicketAssign extends Mailable
         $email = $this->view('mail.newAssignTicket')->subject($subject);
 
         if ($this->dataTicket->file_1 != null) {
-            $absolutePath = $this->dataTicket->file_1;
-            $extension = File::extension($absolutePath);
-            $email->attach($absolutePath, ['as' => 'Attachment.' . $extension]);
+            $path = $this->dataTicket->file_1;
+            $extension = pathinfo($path, PATHINFO_EXTENSION);
+            if (Storage::disk('s3')->exists($path)) {
+                $fileContent = Storage::disk('s3')->get($path);
+                $email->attachData($fileContent, 'Attachment.' . $extension);
+            }
         }
 
         return $email;

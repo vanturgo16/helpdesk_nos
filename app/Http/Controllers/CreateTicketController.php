@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 // Mail
@@ -94,9 +95,12 @@ class CreateTicketController extends Controller
 
         DB::beginTransaction();
         try {
+            $pathFile = null;
             if ($request->hasFile('file_1')) {
-                $path = $request->file('file_1');
-                $url1 = $path->move('storage/attachmentTicket', $path->hashName());
+                $file      = $request->file('file_1');
+                $pathFile  = Storage::disk('s3')->putFileAs(
+                    'ticket-attachment', $file, time() . '-1_' . $file->getClientOriginalName()
+                );
             }
             // Store Data Ticket
             $dataTicket = Ticket::create([
@@ -107,7 +111,7 @@ class CreateTicketController extends Controller
                 'report_date' => $reportDate,
                 'target_solved_date' => $targetDate,
                 'notes' => $request->notes,
-                'file_1' => $url1,
+                'file_1' => $pathFile,
                 'created_by' => $requestor,
                 'status' => 0,
             ]);
@@ -135,7 +139,12 @@ class CreateTicketController extends Controller
             return redirect()->route('ticket.index')->with('success', __('messages.create_ticket_success1'));
         } catch (Exception $e) {
             DB::rollBack();
-            if ($url1 && file_exists(public_path($url1))) { unlink(public_path($url1)); }
+
+            // Delete uploaded file if transaction fails
+            if (!empty($pathFile) && Storage::disk('s3')->exists($pathFile)) {
+                Storage::disk('s3')->delete($pathFile);
+            }
+            
             return redirect()->back()->with(['fail' => __('messages.create_ticket_fail1')]);
         }
     }
