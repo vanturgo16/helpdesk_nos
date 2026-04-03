@@ -66,7 +66,10 @@
                 <td>{{ $row->created_by ?? '-' }}</td>
                 <td>
                     @if($row->file_1)
-                        <a href="{{ url($row->file_1) }}">View File</a>
+                        <a href="{{ route('view.file', ['path' => base64_encode($row->file_1)]) }}">
+                            View File
+                        </a>
+                        {{-- <a href="{{ url($row->file_1) }}">View File</a> --}}
                     @else 
                         -
                     @endif

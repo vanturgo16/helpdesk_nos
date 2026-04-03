@@ -155,6 +155,9 @@ Route::middleware([Authenticate::class, NoCache::class, UpdateLastSeen::class])-
             Route::post('/export', 'export')->name('ticket.export');
         });
     });
+    
+    // VIEW FILE
+    Route::get('/view/file/{path}', [TicketController::class, 'viewFile'])->where('path', '.*')->name('view.file');
 
 
     // AUDIT LOG

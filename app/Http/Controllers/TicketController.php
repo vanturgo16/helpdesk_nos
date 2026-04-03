@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 // Exports
 use App\Exports\TicketExport;
@@ -206,19 +207,26 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
+            $pathFile = null;
             if ($request->hasFile('attachment')) {
-                $path = $request->file('attachment');
-                $url = $path->move('storage/attachmentActivityTicket', $path->hashName());
+                $file      = $request->file('attachment');
+                $pathFile  = Storage::disk('s3')->putFileAs(
+                    'activity-attachment', $file, time() . '-1_' . $file->getClientOriginalName()
+                );
             }
             // Activity Ticket Log
-            $this->activityLog($id, 'Add Activity', $request->message, $url);
+            $this->activityLog($id, 'Add Activity', $request->message, $pathFile);
             // Audit Log
             $this->auditLogs('Add Activity Ticket ID: ' . $id);
             DB::commit();
             return redirect()->back()->with('success', __('messages.ticket_success2'));
         } catch (Exception $e) {
             DB::rollBack();
-            if ($url && file_exists(public_path($url))) { unlink(public_path($url)); }
+
+            // Delete uploaded file if transaction fails
+            if (!empty($pathFile) && Storage::disk('s3')->exists($pathFile)) {
+                Storage::disk('s3')->delete($pathFile);
+            }
             return redirect()->back()->with(['fail' => __('messages.ticket_fail2')]);
         }
     }
@@ -244,10 +252,14 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
+            $pathFile = null;
             if ($request->hasFile('attachment')) {
-                $path = $request->file('attachment');
-                $url = $path->move('storage/attachmentActivityTicket', $path->hashName());
+                $file      = $request->file('attachment');
+                $pathFile  = Storage::disk('s3')->putFileAs(
+                    'activity-attachment', $file, time() . '-1_' . $file->getClientOriginalName()
+                );
             }
+
             // Update Log Assign
             LogTicket::where('id', $id)->update([
                 'assign_status' => 0,
@@ -258,18 +270,23 @@ class TicketController extends Controller
             $dataAssign = LogTicket::where('id', $id)->first();
 
             // Send Email
-            $mailContent = new PreCloseTicket($dataTicket, $dataAssign, $url, $precloseBy);
+            $mailContent = new PreCloseTicket($dataTicket, $dataAssign, $pathFile, $precloseBy);
             Mail::to($toEmail)->cc($ccEmail)->send($mailContent);
 
             // Activity Ticket Log
-            $this->activityLog($dataTicket->id, 'Pre-close Ticket', $request->message, $url);
+            $this->activityLog($dataTicket->id, 'Pre-close Ticket', $request->message, $pathFile);
             // Audit Log
             $this->auditLogs('Pre-close Ticket, ID Assign: ' . $id);
             DB::commit();
             return redirect()->back()->with('success', __('messages.ticket_success3'));
         } catch (Exception $e) {
             DB::rollBack();
-            if ($url && file_exists(public_path($url))) { unlink(public_path($url)); }
+
+            // Delete uploaded file if transaction fails
+            if (!empty($pathFile) && Storage::disk('s3')->exists($pathFile)) {
+                Storage::disk('s3')->delete($pathFile);
+            }
+            
             return redirect()->back()->with(['fail' => __('messages.ticket_fail3')]);
         }
     }
@@ -313,10 +330,14 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
+            $pathFile = null;
             if ($request->hasFile('attachment')) {
-                $path = $request->file('attachment');
-                $url = $path->move('storage/attachmentActivityTicket', $path->hashName());
+                $file      = $request->file('attachment');
+                $pathFile  = Storage::disk('s3')->putFileAs(
+                    'activity-attachment', $file, time() . '-1_' . $file->getClientOriginalName()
+                );
             }
+
             // Update Ticket
             Ticket::where('id', $id)->update([
                 'closed_notes' => $request->message,
@@ -328,18 +349,23 @@ class TicketController extends Controller
             $dataTicket = Ticket::where('id', $id)->first();
 
             // Send Email
-            $mailContent = new CloseTicket($dataTicket, $assignToDept, $url, $closeBy);
+            $mailContent = new CloseTicket($dataTicket, $assignToDept, $pathFile, $closeBy);
             Mail::to($toEmail)->cc($ccEmail)->send($mailContent);
 
             // Activity Ticket Log
-            $this->activityLog($id, 'Close Ticket', $request->message, $url);
+            $this->activityLog($id, 'Close Ticket', $request->message, $pathFile);
             // Audit Log
             $this->auditLogs('Close Ticket, ID: ' . $id);
             DB::commit();
             return redirect()->back()->with('success', __('messages.ticket_success4'));
         } catch (Exception $e) {
             DB::rollBack();
-            if ($url && file_exists(public_path($url))) { unlink(public_path($url)); }
+
+            // Delete uploaded file if transaction fails
+            if (!empty($pathFile) && Storage::disk('s3')->exists($pathFile)) {
+                Storage::disk('s3')->delete($pathFile);
+            }
+            
             return redirect()->back()->with(['fail' => __('messages.ticket_fail4')]);
         }
     }
@@ -376,12 +402,16 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
+            $pathFile = null;
             if ($request->hasFile('attachment')) {
-                $path = $request->file('attachment');
-                $url = $path->move('storage/attachmentActivityTicket', $path->hashName());
+                $file      = $request->file('attachment');
+                $pathFile  = Storage::disk('s3')->putFileAs(
+                    'activity-attachment', $file, time() . '-1_' . $file->getClientOriginalName()
+                );
             }
+
             // Activity Ticket Log
-            $this->activityLog($id, 'Success Re Assign Ticket', $request->message, $url);
+            $this->activityLog($id, 'Success Re Assign Ticket', $request->message, $pathFile);
             $logAssign = $this->activityLog($id, 'Success Assign Ticket', 'Assign To:' . $assignToDept, null);
             // Assign Ticket Log
             LogTicket::create([
@@ -404,7 +434,12 @@ class TicketController extends Controller
             return redirect()->back()->with('success', __('messages.ticket_success5'));
         } catch (Exception $e) {
             DB::rollBack();
-            if ($url && file_exists(public_path($url))) { unlink(public_path($url)); }
+
+            // Delete uploaded file if transaction fails
+            if (!empty($pathFile) && Storage::disk('s3')->exists($pathFile)) {
+                Storage::disk('s3')->delete($pathFile);
+            }
+            
             return redirect()->back()->with(['fail' => __('messages.ticket_fail5')]);
         }
     }
@@ -435,5 +470,11 @@ class TicketController extends Controller
 
         $filename = 'Export_Ticket_' . Carbon::now()->format('d_m_Y_H_i') . '.xlsx';
         return Excel::download(new TicketExport($dataTicket->get(), $dataLogAssign->get(), $request), $filename);
+    }
+
+    public function viewFile($path)
+    {
+        $path = base64_decode($path);
+        return view('view_file.index', compact('path'));
     }
 }
