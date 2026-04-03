@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class CloseTicket extends Mailable
 {
@@ -34,9 +35,12 @@ class CloseTicket extends Mailable
         $email = $this->view('mail.closeTicket')->subject($subject);
 
         if ($this->url != null) {
-            $absolutePath = $this->url;
-            $extension = File::extension($absolutePath);
-            $email->attach($absolutePath, ['as' => 'Attachment.' . $extension]);
+            $path = $this->url;
+            $extension = pathinfo($path, PATHINFO_EXTENSION);
+            if (Storage::disk('s3')->exists($path)) {
+                $fileContent = Storage::disk('s3')->get($path);
+                $email->attachData($fileContent, 'Attachment.' . $extension);
+            }
         }
 
         return $email;
