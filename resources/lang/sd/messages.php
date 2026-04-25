@@ -28,6 +28,7 @@ return [
     'update' => 'Apdet',
     'reset' => 'Setél deui',
     'show' => 'Témbongkeun',
+    'download' => 'Unduh',
     'enable' => 'Aktipkeun',
     'disable' => 'Nonaktipkeun',
     'activate' => 'Aktipkeun',

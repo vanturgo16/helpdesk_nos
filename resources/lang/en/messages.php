@@ -28,6 +28,7 @@ return [
     'update' => 'Update',
     'reset' => 'Reset',
     'show' => 'Show',
+    'download' => 'Download',
     'enable' => 'Enable',
     'disable' => 'Disable',
     'activate' => 'Activate',
