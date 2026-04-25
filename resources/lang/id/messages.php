@@ -28,6 +28,7 @@ return [
     'update' => 'Perbarui',
     'reset' => 'Atur Ulang',
     'show' => 'Tampilkan',
+    'download' => 'Unduh',
     'enable' => 'Aktifkan',
     'disable' => 'Nonaktifkan',
     'activate' => 'Aktifkan',
